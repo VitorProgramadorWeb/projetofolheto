@@ -1,19 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <title>Projeto integrador</title>
+<?php include "patterns/header.php" ?>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <h1>Página inicial</h1>
 
-    <link rel="stylesheet" href="/projetointegrador/styles/style.css">
-    <link rel="stylesheet" href="/projetointegrador/styles/menu.css">
-</head>
-<body>
-
-    <?php include "menu.php" ?>
-
-    <h1>Bem vindo(a)!</h1>
+    <p>Não tem nada aqui, ainda...</p>
 
     <!-- ?php include "footer.php" ?> -->
 

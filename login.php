@@ -1,29 +1,22 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <title>Login</title>
+<?php 
+$PAGE_TITLE = "Login";
+include "patterns/header.php";
+?>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<h1>Login</h1>
 
-    <link rel="stylesheet" href="/projetointegrador/styles/style.css">
-    <link rel="stylesheet" href="/projetointegrador/styles/menu.css">
-</head>
-<body>
-
-    <?php include "menu.php" ?>
-
-    <form action="/projetointegrador/action_login.php" method="post">
-        <h1>Login</h1>
-        <input type="text" name="user" id="" placeholder="Usuário">
-        <br>
-        <input type="password" name="password" id="" placeholder="Senha">
-        <br>
-        <button type="submit">Entrar</button>
-        <a href="#">Esqueceu a senha?</a>
-    </form>
+<form id="form" method="post">
+    <input type="text" name="user" id="user" placeholder="Usuário">
+    <br>
+    <input type="password" name="password" id="password" placeholder="Senha">
+    <br>
+    <button type="submit">Entrar</button>
+    <span id="message"></span>
+</form>
 
     <!-- ?php include "footer.php" ?> -->
+
+    <script src="/projetointegrador/scripts/login.js"></script>
 
 </body>
 </html>
