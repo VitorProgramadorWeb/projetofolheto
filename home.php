@@ -1,5 +1,4 @@
 <?php 
-session_start();
 $PAGE_TITLE = "Home";
 function customHeader() { ?>
 <?php }
