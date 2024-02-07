@@ -1,8 +1,6 @@
 <?php 
 $PAGE_TITLE = "Home";
-function customHeader() { ?>
-<?php }
-include "patterns/header.php";
+include "patterns/logged/header_logged.php";
 ?>
 
     <h1>Bem vindo(a), <?= $_SESSION["user"] ?>!</h1>
