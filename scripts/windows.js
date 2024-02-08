@@ -2,65 +2,69 @@
 //           Add and Remove window           //
 ///////////////////////////////////////////////
 
-function addPopup(popupName = "", popupContent = none()) {
-    // Container dos popups
-    var popups = document.getElementById("container");
+function addWindow(windowLabel = "", windowContent = none()) {
+    // Windows container
+    var container = document.getElementById("container");
 
-    // Popup
-    var popup = document.createElement("div");
-    popup.setAttribute("class", "popup");
-    popup.style.top = "50%";
-    popup.style.left = "50%";
-    // Para colocar um deslocamento do popup anterior
-    var lastPopup = popups.lastChild;
-    if (lastPopup != null) {
-        var topLastPopup = lastPopup.style.top;
-        var leftLastPopup = lastPopup.style.left;
-        popup.style.top = (Number(topLastPopup.substring(0, topLastPopup.length-1)) + 5) + "%";
-        popup.style.left = (Number(leftLastPopup.substring(0, leftLastPopup.length-1)) - 5) + "%";
+    // Window
+    var win = document.createElement("div");
+    win.setAttribute("class", "window");
+    win.style.top = "50%";
+    win.style.left = "50%";
+    // Position relative to previous window
+    var lastWindow = container.lastChild;
+    if (lastWindow != null) {
+        var topLasWindow = lastWindow.style.top;
+        var leftLastWindow = lastWindow.style.left;
+        win.style.top = (Number(topLasWindow.substring(0, topLasWindow.length-1)) + 5) + "%";
+        win.style.left = (Number(leftLastWindow.substring(0, leftLastWindow.length-1)) - 5) + "%";
     }
 
-    /* ----------------------------- CABEÇALHO ----------------------------- */
-    // Bar
+    /* ----------------------------- HEADER ----------------------------- */
+    // Window bar
     var bar = document.createElement("div");
-    bar.setAttribute("class", "bar");
+    bar.setAttribute("class", "window-bar");
     bar.setAttribute("onmousedown", "mouseDown(event, this)");
     bar.setAttribute("onmouseup", "mouseUp()");
 
-    // Name bar
-    var nameBar = document.createElement("span");
-    nameBar.setAttribute("class", "nameBar");
-    nameBar.innerText = popupName;
+    // window label
+    var label = document.createElement("span");
+    label.setAttribute("class", "window-label");
+    label.innerText = windowLabel;
 
     // Close button
     var closeButton = document.createElement("button");
-    closeButton.setAttribute("class", "closeButton");
+    closeButton.setAttribute("class", "close-button");
     closeButton.setAttribute("onmousedown", "event.stopPropagation()");
-    closeButton.setAttribute("onclick", "removePopup(this)");
+    closeButton.setAttribute("onclick", "removeWindow(this)");
     closeButton.innerHTML = "&times;";
     
     /* ----- appends ----- */
-    bar.append(nameBar);
+    bar.append(label);
     bar.append(closeButton);
 
-    popup.append(bar);
-    popup.append(popupContent);
+    win.append(bar);
+    win.append(windowContent);
 
-    popups.append(popup);
+    container.append(win);
 
-    return popup;
+    return win;
 }
 
-function removePopup(element) {
-    // Popup > bar > closeButton
+function removeWindow(element) {
+    // Window > Bar > closeButton
     while(element.tagName != "BODY") {
-        if(element.className == "popup") {
+        if(element.className == "window") {
             element.remove();
-            return;
+
+            return true; // Success
+
         } else {
             element = element.parentElement;
         }
     }
+
+    return false; // Failure
 }
 
 
@@ -73,86 +77,51 @@ function removePopup(element) {
 
 
 ///////////////////////////////////////////////
-//              Conteúdos POPUP              //
+//              Window contents              //
 ///////////////////////////////////////////////
 
-function formulario(action) {
-    /* ----------------------------- FORMULÁRIO ----------------------------- */
+function account() {
+    /* ----------------------------- ACCOUNT ----------------------------- */
     // Form
     var form = document.createElement("form");
-    form.setAttribute("class", "popupContent formulario");
+    form.setAttribute("class", "window-content content-account");
     form.setAttribute("action", "javascript:void(0);");
-    form.setAttribute("onsubmit", "salvarFormulario(event, this, '"+action+"');"); //event.preventDefault();
+    // form.setAttribute("onsubmit", "salvarFormulario(event, this, '"+action+"');"); //event.preventDefault();
     
-    // ----- Campos ----- //
-    // ID
-    var campoId = criarCampo("ID", "id", "number");
+    // ----- Fields ----- //
+    // User
+    var campoUser = criarCampo("User", "user", "text");
 
-    // Nome
+    // Name
     var campoNome = criarCampo("Nome", "nome", "text");
+    
+    // Birthdate
+    var campoNascimento = criarCampo("Nascimento", "nascimento", "date");
+    
+    // Address
+    var campoRua = criarCampo("Rua", "rua", "text");
 
     // Email
     var campoEmail = criarCampo("E-mail", "email", "email");
-
-    // Nascimento
-    var campoNascimento = criarCampo("Nascimento", "nascimento", "date");
     
-    // Renda
-    var campoRenda = criarCampo("Renda", "renda", "number");
-    // step="0.01"
-    // placeholder="R$"
+    // Phone
+    var campoTelefoneResidencial = criarCampo("Telefone residencial", "telefone_residencial", "tel");
+    // placeholder="(__)_____-____"
 
     // CPF
     var campoCpf = criarCampo("CPF", "cpf", "text");
     // placeholder="___.___.___-__"
-    
-    // CNPJ
-    var campoCnpj = criarCampo("CNPJ", "cnpj", "text");
-    // placeholder="__.___.___/____-__"
 
-    // Rua
-    var campoRua = criarCampo("Rua", "rua", "text");
-
-    // Nº
-    var campoNumero = criarCampo("Nº", "numero", "number");
-
-    // Complemento
-    var campoComplemento = criarCampo("Complemento", "complemento", "text");
-
-    // UF e Cidade [Campos tipo SELECT (e dentros de outra div)]
-    var campoUf = criarCampo("UF", "uf", "text");
-    var campoCidade = criarCampo("Cidade", "cidade", "text");
-
-    // CEP
-    var campoCep = criarCampo("CEP", "cep", "text");
-    // placeholder="_____-___"
-
-    // Telefone residencial
-    var campoTelefoneResidencial = criarCampo("Telefone residencial", "telefone_residencial", "tel");
-    // placeholder="(__)____-____"
-
-    // Telefone celular
-    var campoTelefoneCelular = criarCampo("Telefone celular", "telefone_celular", "tel");
-    // placeholder="(__)_____-____"
-
-    // Botão: SALVAR
+    // Save button
     var botaoSalvar = criarBotaoSubmit();
 
-    form.append(campoId);
+    form.append(campoUser);
     form.append(campoNome);
-    form.append(campoEmail);
     form.append(campoNascimento);
-    form.append(campoRenda);
-    form.append(campoCpf);
-    form.append(campoCnpj);
     form.append(campoRua);
-    form.append(campoNumero);
-    form.append(campoComplemento);
-    form.append(campoUf);
-    form.append(campoCidade);
-    form.append(campoCep);
+    form.append(campoEmail);
     form.append(campoTelefoneResidencial);
-    form.append(campoTelefoneCelular);
+    form.append(campoCpf);
     form.append(botaoSalvar);
 
     return form;
@@ -204,7 +173,7 @@ function configuracao() {
 
 function none() {
     var none = document.createElement("div");
-    none.setAttribute("class", "popupContent");
+    none.setAttribute("class", "window-content");
     // size
     none.style.width = "200px";
     none.style.height = "150px";
@@ -222,53 +191,57 @@ function none() {
 
 
 //////////////////////////////////////////////
-//            Outras ações POPUP            //
+//           Other window actions           //
 //////////////////////////////////////////////
 
-// Variáveis de comunicação
-var focusedPopup;
-var xPopup;
-var yPopup;
+// Communication variables
+var focusedWindow;
+var xWindow;
+var yWindow;
 
-// Mover popup [mouseDown -> movePopup -> mouseUp]
+// Window movimentatino [mouseDown -> moveWindow -> mouseUp]
 function mouseDown(e, bar) {
-    // Elemento popup
-    var popup = bar.parentElement;
+    // Window element
+    var win = bar.parentElement;
 
-    // Focar no popup (Colocá-lo à frente)
-    popupFocus(popup);
-    focusedPopup = popup;
+    // Focus on window (places it in front)
+    focusedWindow = windowsFocus(win);
 
-    // Capturar os movimentos do mouse na página inteira
-    document.addEventListener("mousemove", movePopup);
+    // Capture mouse moves
+    document.addEventListener("mousemove", moveWindow);
 
-    // Pegando os valores css TOP e LEFT do popup
-    var topPopup = window.getComputedStyle(popup).getPropertyValue("top"); // "px"
-    var leftPopup = window.getComputedStyle(popup).getPropertyValue("left");
+    // TOP and LEFT CSS values of window
+    // window != win
+    var topWindow = window.getComputedStyle(popup).getPropertyValue("top"); // "px"
+    var leftWindow = window.getComputedStyle(popup).getPropertyValue("left");
     
-    // Calculando a distância X e Y do canto superior esquerdo do popup até o mouse
-    yPopup = e.pageY - Number(topPopup.substring(0, topPopup.length-2)); // Ex: str("10px") -> num(10)
-    xPopup = e.pageX - Number(leftPopup.substring(0, leftPopup.length-2));
+    // Calculating the X and Y distance from the top left corner of the window to the mouse
+    yWindow = e.pageY - Number(topWindow.substring(0, topWindow.length-2)); // Ex: str("10px") -> num(10)
+    xWindow = e.pageX - Number(leftWindow.substring(0, leftWindow.length-2));
 }
-function movePopup(e) {
-    // Define css TOP e LEFT do popup com base no local que o mouse agarrou na Bar
-    focusedPopup.style.top = (e.pageY - yPopup) + "px";
-    focusedPopup.style.left = (e.pageX - xPopup) + "px";
+function moveWindow(e) {
+    // Defines the TOP and LEFT css of the window based on where the mouse is grabbing on the Bar
+    focusedWindow.style.top = (e.pageY - yWindow) + "px";
+    focusedWindow.style.left = (e.pageX - xWindow) + "px";
 }
 function mouseUp() {
     document.removeEventListener("mousemove", movePopup);
 }
 
-// Colocar o popup na frente
-function popupFocus(popup) {
-    while(popup.tagName != "BODY") {
-        if(popup.className == "popup") {
-            document.getElementById("popups").append(popup);
-            return;
+// Places window in front
+function windowFocus(win) {
+    while(win.tagName != "BODY") {
+        if(win.className == "window") {
+            document.getElementById("container").append(win);
+
+            return win; // Success
+
         } else {
-            popup = popup.parentElement;
+            win = win.parentElement;
         }
     }
+
+    return false; // Failure
 }
 
 // Salvar formulário
