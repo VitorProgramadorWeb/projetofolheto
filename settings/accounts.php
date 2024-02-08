@@ -1,6 +1,6 @@
 <?php 
 $PAGE_TITLE = "Contas";
-include "patterns/logged/header_logged.php";
+include "patterns/logged/header.php";
 ?>
 
     <h1>Contas dos usuários</h1>

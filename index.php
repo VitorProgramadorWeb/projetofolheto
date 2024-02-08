@@ -1,4 +1,4 @@
-<?php include "patterns/unlogged/header_unlogged.php" ?>
+<?php include "patterns/unlogged/header.php" ?>
 
     <h1>Página inicial</h1>
 

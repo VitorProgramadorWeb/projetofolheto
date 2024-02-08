@@ -1,4 +1,4 @@
-<?php
+<?php // LOGGED
 function customHeader() {
 
     session_start();
@@ -12,6 +12,6 @@ function customHeader() {
 ?>
 
 <?php }
-include "patterns/header.php";
-include "patterns/logged/menu_logged.php";
+include "patterns/_header.php";
+include "patterns/logged/menu.php";
 ?>

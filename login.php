@@ -1,6 +1,6 @@
 <?php 
 $PAGE_TITLE = "Login";
-include "patterns/unlogged/header_unlogged.php";
+include "patterns/unlogged/header.php";
 ?>
 
 <h1>Login</h1>

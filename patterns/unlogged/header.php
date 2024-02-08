@@ -1,4 +1,4 @@
-<?php
+<?php // UNLOGGED
 function customHeader() {
 
     session_start();
@@ -12,6 +12,6 @@ function customHeader() {
 ?>
 
 <?php }
-include "patterns/header.php";
-include "patterns/unlogged/menu_unlogged.php";
+include "patterns/_header.php";
+include "patterns/unlogged/menu.php";
 ?>

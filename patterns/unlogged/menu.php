@@ -1,7 +1,7 @@
-<?php
+<?php // UNLOGGED
 function customMenu() { ?>
     <li><a href='/projetointegrador/login.php'>Login</a></li>
 <?php }
 
-include "patterns/menu.php";
+include "patterns/_menu.php";
 ?>
