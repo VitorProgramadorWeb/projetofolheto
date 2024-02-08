@@ -3,7 +3,7 @@ var form = document.querySelector("#form");
 function authenticate() {
     var formData = new FormData(form);
 
-    fetch("/projetointegrador/actions/action_login.php", {
+    fetch("/projetointegrador/actions/login.php", {
         method: "post",
         body: formData
     }).then(response => response.json())

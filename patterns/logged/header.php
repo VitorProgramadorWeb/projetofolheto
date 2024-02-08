@@ -10,7 +10,7 @@ function customHeader() {
     }
 
 ?>
-
+    <link rel="stylesheet" href="styles/table.css">
 <?php }
 include "patterns/_header.php";
 include "patterns/logged/menu.php";

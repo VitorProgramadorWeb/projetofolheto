@@ -6,9 +6,9 @@ include "patterns/unlogged/header.php";
 <h1>Login</h1>
 
 <form id="form" method="post">
-    <input type="text" name="user" id="user" placeholder="Usuário">
+    <input type="text" name="user" id="user" placeholder="Usuário" required>
     <br>
-    <input type="password" name="password" id="password" placeholder="Senha">
+    <input type="password" name="password" id="password" placeholder="Senha" required>
     <br>
     <button type="submit">Entrar</button>
     <span id="message"></span>
