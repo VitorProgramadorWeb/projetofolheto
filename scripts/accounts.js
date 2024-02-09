@@ -53,6 +53,7 @@ function listUserAccounts() {
         var tfoot = document.createElement("tfoot");
         var th = document.createElement("th");
         th.colSpan = 5;
+        th.scope = "row";
         th.innerHTML = "<a onclick='addWindow(\"Criar conta\", account())' href='#create'>&plus; Criar conta de usuário</a>";
         tfoot.append(th);
 

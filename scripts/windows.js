@@ -2,38 +2,41 @@
 //           Add and Remove window           //
 ///////////////////////////////////////////////
 
+// After adding a window, this number is increased by 1
+let windowNumber = 1;
+
 function addWindow(windowLabel = "", windowContent = none()) {
     // Windows container
-    var container = document.getElementById("container");
+    let container = document.getElementById("container");
 
     // Window
-    var win = document.createElement("div");
+    let win = document.createElement("div");
     win.setAttribute("class", "window");
     win.style.top = "50%";
     win.style.left = "50%";
     // Position relative to previous window
-    var lastWindow = container.lastChild;
+    let lastWindow = container.lastChild;
     if (lastWindow != null) {
-        var topLasWindow = lastWindow.style.top;
-        var leftLastWindow = lastWindow.style.left;
+        let topLasWindow = lastWindow.style.top;
+        let leftLastWindow = lastWindow.style.left;
         win.style.top = (Number(topLasWindow.substring(0, topLasWindow.length-1)) + 5) + "%";
         win.style.left = (Number(leftLastWindow.substring(0, leftLastWindow.length-1)) - 5) + "%";
     }
 
     /* ----------------------------- HEADER ----------------------------- */
     // Window bar
-    var bar = document.createElement("div");
+    let bar = document.createElement("div");
     bar.setAttribute("class", "window-bar");
     bar.setAttribute("onmousedown", "mouseDown(event, this)");
     bar.setAttribute("onmouseup", "mouseUp()");
 
     // window label
-    var label = document.createElement("span");
+    let label = document.createElement("span");
     label.setAttribute("class", "window-label");
     label.innerText = windowLabel;
 
     // Close button
-    var closeButton = document.createElement("button");
+    let closeButton = document.createElement("button");
     closeButton.setAttribute("class", "close-button");
     closeButton.setAttribute("onmousedown", "event.stopPropagation()");
     closeButton.setAttribute("onclick", "removeWindow(this)");
@@ -48,6 +51,7 @@ function addWindow(windowLabel = "", windowContent = none()) {
 
     container.append(win);
 
+    windowNumber++;
     return win;
 }
 
@@ -83,83 +87,110 @@ function removeWindow(element) {
 function account() {
     /* ----------------------------- ACCOUNT ----------------------------- */
     // Form
-    var form = document.createElement("form");
+    let form = document.createElement("form");
     form.setAttribute("class", "window-content content-account");
     form.setAttribute("action", "javascript:void(0);");
     // form.setAttribute("onsubmit", "salvarFormulario(event, this, '"+action+"');"); //event.preventDefault();
     
     // ----- Fields ----- //
     // User
-    var campoUser = criarCampo("User", "user", "text");
+    let userField = createField("Usuário", "user", "text");
 
     // Name
-    var campoNome = criarCampo("Nome", "nome", "text");
+    let nameField = createField("Nome", "name", "text");
     
     // Birthdate
-    var campoNascimento = criarCampo("Nascimento", "nascimento", "date");
+    let birthdateField = createField("Nascimento", "birthdate", "date");
     
     // Address
-    var campoRua = criarCampo("Rua", "rua", "text");
+    let addressField = createField("Endereço", "address", "text");
 
     // Email
-    var campoEmail = criarCampo("E-mail", "email", "email");
+    let emailField = createField("E-mail", "email", "email");
     
     // Phone
-    var campoTelefoneResidencial = criarCampo("Telefone residencial", "telefone_residencial", "tel");
-    // placeholder="(__)_____-____"
+    let phoneField = createField("Telefone", "phone", "tel", {placeholder: "(__)_____-____"});
 
     // CPF
-    var campoCpf = criarCampo("CPF", "cpf", "text");
-    // placeholder="___.___.___-__"
+    let cpfField = createField("CPF", "cpf", "text", {placeholder: "___.___.___-__"});
 
     // Save button
-    var botaoSalvar = criarBotaoSubmit();
+    let botaoSalvar = criarBotaoSubmit();
 
-    form.append(campoUser);
-    form.append(campoNome);
-    form.append(campoNascimento);
-    form.append(campoRua);
-    form.append(campoEmail);
-    form.append(campoTelefoneResidencial);
-    form.append(campoCpf);
+    form.append(userField);
+    form.append(nameField);
+    form.append(birthdateField);
+    form.append(addressField);
+    form.append(emailField);
+    form.append(phoneField);
+    form.append(cpfField);
+
     form.append(botaoSalvar);
 
     return form;
 
 
     
-    function criarCampo(labelText, inputID, inputType) {
-        // Campo
-        var campo = document.createElement("div");
-        campo.setAttribute("class", "campo");
-    
-        // Label
-        var label = document.createElement("label");
-        label.setAttribute("for", inputID);
-        label.innerText = labelText;
-    
-        // Input
-        var input = document.createElement("input");
-        input.setAttribute("type", inputType);
-        input.setAttribute("name", inputID);
-        input.setAttribute("class", inputID);
-        input.setAttribute("id", inputID);
-        //input.setAttribute("placeholder", "");
-    
-        campo.append(label);
-        campo.append(input);
-        return campo;
+    let paramethers = {
+        "labelTextContent": "Texto",
+        "inputName": "text",
+        "inputType": "text"
+        //"placeholder": ""
+    }
+    function createField(params = paramethers) {
+
+        if(params.inputType)
+        switch (params.inputType) {
+            case "submit":{
+                // Input
+                let input = document.createElement("input");
+                input.setAttribute("class", "input");
+                input.setAttribute("type", inputType);
+                input.setAttribute("name", inputName);
+                input.setAttribute("id", inputID);
+                if(other["placeholder"]) input.setAttribute("placeholder", other.placeholder);
+                
+                break;
+            }
+            default:
+                let inputID = inputName + `-${windowNumber}`;
+        
+                // Field
+                let field = document.createElement("div");
+                field.setAttribute("class", "field");
+            
+                // Label
+                let label = document.createElement("label");
+                label.setAttribute("class", "label");
+                label.setAttribute("for", inputID);
+                label.textContent = labelTextContent;
+            
+                // Input
+                let input = document.createElement("input");
+                input.setAttribute("class", "input");
+                input.setAttribute("type", inputType);
+                input.setAttribute("name", inputName);
+                input.setAttribute("id", inputID);
+                if(other["placeholder"]) input.setAttribute("placeholder", other.placeholder);
+            
+                field.append(label);
+                field.append(input);
+                return field;
+
+                break;
+        }
+        
     }
 
-    function criarBotaoSubmit(buttonText) {
-        // Campo
-        var campo = document.createElement("div");
-        campo.setAttribute("class", "campo");
+    function createButton(buttonText, ) {
+        // Field
+        let field = document.createElement("div");
+        field.setAttribute("class", "content-field");
     
         // Input
-        var input = document.createElement("input");
-        input.setAttribute("class", "salvar");
-        input.setAttribute("value", "Salvar");
+        let input = document.createElement("input");
+        input.setAttribute("class", "button");
+        input.setAttribute("value", buttonText);
         input.setAttribute("type", "submit");
     
         campo.append(input);
@@ -172,7 +203,7 @@ function configuracao() {
 }
 
 function none() {
-    var none = document.createElement("div");
+    let none = document.createElement("div");
     none.setAttribute("class", "window-content");
     // size
     none.style.width = "200px";

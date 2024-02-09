@@ -3,7 +3,7 @@ $PAGE_TITLE = "Contas";
 include "patterns/logged/header.php";
 ?>
 
-    <!-- User forms appears here, in #container -->
+    <!-- Windows appears here, in #container -->
     <div id="container"></div>
 
     <h1>Contas dos usuários</h1>

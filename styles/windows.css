@@ -1,4 +1,19 @@
-.form {
-    position: fixed;
+.window {
     border: 1px solid black;
+    width: fit-content;
+}
+
+.window-bar {
+    border-bottom: 1px solid black;
+    display: flex;
+    justify-content: space-between;
+}
+
+.window-content {
+    display: grid;
+}
+
+.content-field {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
