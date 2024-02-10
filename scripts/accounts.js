@@ -54,10 +54,10 @@ function listUserAccounts() {
             });
             // options
             td = document.createElement("td");
-            td.innerHTML = `<a href="#edit?id=${id}">Editar</a>`;
+            td.innerHTML = `<button onclick="loadAccountContent(${id}, addWindow('Editar conta', account('editAccount(this)')));">Editar</button>`;
             tr.append(td);
             td = document.createElement("td");
-            td.innerHTML = `<a onclick="deleteAccount(${id});" href="#delete?id=${id}">Excluir</a>`;
+            td.innerHTML = `<button onclick="deleteAccount(${id});">Excluir</button>`;
             tr.append(td);
 
             tbody.append(tr);
@@ -68,7 +68,7 @@ function listUserAccounts() {
         th = document.createElement("th");
         th.colSpan = 5;
         th.scope = "row";
-        th.innerHTML = "<a onclick='addWindow(\"Criar conta\", account())' href='#create'>&plus; Criar conta de usuário</a>";
+        th.innerHTML = `<button onclick="addWindow('Criar conta', account('createAccount(this)'))">&plus; Criar conta de usuário</button>`;
         tfoot.append(th);
 
         table.append(thead);
@@ -103,10 +103,10 @@ function tableRow(id, name, user) {
 
     // options
     td = document.createElement("td");
-    td.innerHTML = "<a href='#edit?id="+id+"''>Editar</a>";
+    td.innerHTML = `<button onclick="loadAccountContent(${id}, addWindow('Editar conta', account('editAccount(this)')));">Editar</button>`;
     tr.append(td);
     td = document.createElement("td");
-    td.innerHTML = `<a onclick="deleteAccount(${id});" href="#delete?id=${id}">Excluir</a>`;
+    td.innerHTML = `<button onclick="deleteAccount(${id});">Excluir</button>`;
     tr.append(td);
 
     return tr;
@@ -140,7 +140,6 @@ function createAccount(form) {
 function deleteAccount(id) {
 
     let data = new FormData();
-
     data.append("action", "delete");
     data.append("id", id);
 
@@ -158,6 +157,77 @@ function deleteAccount(id) {
                     td.parentNode.remove();
                 }
             });
+
+            // Auto destruction
+            if (response.id == response.sessionId) {
+                window.location.href = "/projetointegrador/logout.php";
+            }
         }
+    });
+}
+
+// Edit user account
+function editAccount(form) {
+    
+    let data = new FormData(form);
+    data.append("action", "edit");
+    data.append("id", form.getElementsByClassName("id")[0].value);
+
+    fetch("/projetointegrador/actions/accounts.php", {
+        method: "post",
+        body: data
+    }).then(res => res.json())
+    .then(response => {
+
+        if (response.edited) {
+            let tds = document.getElementsByClassName("id");
+
+            Object.values(tds).forEach(td => {
+                if (td.innerHTML == response.id) {
+                    td.parentNode.getElementsByClassName("name")[0].innerHTML = response.name;
+                    td.parentNode.getElementsByClassName("user")[0].innerHTML = response.user;
+                }
+            });
+
+            removeWindow(form);
+        }
+    });
+}
+
+// Loads account contents in a window to edit
+function loadAccountContent(id, win) {
+
+    let data = new FormData();
+    data.append("action", "read");
+    data.append("id", id);
+
+    fetch("/projetointegrador/actions/accounts.php", {
+        method: "post",
+        body: data
+    }).then(res => res.json())
+    .then(response => {
+
+        let form = win.getElementsByClassName("content-account")[0];
+
+        let inputId = form.getElementsByClassName("id")[0];
+        let inputUser = form.getElementsByClassName("user")[0];
+        let inputPassword = form.getElementsByClassName("password")[0];
+        let inputName = form.getElementsByClassName("name")[0];
+        let inputBirthdate = form.getElementsByClassName("birthdate")[0];
+        let inputAddress = form.getElementsByClassName("address")[0];
+        let inputEmail = form.getElementsByClassName("email")[0];
+        let inputPhone = form.getElementsByClassName("phone")[0];
+        let inputCpf = form.getElementsByClassName("cpf")[0];
+
+        inputId.value = response.id;
+        inputUser.value = response.user;
+        inputPassword.value = response.password;
+        inputName.value = response.name;
+        inputBirthdate.value = response.birthdate;
+        inputAddress.value = response.address;
+        inputEmail.value = response.email;
+        inputPhone.value = response.phone;
+        inputCpf.value = response.cpf;
+        
     });
 }

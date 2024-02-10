@@ -20,6 +20,7 @@ if($response->num_rows > 0) {
         $json["auth"] = true;
 
         session_start();
+        $_SESSION["id"]   = $user_data["id"];
         $_SESSION["user"] = $user;
 
     } else {

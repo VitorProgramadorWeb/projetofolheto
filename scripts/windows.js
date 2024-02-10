@@ -84,13 +84,12 @@ function removeWindow(element) {
 //              Window contents              //
 ///////////////////////////////////////////////
 
-function account() {
+function account(action = "") {
     /* ----------------------------- ACCOUNT ----------------------------- */
     // Form
     let form = document.createElement("form");
     form.setAttribute("class", "window-content content-account");
-    form.setAttribute("action", "javascript:void(0);");
-    form.setAttribute("onsubmit", "event.preventDefault(); createAccount(this);");
+    form.setAttribute("onsubmit", `event.preventDefault(); ${action};`);
     
     // ----- Fields ----- //
     // ID
@@ -106,7 +105,16 @@ function account() {
     let userField = createField({
         labelTextContent: "Usuário",
         inputName: "user",
-        inputType: "text"
+        inputType: "text",
+        inputRequired: true
+    });
+    
+    // Password
+    let passwordField = createField({
+        labelTextContent: "Senha",
+        inputName: "password",
+        inputType: "password",
+        inputRequired: true
     });
 
     // Name
@@ -161,13 +169,14 @@ function account() {
 
     form.append(idField);
     form.append(userField);
+    form.append(passwordField);
     form.append(nameField);
     form.append(birthdateField);
     form.append(addressField);
     form.append(emailField);
     form.append(phoneField);
     form.append(cpfField);
-
+    
     form.append(submitButton);
 
     return form;
@@ -181,21 +190,24 @@ function account() {
         "inputType": "text"
         //"inputValue": ""
         //"inputDisabled": false
+        //"inputRequired": false
         //"inputPlaceHolder": ""
         //"hidden": false
     }) {
-        
+        let field, label, input;
+
         if("inputType" in params)
         switch (params.inputType) {
-            case "submit":{
+    
+            case "submit":
                 // Field
-                let field = document.createElement("div");
+                field = document.createElement("div");
                 field.setAttribute("class", "field");
                 if("hidden" in params) field.setAttribute("hidden", params.hidden);
                 
                 // Input
-                let input = document.createElement("input");
-                input.setAttribute("class", "input");
+                input = document.createElement("input");
+                input.setAttribute("class", `input ${params.inputType}`);
                 input.setAttribute("type", params.inputType);
                 input.setAttribute("value", params.inputValue);
                 if("inputDisabled" in params) input.setAttribute("disabled", params.inputDisabled);
@@ -205,35 +217,84 @@ function account() {
                 
                 return field;
                 //break;
-            }
+
+            case "checkbox":
+                // Field
+                field = document.createElement("div");
+                field.setAttribute("class", "field");
+                if("hidden" in params) field.setAttribute("hidden", params.hidden);
+                
+                // Label
+                label = document.createElement("label");
+                label.textContent = params.labelTextContent;
+
+                // Input
+                input = document.createElement("input");
+                input.setAttribute("class", `input ${params.inputType}`);
+                input.setAttribute("type", params.inputType);
+                if("inputValue" in params) input.setAttribute("value", params.inputValue);
+                if("inputDisabled" in params) input.setAttribute("disabled", params.inputDisabled);
+                if("hidden" in params) input.setAttribute("hidden", params.hidden);
+
+                label.append(input);
+                field.append(label);
+                
+                return field;
+                //break;
 
             default:
                 let inputID = params.inputName + `-${windowNumber}`;
 
                 // Field
-                let field = document.createElement("div");
+                field = document.createElement("div");
                 field.setAttribute("class", "field");
                 if("hidden" in params) field.setAttribute("hidden", params.hidden);
                 
                 // Label
-                let label = document.createElement("label");
+                label = document.createElement("label");
                 label.setAttribute("class", "label");
                 label.setAttribute("for", inputID);
                 label.textContent = params.labelTextContent;
                 if("hidden" in params) label.setAttribute("hidden", params.hidden);
                 
                 // Input
-                let input = document.createElement("input");
-                input.setAttribute("class", "input");
+                input = document.createElement("input");
+                input.setAttribute("class", `input ${params.inputName}`);
                 input.setAttribute("type", params.inputType);
                 input.setAttribute("name", params.inputName);
                 input.setAttribute("id", inputID);
+                if("inputValue" in params) input.setAttribute("value", params.inputValue);
                 if("inputPlaceHolder" in params) input.setAttribute("placeholder", params.inputPlaceHolder);
                 if("inputDisabled" in params) input.setAttribute("disabled", params.inputDisabled);
+                if("inputRequired" in params) input.setAttribute("required", params.inputRequired);
                 if("hidden" in params) input.setAttribute("hidden", params.hidden);
-            
+
                 field.append(label);
-                field.append(input);
+                
+                if(params.inputType == "password") {
+                    // Wrapper password + toggle
+                    let div = document.createElement("div");
+                    div.setAttribute("class", "wrapper");
+
+                    // Password visibility toggle
+                    let toggle = document.createElement("input");
+                    toggle.setAttribute("class", `input checkbox`);
+                    toggle.setAttribute("type", "checkbox");
+                    toggle.addEventListener("click", (e) => {
+                        let inputPassword = toggle.parentElement.getElementsByClassName("password")[0];
+                        if (inputPassword.type == "password") {
+                            inputPassword.type = "text";
+                        } else {
+                            inputPassword.type = "password";
+                        }
+                    });
+
+                    div.append(input);
+                    div.append(toggle);
+                    field.append(div);
+                } else {
+                    field.append(input);
+                }
                 
                 return field;
                 //break;
@@ -277,7 +338,7 @@ function mouseDown(e, bar) {
     var win = bar.parentElement;
 
     // Focus on window (places it in front)
-    focusedWindow = windowsFocus(win);
+    focusedWindow = windowFocus(win);
 
     // Capture mouse moves
     document.addEventListener("mousemove", moveWindow);

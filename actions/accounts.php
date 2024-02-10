@@ -1,7 +1,7 @@
 <?php
 include "actions/conn.php";
 
-// session_start();
+session_start();
 // $user      = $_SESSION["user"];
 // $privilege = 777;
 
@@ -10,6 +10,7 @@ $action = $_POST["action"];
 switch ($action) {
     case "create":
         $user      = $_POST["user"];
+        $password  = $_POST["password"];
         $name      = $_POST["name"];
         $birthdate = $_POST["birthdate"] == "" ? null : $_POST["birthdate"];
         $address   = $_POST["address"];
@@ -26,8 +27,8 @@ switch ($action) {
 
         } else {
             // Creating
-            $sql = "INSERT INTO users(user, name,".($birthdate == null ? "" : " birthdate,")." address, email, phone, cpf) " . 
-            "values('$user', '$name',".($birthdate == null ? "" : " 'birthdate',")." '$address', '$email', '$phone', '$cpf')";
+            $sql = "INSERT INTO users(user, password, name,".($birthdate == null ? "" : " birthdate,")." address, email, phone, cpf) " . 
+            "values('$user', '$password', '$name',".($birthdate == null ? "" : " 'birthdate',")." '$address', '$email', '$phone', '$cpf')";
             $conn->query($sql);
     
             // getting id
@@ -58,7 +59,24 @@ switch ($action) {
         break;
 
     case "edit":
-        # code...
+        $id      = $_POST["id"];
+        $user      = $_POST["user"];
+        $password  = $_POST["password"];
+        $name      = $_POST["name"];
+        $birthdate = $_POST["birthdate"] == "" ? null : $_POST["birthdate"];
+        $address   = $_POST["address"];
+        $email     = $_POST["email"];
+        $phone     = $_POST["phone"];
+        $cpf       = $_POST["cpf"];
+
+        $sql = "UPDATE users SET user = '$user', password = '$password', name = '$name', ".($birthdate == null ? "" :  "birthdate = '$birthdate', ")."address = '$address', email = '$email', phone = '$phone' WHERE id = '$id'";
+
+        echo json_encode([
+            "edited" => $conn->query($sql),
+            "id" => $id,
+            "name" => $name,
+            "user" => $user
+        ]);
         break;
 
     case "delete":
@@ -68,14 +86,18 @@ switch ($action) {
         $response = $conn->query($sql);
 
         if ($response != false) {
-            echo json_encode(["deleted" => true, "id" => $id]);
+            echo json_encode(["deleted" => true, "id" => $id, "sessionId" => $_SESSION["id"]]);
         } else {
             echo json_encode(["deleted" => false]);
         }
         break;
     
-    default:
-        # code...
+    case "read":
+        $id = $_POST["id"];
+        $sql = "SELECT * FROM users WHERE id = '$id'";
+        $response = $conn->query($sql);
+
+        echo json_encode($response->fetch_assoc());
         break;
 }
 
