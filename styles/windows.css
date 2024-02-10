@@ -11,9 +11,14 @@
 
 .window-content {
     display: grid;
-}
 
-.content-field {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    .field {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        .input {
+            width: 100px;
+            box-sizing: border-box;
+        }
+    }
 }

@@ -1,7 +1,7 @@
-var form = document.querySelector("#form");
+let form = document.querySelector("#form");
 
 function authenticate() {
-    var formData = new FormData(form);
+    let formData = new FormData(form);
 
     fetch("/projetointegrador/actions/login.php", {
         method: "post",
@@ -14,7 +14,7 @@ function authenticate() {
         }
 
         // Message
-        var spanMessage = document.querySelector("#message");
+        let spanMessage = document.querySelector("#message");
         spanMessage.innerHTML = data.message;
         if (data.message != "") {
         }

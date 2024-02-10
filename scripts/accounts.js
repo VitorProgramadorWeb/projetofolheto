@@ -1,4 +1,4 @@
-var table = document.querySelector(".accounts-table");
+let table = document.querySelector(".accounts-table");
 
 // List accounts available to edit/delete or even create, in a table
 // Also the options to do that
@@ -9,18 +9,21 @@ function listUserAccounts() {
     .then(response => {
         // RESPONSE: id, name, user
 
+        let thead, tbody, tfoot;
+        let tr, th, td;
+
         // ---------- THEAD ----------
-        var thead = document.createElement("thead");
-        var tr = document.createElement("tr");
+        thead = document.createElement("thead");
+        tr = document.createElement("tr");
         // Object.keys(response[0]).forEach((key) => {
         ["ID", "Nome", "Usuário"].forEach((key, index) => {
-            var th = document.createElement("th");
+            th = document.createElement("th");
             th.innerHTML = key;
             if (index == 0) th.hidden = true; // Hide ID
             tr.append(th);
         });
         // options
-        var th = document.createElement("th");
+        th = document.createElement("th");
         th.colSpan = 2;
         th.innerHTML = "Opções";
         tr.append(th);
@@ -28,30 +31,36 @@ function listUserAccounts() {
         thead.append(tr);
 
         // ---------- TBODY ----------
-        var tbody = document.createElement("tbody");
+        tbody = document.createElement("tbody");
+        tbody.setAttribute("class", "tbody");
         response.forEach((row, index) => {
-            var tr = document.createElement("tr");
+            let id;
+            tr = document.createElement("tr");
 
-            Object.values(row).forEach((value, index) => {
-                var td = document.createElement("td");
+            Object.entries(row).forEach(([key, value], index) => {
+                td = document.createElement("td");
+                td.setAttribute("class", key);
                 td.innerHTML = value;
-                if (index == 0) td.hidden = true; // Hide ID
+                if (index == 0) {
+                    td.hidden = true; // Hide ID
+                    id = value;
+                }
                 tr.append(td);
             });
             // options
-            var td = document.createElement("td");
-            td.innerHTML = "<a href='#edit?id="+index+"''>Editar</a>";
+            td = document.createElement("td");
+            td.innerHTML = `<a href="#edit?id=${id}">Editar</a>`;
             tr.append(td);
-            var td = document.createElement("td");
-            td.innerHTML = "<a href='#delete?id="+index+"'>Excluir</a>";
+            td = document.createElement("td");
+            td.innerHTML = `<a onclick="deleteAccount(${id});" href="#delete?id=${id}">Excluir</a>`;
             tr.append(td);
 
             tbody.append(tr);
         });
 
         // ---------- TFOOT ----------
-        var tfoot = document.createElement("tfoot");
-        var th = document.createElement("th");
+        tfoot = document.createElement("tfoot");
+        th = document.createElement("th");
         th.colSpan = 5;
         th.scope = "row";
         th.innerHTML = "<a onclick='addWindow(\"Criar conta\", account())' href='#create'>&plus; Criar conta de usuário</a>";
@@ -63,65 +72,81 @@ function listUserAccounts() {
     });
 }
 
-// Invokes a form to Create a user accounts
-function createAccount() {
+function tableRow(id, name, user) {
+    let tr, td;
 
+    tr = document.createElement("tr");
 
+    // id
+    td = document.createElement("td");
+    td.setAttribute("class", "id");
+    td.innerHTML = id;
+    td.hidden = true; // Hide ID
+    tr.append(td);
+    
+    // name
+    td = document.createElement("td");
+    td.setAttribute("class", "name");
+    td.innerHTML = name;
+    tr.append(td);
+    
+    // user
+    td = document.createElement("td");
+    td.setAttribute("class", "user");
+    td.innerHTML = user;
+    tr.append(td);
 
-    fetch("/projetointegrador/actions/accounts.php?action=create")
-    .then(response => response.json())
+    // options
+    td = document.createElement("td");
+    td.innerHTML = "<a href='#edit?id="+id+"''>Editar</a>";
+    tr.append(td);
+    td = document.createElement("td");
+    td.innerHTML = `<a onclick="deleteAccount(${id});" href="#delete?id=${id}">Excluir</a>`;
+    tr.append(td);
+
+    return tr;
+}
+
+// Create user account from form
+function createAccount(form) {
+    
+    let formData = new FormData(form);
+
+    fetch("/projetointegrador/actions/accounts.php?action=create", {
+        method: "post",
+        body: formData
+    }).then(res => res.json())
     .then(response => {
-        // RESPONSE: id, name, user
 
-        // ---------- THEAD ----------
-        var thead = document.createElement("thead");
-        var tr = document.createElement("tr");
-        // Object.keys(response[0]).forEach((key) => {
-        ["ID", "Nome", "Usuário"].forEach((key, index) => {
-            var th = document.createElement("th");
-            th.innerHTML = key;
-            if (index == 0) th.hidden = true; // Hide ID
-            tr.append(th);
-        });
-        // options
-        var th = document.createElement("th");
-        th.colSpan = 2;
-        th.innerHTML = "Opções";
-        tr.append(th);
+        if (response.invalidUser) {
+            alert("Usuário já existe.");
 
-        thead.append(tr);
+        } else if (response.created) {
+            let tbody = document.getElementsByTagName("tbody")[0];
 
-        // ---------- TBODY ----------
-        var tbody = document.createElement("tbody");
-        response.forEach((row, index) => {
-            var tr = document.createElement("tr");
+            tbody.append(tableRow(response.id, response.name, response.user));
+            removeWindow(form);
+        }
+    });
+}
 
-            Object.values(row).forEach((value, index) => {
-                var td = document.createElement("td");
-                td.innerHTML = value;
-                if (index == 0) td.hidden = true; // Hide ID
-                tr.append(td);
+// Delete user account
+function deleteAccount(id) {
+
+    fetch("/projetointegrador/actions/accounts.php?action=delete&id="+id, {
+        method: "post",
+        body: `{"id": ${id}}`
+    }).then(res => res.json())
+    .then(response => {
+
+        if (response.deleted) {
+            let tds = document.getElementsByClassName("id");
+
+            Object.values(tds).forEach(td => {
+                if (td.innerHTML == id) {
+                    td.parentNode.remove();
+                }
             });
-            // options
-            var td = document.createElement("td");
-            td.innerHTML = "<a href='#edit?id="+index+"''>Editar</a>";
-            tr.append(td);
-            var td = document.createElement("td");
-            td.innerHTML = "<a href='#delete?id="+index+"'>Excluir</a>";
-            tr.append(td);
-
-            tbody.append(tr);
-        });
-
-        // ---------- TFOOT ----------
-        var tfoot = document.createElement("tfoot");
-        var th = document.createElement("th");
-        th.colSpan = 5;
-        th.innerHTML = "<a href='#create'>&plus; Criar conta de usuário</a>";
-        tfoot.append(th);
-
-        table.append(thead);
-        table.append(tbody);
-        table.append(tfoot);
+        }
     });
 }

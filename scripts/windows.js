@@ -90,33 +90,76 @@ function account() {
     let form = document.createElement("form");
     form.setAttribute("class", "window-content content-account");
     form.setAttribute("action", "javascript:void(0);");
-    // form.setAttribute("onsubmit", "salvarFormulario(event, this, '"+action+"');"); //event.preventDefault();
+    form.setAttribute("onsubmit", "event.preventDefault(); createAccount(this);");
     
     // ----- Fields ----- //
+    // ID
+    let idField = createField({
+        hidden: true,
+        labelTextContent: "ID",
+        inputName: "id",
+        inputType: "number",
+        inputDisabled: true
+    });
+
     // User
-    let userField = createField("Usuário", "user", "text");
+    let userField = createField({
+        labelTextContent: "Usuário",
+        inputName: "user",
+        inputType: "text"
+    });
 
     // Name
-    let nameField = createField("Nome", "name", "text");
+    let nameField = createField({
+        labelTextContent: "Nome",
+        inputName: "name",
+        inputType: "text"
+    });
     
     // Birthdate
-    let birthdateField = createField("Nascimento", "birthdate", "date");
+    let birthdateField = createField({
+        labelTextContent: "Nascimento",
+        inputName: "birthdate",
+        inputType: "date"
+    });
     
     // Address
-    let addressField = createField("Endereço", "address", "text");
+    let addressField = createField({
+        labelTextContent: "Endereço",
+        inputName: "address",
+        inputType: "text"
+    });
 
     // Email
-    let emailField = createField("E-mail", "email", "email");
+    let emailField = createField({
+        labelTextContent: "E-mail",
+        inputName: "email",
+        inputType: "email"
+    });
     
     // Phone
-    let phoneField = createField("Telefone", "phone", "tel", {placeholder: "(__)_____-____"});
+    let phoneField = createField({
+        labelTextContent: "Telefone",
+        inputName: "phone",
+        inputType: "tel",
+        inputPlaceHolder: "(__)_____-____"
+    });
 
     // CPF
-    let cpfField = createField("CPF", "cpf", "text", {placeholder: "___.___.___-__"});
+    let cpfField = createField({
+        labelTextContent: "CPF",
+        inputName: "cpf",
+        inputType: "text",
+        inputPlaceHolder: "___.___.___-__"
+    });
 
-    // Save button
-    let botaoSalvar = criarBotaoSubmit();
+    // Submit button
+    let submitButton = createField({
+        inputType: "submit",
+        inputValue: "Salvar"
+    });
 
+    form.append(idField);
     form.append(userField);
     form.append(nameField);
     form.append(birthdateField);
@@ -125,81 +168,79 @@ function account() {
     form.append(phoneField);
     form.append(cpfField);
 
-    form.append(botaoSalvar);
+    form.append(submitButton);
 
     return form;
 
 
     
-    let paramethers = {
+    
+    function createField(params = {
         "labelTextContent": "Texto",
         "inputName": "text",
         "inputType": "text"
-        //"placeholder": ""
-    }
-    function createField(params = paramethers) {
-
-        if(params.inputType)
+        //"inputValue": ""
+        //"inputDisabled": false
+        //"inputPlaceHolder": ""
+        //"hidden": false
+    }) {
+        
+        if("inputType" in params)
         switch (params.inputType) {
             case "submit":{
-                // Input
-                let input = document.createElement("input");
-                input.setAttribute("class", "input");
-                input.setAttribute("type", inputType);
-                input.setAttribute("name", inputName);
-                input.setAttribute("id", inputID);
-                if(other["placeholder"]) input.setAttribute("placeholder", other.placeholder);
-                
-                break;
-            }
-            default:
-                let inputID = inputName + `-${windowNumber}`;
-        
                 // Field
                 let field = document.createElement("div");
                 field.setAttribute("class", "field");
-            
+                if("hidden" in params) field.setAttribute("hidden", params.hidden);
+                
+                // Input
+                let input = document.createElement("input");
+                input.setAttribute("class", "input");
+                input.setAttribute("type", params.inputType);
+                input.setAttribute("value", params.inputValue);
+                if("inputDisabled" in params) input.setAttribute("disabled", params.inputDisabled);
+                if("hidden" in params) input.setAttribute("hidden", params.hidden);
+
+                field.append(input);
+                
+                return field;
+                //break;
+            }
+
+            default:
+                let inputID = params.inputName + `-${windowNumber}`;
+
+                // Field
+                let field = document.createElement("div");
+                field.setAttribute("class", "field");
+                if("hidden" in params) field.setAttribute("hidden", params.hidden);
+                
                 // Label
                 let label = document.createElement("label");
                 label.setAttribute("class", "label");
                 label.setAttribute("for", inputID);
-                label.textContent = labelTextContent;
-            
+                label.textContent = params.labelTextContent;
+                if("hidden" in params) label.setAttribute("hidden", params.hidden);
+                
                 // Input
                 let input = document.createElement("input");
                 input.setAttribute("class", "input");
-                input.setAttribute("type", inputType);
-                input.setAttribute("name", inputName);
+                input.setAttribute("type", params.inputType);
+                input.setAttribute("name", params.inputName);
                 input.setAttribute("id", inputID);
-                if(other["placeholder"]) input.setAttribute("placeholder", other.placeholder);
+                if("inputPlaceHolder" in params) input.setAttribute("placeholder", params.inputPlaceHolder);
+                if("inputDisabled" in params) input.setAttribute("disabled", params.inputDisabled);
+                if("hidden" in params) input.setAttribute("hidden", params.hidden);
             
                 field.append(label);
                 field.append(input);
+                
                 return field;
-
-                break;
+                //break;
         }
-        
     }
 
-    function createButton(buttonText, ) {
-        // Field
-        let field = document.createElement("div");
-        field.setAttribute("class", "content-field");
-    
-        // Input
-        let input = document.createElement("input");
-        input.setAttribute("class", "button");
-        input.setAttribute("value", buttonText);
-        input.setAttribute("type", "submit");
-    
-        campo.append(input);
-        return campo;
-    }
-}
-
-function configuracao() {
-    
+    // function createButton() {}
 }
 
 function none() {
@@ -275,52 +316,3 @@ function windowFocus(win) {
     return false; // Failure
 }
 
-// Salvar formulário
-function salvarFormulario(e, form, action) {
-    
-    // Dados do formulário
-    var dadosForm = e.currentTarget;
-    var dados = {
-        id:                   dadosForm.id.value,
-        nome:                 dadosForm.nome.value,
-        email:                dadosForm.email.value,
-        nascimento:           dadosForm.nascimento.value,
-        renda:                dadosForm.renda.value,
-        cpf:                  dadosForm.cpf.value,
-        cnpj:                 dadosForm.cnpj.value,
-        rua:                  dadosForm.rua.value,
-        numero:               dadosForm.numero.value,
-        complemento:          dadosForm.complemento.value,
-        uf:                   dadosForm.uf.value,
-        cidade:               dadosForm.cidade.value,
-        cep:                  dadosForm.cep.value,
-        telefone_residencial: dadosForm.telefone_residencial.value,
-        telefone_celular:     dadosForm.telefone_celular.value
-    };
-
-    // Criando os parâmetros
-    var param = "?";
-    for (var dado in dados) {
-        param += dado+"="+dados[dado]+"&";
-    }
-    param = param.substring(0, param.length-1); // - ...&
-
-    // AJAX
-    var xmlhttp = new XMLHttpRequest();
-
-    // Ao receber a resposta
-    xmlhttp.onload = function() {
-
-        if(this.response != "") {
-            alert(this.response); // ERRO
-        } else {
-            carregarTabela();
-            removePopup(form);
-        }
-        
-    };
-
-    // Enviando o pedido
-    xmlhttp.open("GET", action+".php"+param);
-    xmlhttp.send();
-}
