@@ -5,7 +5,7 @@ include "actions/conn.php";
 // $user      = $_SESSION["user"];
 // $privilege = 777;
 
-$action = $_GET["action"];
+$action = $_POST["action"];
 
 switch ($action) {
     case "create":
@@ -62,7 +62,7 @@ switch ($action) {
         break;
 
     case "delete":
-        $id = $_GET["id"];
+        $id = $_POST["id"];
 
         $sql = "DELETE FROM users WHERE id='$id'";
         $response = $conn->query($sql);

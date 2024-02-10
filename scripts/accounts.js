@@ -4,8 +4,13 @@ let table = document.querySelector(".accounts-table");
 // Also the options to do that
 function listUserAccounts() {
 
-    fetch("/projetointegrador/actions/accounts.php?action=list")
-    .then(response => response.json())
+    let data = new FormData();
+    data.append("action", "list");
+    
+    fetch("/projetointegrador/actions/accounts.php", {
+        method: "post",
+        body: data
+    }).then(res => res.json())
     .then(response => {
         // RESPONSE: id, name, user
 
@@ -111,8 +116,9 @@ function tableRow(id, name, user) {
 function createAccount(form) {
     
     let formData = new FormData(form);
+    formData.append("action", "create");
 
-    fetch("/projetointegrador/actions/accounts.php?action=create", {
+    fetch("/projetointegrador/actions/accounts.php", {
         method: "post",
         body: formData
     }).then(res => res.json())
@@ -133,9 +139,14 @@ function createAccount(form) {
 // Delete user account
 function deleteAccount(id) {
 
-    fetch("/projetointegrador/actions/accounts.php?action=delete&id="+id, {
+    let data = new FormData();
+
+    data.append("action", "delete");
+    data.append("id", id);
+
+    fetch("/projetointegrador/actions/accounts.php", {
         method: "post",
-        body: `{"id": ${id}}`
+        body: data
     }).then(res => res.json())
     .then(response => {
 
