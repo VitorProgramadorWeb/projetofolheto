@@ -69,7 +69,7 @@ switch ($action) {
         $phone     = $_POST["phone"];
         $cpf       = $_POST["cpf"];
 
-        $sql = "UPDATE users SET user = '$user', password = '$password', name = '$name', ".($birthdate == null ? "" :  "birthdate = '$birthdate', ")."address = '$address', email = '$email', phone = '$phone' WHERE id = '$id'";
+        $sql = "UPDATE users SET user = '$user', password = '$password', name = '$name', ".($birthdate == null ? "" :  "birthdate = '$birthdate', ")."address = '$address', email = '$email', phone = '$phone', cpf = '$cpf' WHERE id = '$id'";
 
         echo json_encode([
             "edited" => $conn->query($sql),
