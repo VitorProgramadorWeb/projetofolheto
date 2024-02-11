@@ -28,7 +28,7 @@ switch ($action) {
         } else {
             // Creating
             $sql = "INSERT INTO users(user, password, name,".($birthdate == null ? "" : " birthdate,")." address, email, phone, cpf) " . 
-            "values('$user', '$password', '$name',".($birthdate == null ? "" : " 'birthdate',")." '$address', '$email', '$phone', '$cpf')";
+            "values('$user', '$password', '$name',".($birthdate == null ? "" : " '$birthdate',")." '$address', '$email', '$phone', '$cpf')";
             $conn->query($sql);
     
             // getting id
