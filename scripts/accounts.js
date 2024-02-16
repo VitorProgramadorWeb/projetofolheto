@@ -1,8 +1,9 @@
 let table = document.querySelector(".accounts-table");
 
-// List accounts available to edit/delete or even create, in a table
-// Also the options to do that
-function listUserAccounts() {
+/**
+ * List Registries available to edit/delete or even create, in a table. Also the options to do that.
+ */
+function listRegistries() {
 
     let data = new FormData();
     data.append("action", "list");
@@ -112,8 +113,12 @@ function tableRow(id, name, user) {
     return tr;
 }
 
-// Create user account from form
-function createAccount(form) {
+/**
+ * Create a registry.
+ * 
+ * @param {HTMLFormElement} form A form element.
+ */
+function createRegistry(form) {
     
     let formData = new FormData(form);
     formData.append("action", "create");
@@ -136,8 +141,12 @@ function createAccount(form) {
     });
 }
 
-// Delete user account
-function deleteAccount(id) {
+/**
+ * Delete a registry.
+ * 
+ * @param {number} id The registry id to delete.
+ */
+function deleteRegistry(id) {
 
     let data = new FormData();
     data.append("action", "delete");
@@ -166,8 +175,12 @@ function deleteAccount(id) {
     });
 }
 
-// Edit user account
-function editAccount(form) {
+/**
+ * Edit a registry.
+ * 
+ * @param {HTMLFormElement} form A form element.
+ */
+function editRegistry(form) {
     
     let data = new FormData(form);
     data.append("action", "edit");
@@ -194,8 +207,13 @@ function editAccount(form) {
     });
 }
 
-// Loads account contents in a window to edit
-function loadAccountContent(id, win) {
+/**
+ * Loads registry contents in a form.
+ * 
+ * @param {number} id The registry id to delete.
+ * @param {HTMLElement} win A form element.
+ */
+function loadRegistryContent(id, win) {
 
     let data = new FormData();
     data.append("action", "read");
