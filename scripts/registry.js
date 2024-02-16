@@ -5,7 +5,7 @@ let table = document.querySelector(".registries-table");
  */
 function listRegistries() {
 
-    getRegistry('*').then(response => {
+    getRegistry("users", "*").then(response => {
         // RESPONSE: id, name, user
 
         let thead, tbody, tfoot;
@@ -242,15 +242,17 @@ function loadRegistry(id, win) {
 /**
  * Gets registry.
  * @async
- * @param {string} id - The registry id to get. Also can be '*' to get all available registries.
+ * @param {string} table - Database table name.
+ * @param {string} primaryKey - The registry primary key of 'table' to get. Also can be '*' to get all available registries.
  * @returns Promise json.
  */
-async function getRegistry(id) {
+async function getRegistry(table, primaryKey) {
     const response = await fetch("/projetointegrador/actions/registry.php", {
         method: "post",
+        headers: {"Content-Type": "multipart/form-data;charset=UTF-8"},
         body: JSON.stringify({
-            "Content-Type": "multipart/form-data",
-            "id": `${id}`
+            "table": `${table}`,
+            "primary-key": `${primaryKey}`
         })
     });
     return await response.json();
