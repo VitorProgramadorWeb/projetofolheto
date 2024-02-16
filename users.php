@@ -8,10 +8,10 @@ include "patterns/logged/header.php";
 
     <h1>Contas dos usuários</h1>
 
-    <table class="users-table"></table>
+    <table class="registries-table"></table>
     
     <script src="/projetointegrador/scripts/window.js"></script>
-    <script src="/projetointegrador/scripts/registration.js"></script>
+    <script src="/projetointegrador/scripts/registry.js"></script>
     <script>listRegistries()</script>
     
     <!-- ?php include "footer.php" ?> -->

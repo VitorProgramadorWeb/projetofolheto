@@ -1,18 +1,11 @@
-let table = document.querySelector(".accounts-table");
+let table = document.querySelector(".registries-table");
 
 /**
  * List Registries available to edit/delete or even create, in a table. Also the options to do that.
  */
 function listRegistries() {
 
-    let data = new FormData();
-    data.append("action", "list");
-    
-    fetch("/projetointegrador/actions/accounts.php", {
-        method: "post",
-        body: data
-    }).then(res => res.json())
-    .then(response => {
+    getRegistry('*').then(response => {
         // RESPONSE: id, name, user
 
         let thead, tbody, tfoot;
@@ -21,8 +14,8 @@ function listRegistries() {
         // ---------- THEAD ----------
         thead = document.createElement("thead");
         tr = document.createElement("tr");
-        // Object.keys(response[0]).forEach((key) => {
-        ["ID", "Nome", "Usuário"].forEach((key, index) => {
+        // ["ID", "Nome", "Usuário"].forEach((key, index) => {
+        Object.keys(response[0]).forEach((key, index) => {
             th = document.createElement("th");
             th.innerHTML = key;
             if (index == 0) th.hidden = true; // Hide ID
@@ -55,10 +48,10 @@ function listRegistries() {
             });
             // options
             td = document.createElement("td");
-            td.innerHTML = `<button onclick="loadAccountContent(${id}, addWindow('Editar conta', account('editAccount(this)')));">Editar</button>`;
+            td.innerHTML = `<button onclick="loadAccountContent(${id}, addWindow('Editar conta', account('editRegistry(this)')));">Editar</button>`;
             tr.append(td);
             td = document.createElement("td");
-            td.innerHTML = `<button onclick="deleteAccount(${id});">Excluir</button>`;
+            td.innerHTML = `<button onclick="deleteRegistry(${id});">Excluir</button>`;
             tr.append(td);
 
             tbody.append(tr);
@@ -244,4 +237,28 @@ function loadRegistry(id, win) {
         inputCpf.value = response.cpf;
         
     });
+}
+
+/**
+ * Gets registry.
+ * @async
+ * @param {string} id - The registry id to get. Also can be '*' to get all available registries.
+ * @returns Promise json.
+ */
+async function getRegistry(id) {
+    const response = await fetch("/projetointegrador/actions/registry.php", {
+        method: "post",
+        body: JSON.stringify({
+            "Content-Type": "multipart/form-data",
+            "id": `${id}`
+        })
+    });
+    return await response.json();
+}
+
+/**
+ * Sets registry.
+ */
+function SetRegistry() {
+
 }
