@@ -1,24 +1,22 @@
-let table = document.querySelector(".registries-table");
+let registriesTable = document.querySelector(".registries-table");
 
 /**
  * List Registries available to edit/delete or even create, in a table. Also the options to do that.
+ * @param {string} tableName - Database table name.
  */
-function listRegistries() {
+function listRegistries(tableName) {
 
-    getRegistry("users", "*").then(response => {
-        // RESPONSE: id, name, user
-
+    getRegistry(tableName, "*").then(response => {
         let thead, tbody, tfoot;
         let tr, th, td;
 
         // ---------- THEAD ----------
         thead = document.createElement("thead");
         tr = document.createElement("tr");
-        // ["ID", "Nome", "Usuário"].forEach((key, index) => {
-        Object.keys(response[0]).forEach((key, index) => {
+        Object.keys(response[0]).forEach((key) => {
             th = document.createElement("th");
             th.innerHTML = key;
-            if (index == 0) th.hidden = true; // Hide ID
+            if (key == "id") th.hidden = true; // Hide ID
             tr.append(th);
         });
         // options
@@ -32,15 +30,15 @@ function listRegistries() {
         // ---------- TBODY ----------
         tbody = document.createElement("tbody");
         tbody.setAttribute("class", "tbody");
-        response.forEach((row, index) => {
+        response.forEach((row) => {
             let id;
             tr = document.createElement("tr");
 
-            Object.entries(row).forEach(([key, value], index) => {
+            Object.entries(row).forEach(([key, value]) => {
                 td = document.createElement("td");
                 td.setAttribute("class", key);
                 td.innerHTML = value;
-                if (index == 0) {
+                if (key == "id") {
                     td.hidden = true; // Hide ID
                     id = value;
                 }
@@ -60,14 +58,14 @@ function listRegistries() {
         // ---------- TFOOT ----------
         tfoot = document.createElement("tfoot");
         th = document.createElement("th");
-        th.colSpan = 5;
+        th.colSpan = 100;
         th.scope = "row";
         th.innerHTML = `<button onclick="addWindow('Criar conta', account('createAccount(this)'))">&plus; Criar conta de usuário</button>`;
         tfoot.append(th);
 
-        table.append(thead);
-        table.append(tbody);
-        table.append(tfoot);
+        registriesTable.append(thead);
+        registriesTable.append(tbody);
+        registriesTable.append(tfoot);
     });
 }
 
@@ -243,19 +241,15 @@ function loadRegistry(id, win) {
  * Gets registry.
  * @async
  * @param {string} table - Database table name.
- * @param {string} primaryKey - The registry primary key of 'table' to get. Also can be '*' to get all available registries.
- * @returns Promise json.
+ * @param {string | number} primaryKey - The registry primary key of 'table' to get. Also can be '*' to get all available registries.
+ * @returns {Promise<object>} Promise json.
  */
 async function getRegistry(table, primaryKey) {
-    const response = await fetch("/projetointegrador/actions/registry.php", {
+    return await fetch("/projetointegrador/actions/registry.php", {
         method: "post",
-        headers: {"Content-Type": "multipart/form-data;charset=UTF-8"},
-        body: JSON.stringify({
-            "table": `${table}`,
-            "primary-key": `${primaryKey}`
-        })
-    });
-    return await response.json();
+        headers: {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"},
+        body: `action=get&table=${table}&primary_key=${primaryKey}`
+    }).then(response => response.json());
 }
 
 /**

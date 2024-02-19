@@ -6,13 +6,13 @@ include "patterns/logged/header.php";
     <!-- Windows appears here, in #container -->
     <div id="container"></div>
 
-    <h1>Contas dos usuários</h1>
+    <h1>Cadastro dos usuários</h1>
 
     <table class="registries-table"></table>
     
     <script src="/projetointegrador/scripts/window.js"></script>
     <script src="/projetointegrador/scripts/registry.js"></script>
-    <script>listRegistries()</script>
+    <script>listRegistries("users")</script>
     
     <!-- ?php include "footer.php" ?> -->
 

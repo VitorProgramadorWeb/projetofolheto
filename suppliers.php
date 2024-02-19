@@ -8,11 +8,11 @@ include "patterns/logged/header.php";
 
     <h1>Cadastro dos fornecedores</h1>
 
-    <table class="suppliers-table"></table>
+    <table class="registries-table"></table>
     
-    <script src="/projetointegrador/scripts/windows.js"></script>
-    <script src="/projetointegrador/scripts/accounts.js"></script>
-    <script>listUserAccounts()</script>
+    <script src="/projetointegrador/scripts/window.js"></script>
+    <script src="/projetointegrador/scripts/registry.js"></script>
+    <script>listRegistries("suppliers")</script>
     
     <!-- ?php include "footer.php" ?> -->
 
