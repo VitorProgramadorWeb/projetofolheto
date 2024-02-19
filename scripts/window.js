@@ -304,6 +304,18 @@ function account(action = "") {
     // function createButton() {}
 }
 
+function userForm() {
+    
+}
+
+function supplierForm() {
+
+}
+
+function customerForm() {
+
+}
+
 function none() {
     let none = document.createElement("div");
     none.setAttribute("class", "window-content");
