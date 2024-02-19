@@ -1,6 +1,8 @@
 .window {
     border: 1px solid black;
     width: fit-content;
+    position: fixed; /* remove to disable window mode */
+    background-color: white;
 }
 
 .window-bar {

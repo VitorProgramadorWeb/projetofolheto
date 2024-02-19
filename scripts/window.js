@@ -7,20 +7,26 @@ let windowNumber = 1;
 
 function addWindow(windowLabel = "", windowContent = none()) {
     // Windows container
-    let container = document.getElementById("container");
+    const container = document.getElementById("container");
 
     // Window
-    let win = document.createElement("div");
+    const win = document.createElement("div");
     win.setAttribute("class", "window");
     win.style.top = "50%";
     win.style.left = "50%";
+    win.style.transform = "translate(-50%, -50%)";
     // Position relative to previous window
     let lastWindow = container.lastChild;
     if (lastWindow != null) {
         let topLasWindow = lastWindow.style.top;
         let leftLastWindow = lastWindow.style.left;
-        win.style.top = (Number(topLasWindow.substring(0, topLasWindow.length-1)) + 5) + "%";
-        win.style.left = (Number(leftLastWindow.substring(0, leftLastWindow.length-1)) - 5) + "%";
+        if (win.style.top.includes("%")) {
+            win.style.top = (Number(topLasWindow.replace("%", "")) + 5) + "%";
+            win.style.left = (Number(leftLastWindow.replace("%", "")) - 5) + "%";
+        } else if (win.style.top.includes("px")){
+            win.style.top = (Number(topLasWindow.replace("px", "")) + 5) + "px";
+            win.style.left = (Number(leftLastWindow.replace("px", "")) - 5) + "px";
+        }
     }
 
     /* ----------------------------- HEADER ----------------------------- */
@@ -357,12 +363,12 @@ function mouseDown(e, bar) {
 
     // TOP and LEFT CSS values of window
     // window != win
-    var topWindow = window.getComputedStyle(popup).getPropertyValue("top"); // "px"
-    var leftWindow = window.getComputedStyle(popup).getPropertyValue("left");
+    var topWindow = window.getComputedStyle(win).getPropertyValue("top"); // "px"
+    var leftWindow = window.getComputedStyle(win).getPropertyValue("left");
     
     // Calculating the X and Y distance from the top left corner of the window to the mouse
-    yWindow = e.pageY - Number(topWindow.substring(0, topWindow.length-2)); // Ex: str("10px") -> num(10)
-    xWindow = e.pageX - Number(leftWindow.substring(0, leftWindow.length-2));
+    yWindow = e.pageY - Number(topWindow.replace("px", "")); // Ex: str("10px") -> num(10)
+    xWindow = e.pageX - Number(leftWindow.replace("px", ""));
 }
 function moveWindow(e) {
     // Defines the TOP and LEFT css of the window based on where the mouse is grabbing on the Bar
@@ -370,7 +376,7 @@ function moveWindow(e) {
     focusedWindow.style.left = (e.pageX - xWindow) + "px";
 }
 function mouseUp() {
-    document.removeEventListener("mousemove", movePopup);
+    document.removeEventListener("mousemove", moveWindow);
 }
 
 // Places window in front
