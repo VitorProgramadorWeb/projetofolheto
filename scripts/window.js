@@ -328,9 +328,9 @@ function none() {
 //////////////////////////////////////////////
 
 // Communication variables
-var focusedWindow;
-var xWindow;
-var yWindow;
+let focusedWindow;
+let xWindow;
+let yWindow;
 
 // Window movimentatino [mouseDown -> moveWindow -> mouseUp]
 function mouseDown(e, bar) {

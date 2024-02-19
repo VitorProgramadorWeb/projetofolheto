@@ -7,64 +7,70 @@ let registriesTable = document.querySelector(".registries-table");
 function listRegistries(tableName) {
 
     getRegistry(tableName, "*").then(response => {
+        
         let thead, tbody, tfoot;
         let tr, th, td;
 
-        // ---------- THEAD ----------
-        thead = document.createElement("thead");
-        tr = document.createElement("tr");
-        Object.keys(response[0]).forEach((key) => {
-            th = document.createElement("th");
-            th.innerHTML = key;
-            if (key == "id") th.hidden = true; // Hide ID
-            tr.append(th);
-        });
-        // options
-        th = document.createElement("th");
-        th.colSpan = 2;
-        th.innerHTML = "Opções";
-        tr.append(th);
-
-        thead.append(tr);
-
-        // ---------- TBODY ----------
-        tbody = document.createElement("tbody");
-        tbody.setAttribute("class", "tbody");
-        response.forEach((row) => {
-            let id;
+        if (response.length !== 0) {
+            // ---------- THEAD ----------
+            thead = document.createElement("thead");
             tr = document.createElement("tr");
-
-            Object.entries(row).forEach(([key, value]) => {
-                td = document.createElement("td");
-                td.setAttribute("class", key);
-                td.innerHTML = value;
-                if (key == "id") {
-                    td.hidden = true; // Hide ID
-                    id = value;
-                }
-                tr.append(td);
+            Object.keys(response[0]).forEach((key) => {
+                th = document.createElement("th");
+                th.innerHTML = key;
+                if (key == "id") th.hidden = true; // Hide ID
+                tr.append(th);
             });
             // options
-            td = document.createElement("td");
-            td.innerHTML = `<button onclick="loadAccountContent(${id}, addWindow('Editar conta', account('editRegistry(this)')));">Editar</button>`;
-            tr.append(td);
-            td = document.createElement("td");
-            td.innerHTML = `<button onclick="deleteRegistry(${id});">Excluir</button>`;
-            tr.append(td);
+            th = document.createElement("th");
+            th.colSpan = 2;
+            th.innerHTML = "Opções";
+            tr.append(th);
+    
+            thead.append(tr);
+    
+            // ---------- TBODY ----------
+            tbody = document.createElement("tbody");
+            tbody.setAttribute("class", "tbody");
+            response.forEach((row) => {
+                let id;
+                tr = document.createElement("tr");
+    
+                Object.entries(row).forEach(([key, value]) => {
+                    td = document.createElement("td");
+                    td.setAttribute("class", key);
+                    td.innerHTML = value;
+                    if (key == "id") {
+                        td.hidden = true; // Hide ID
+                        id = value;
+                    }
+                    tr.append(td);
+                });
+                // options
+                td = document.createElement("td");
+                td.innerHTML = `<button onclick="loadAccountContent(${id}, addWindow('Editar conta', account('editRegistry(this)')));">Editar</button>`;
+                tr.append(td);
+                td = document.createElement("td");
+                td.innerHTML = `<button onclick="deleteRegistry(${id});">Excluir</button>`;
+                tr.append(td);
+    
+                tbody.append(tr);
+            });
 
-            tbody.append(tr);
-        });
-
+            // APPEND
+            registriesTable.append(thead);
+            registriesTable.append(tbody);
+        }
+        
         // ---------- TFOOT ----------
         tfoot = document.createElement("tfoot");
         th = document.createElement("th");
         th.colSpan = 100;
         th.scope = "row";
-        th.innerHTML = `<button onclick="addWindow('Criar conta', account('createAccount(this)'))">&plus; Criar conta de usuário</button>`;
+        th.innerHTML = `<button onclick="addWindow('Criar conta', account('createAccount(this)'))">&plus; Criar novo</button>`;
         tfoot.append(th);
-
-        registriesTable.append(thead);
-        registriesTable.append(tbody);
+        
+        // APPEND
         registriesTable.append(tfoot);
     });
 }
