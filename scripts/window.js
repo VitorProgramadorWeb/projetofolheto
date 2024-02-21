@@ -11,6 +11,8 @@ const container = document.getElementById("container");
 
 function addWindow(windowLabel = "", windowContent = none()) {
 
+    
+
     const lastWindow = container.lastChild; // Position relative to last window
 
     // Window
@@ -20,7 +22,7 @@ function addWindow(windowLabel = "", windowContent = none()) {
     /* ----------------------------- HEADER ----------------------------- */
     // Window bar
     const bar = document.createElement("div");
-    bar.setAttribute("class", "window-bar");
+    bar.className = "window-bar";
     bar.setAttribute("onmousedown", "this.style.cursor = 'grabbing'; mouseDown(event, this)");
     bar.setAttribute("onmouseup", "this.style.cursor = 'grab'");
     bar.setAttribute("onmouseleave", "this.style.cursor = 'grab'");
@@ -96,25 +98,14 @@ function removeWindow(element) {
 //              Window contents              //
 ///////////////////////////////////////////////
 
-const resizeObserver = new ResizeObserver((entries) => {
-    const targ = entries[0].target;
-    const windowContent = targ.getElementsByClassName("window-content")[0];
-
-    if (((Number(targ.style.top.replace("px", "")) + 10) + windowContent.clientHeight) > innerHeight) {
-        windowContent.style.height = (innerHeight - Number(targ.style.top.replace("px", "")) - 5) + "px";
-    }
-    if (((Number(targ.style.left.replace("px", "")) - 10) + windowContent.clientWidth) > innerWidth) {
-        windowContent.style.width = (innerWidth - Number(targ.style.left.replace("px", "")) - 5) + "px";
-    }
-});
-
-function account(action = "") {
-    /* ----------------------------- ACCOUNT ----------------------------- */
+function userForm(data) {
+    /* ----------------------------- USER ----------------------------- */
     // Form
     let form = document.createElement("form");
-    form.setAttribute("class", "window-content content-account");
-    form.setAttribute("onsubmit", `event.preventDefault(); ${action};`);
-    form.setAttribute("onmousedown", `windowFocus(this)`);
+    form.className = "window-content content-user";
+    form.id = `user-form-${data.id}`;
+    form.onsubmit = (e) => {e.preventDefault(); setRegistry(form)};
+    form.onmousedown = () => windowFocus(form);
     form.style.minWidth = "330px";
     form.style.minHeight = "290px";
     
@@ -125,7 +116,8 @@ function account(action = "") {
         labelTextContent: "ID",
         inputName: "id",
         inputType: "number",
-        inputDisabled: true
+        inputDisabled: true,
+        inputValue: data.id
     });
     idField.removeAttribute("class");
 
@@ -134,7 +126,8 @@ function account(action = "") {
         labelTextContent: "Usuário",
         inputName: "user",
         inputType: "text",
-        inputRequired: true
+        inputRequired: true,
+        inputValue: data.user
     });
     
     // Password
@@ -142,35 +135,40 @@ function account(action = "") {
         labelTextContent: "Senha",
         inputName: "password",
         inputType: "password",
-        inputRequired: true
+        inputRequired: true,
+        inputValue: data.password
     });
 
     // Name
     let nameField = createField({
         labelTextContent: "Nome",
         inputName: "name",
-        inputType: "text"
+        inputType: "text",
+        inputValue: data.name
     });
     
     // Birthdate
     let birthdateField = createField({
         labelTextContent: "Nascimento",
         inputName: "birthdate",
-        inputType: "date"
+        inputType: "date",
+        inputValue: data.birthdate
     });
     
     // Address
     let addressField = createField({
         labelTextContent: "Endereço",
         inputName: "address",
-        inputType: "text"
+        inputType: "text",
+        inputValue: data.address
     });
 
     // Email
     let emailField = createField({
         labelTextContent: "E-mail",
         inputName: "email",
-        inputType: "email"
+        inputType: "email",
+        inputValue: data.email
     });
     
     // Phone
@@ -178,7 +176,8 @@ function account(action = "") {
         labelTextContent: "Telefone",
         inputName: "phone",
         inputType: "tel",
-        inputPlaceHolder: "(__)_____-____"
+        inputPlaceHolder: "(__)_____-____",
+        inputValue: data.phone
     });
 
     // CPF
@@ -186,7 +185,8 @@ function account(action = "") {
         labelTextContent: "CPF",
         inputName: "cpf",
         inputType: "text",
-        inputPlaceHolder: "___.___.___-__"
+        inputPlaceHolder: "___.___.___-__",
+        inputValue: data.cpf
     });
 
     // Submit button
@@ -332,15 +332,15 @@ function account(action = "") {
     // function createButton() {}
 }
 
-function userForm() {
-    
-}
-
 function supplierForm() {
 
 }
 
 function customerForm() {
+
+}
+
+function productForm() {
 
 }
 
@@ -393,13 +393,20 @@ function mouseDown(e, bar) {
 }
 function moveWindow(e) {
     // Defines the TOP and LEFT css of the window based on where the mouse is grabbing on the Bar
-    if ((e.pageY - yWindow) > 0 &&
-    ((e.pageY - yWindow) + focusedWindow.clientHeight) < innerHeight) {
+    if ((e.pageY - yWindow) > 0 && ((e.pageY - yWindow) + focusedWindow.clientHeight) < innerHeight) {
         focusedWindow.style.top = (e.pageY - yWindow) + "px";
+    } else if ((e.pageY - yWindow) < 0) {
+        focusedWindow.style.top = 0 + "px";
+    } else if (((e.pageY - yWindow) + focusedWindow.clientHeight) > innerHeight) {
+        focusedWindow.style.top = (innerHeight - focusedWindow.clientHeight) + "px";
     }
-    if ((e.pageX - xWindow) > 0 &&
-    ((e.pageX - xWindow) + focusedWindow.clientWidth) < innerWidth) {
+
+    if ((e.pageX - xWindow) > 0 && ((e.pageX - xWindow) + focusedWindow.clientWidth) < innerWidth) {
         focusedWindow.style.left = (e.pageX - xWindow) + "px";
+    } else if ((e.pageX - xWindow) < 0) {
+        focusedWindow.style.left = 0 + "px";
+    } else if (((e.pageX - xWindow) + focusedWindow.clientWidth) > innerWidth) {
+        focusedWindow.style.left = (innerWidth - focusedWindow.clientWidth) + "px";
     }
 }
 
@@ -407,9 +414,39 @@ document.addEventListener("mouseleave", mouseUp);
 document.addEventListener("mouseup", mouseUp);
 function mouseUp() {
     document.removeEventListener("mousemove", moveWindow);
+
+    // window elements
+    const win = focusedWindow;
+    const windowContent = win.getElementsByClassName("window-content")[0];
+    const windowBar = win.getElementsByClassName("window-bar")[0];
+    // resize if out of window
+    const top = Number(win.style.top.replace("px", ""));
+    const bottomTop = Number(win.style.top.replace("px", "")) + win.clientHeight;
+    const left = Number(win.style.left.replace("px", ""));
+    const rightLeft = Number(win.style.left.replace("px", "")) + win.clientWidth;
+
+    
+    if (win.clientHeight > innerHeight) {
+        win.style.top = 0 + "px";
+        windowContent.style.height = (innerHeight - windowBar.style.height - 29) + "px"; // - bar.height
+    } else if (top < 0) {
+        win.style.top = 0 + "px";
+    } else if (bottomTop > innerHeight) {
+        win.style.top = (innerHeight - win.clientHeight) + "px";
+    }
+
+    if (win.clientWidth > innerWidth) {
+        win.style.left = 0 + "px";
+        windowContent.style.width = innerWidth + "px";
+    } else if (left < 0) {
+        win.style.left = 0 + "px";
+    } else if (rightLeft > innerWidth) {
+        win.style.left = (innerWidth - win.clientWidth) + "px";
+    }
 }
 
 // Places window in front
+/** @param {HTMLElement} win  */
 function windowFocus(win) {
     const lastWindow = container.lastChild;
     
@@ -417,15 +454,6 @@ function windowFocus(win) {
         if(win.className == "window") {
             if (win !== lastWindow) {
                 document.getElementById("container").append(win);
-            }
-            // resize if out of window
-            const windowContent = win.getElementsByClassName("window-content")[0];
-
-            if ((Number(win.style.top.replace("px", "")) + win.clientHeight) >= innerHeight) {
-            windowContent.style.height = (innerHeight - Number(win.style.top.replace("px", "")) - 30) + "px"; // -30px (bug?)
-            }
-            if ((Number(win.style.left.replace("px", "")) + win.clientWidth) >= innerWidth) {
-            windowContent.style.width = (innerWidth - Number(win.style.left.replace("px", ""))) + "px";
             }
 
             return win; // Success

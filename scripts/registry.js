@@ -10,6 +10,7 @@ function listRegistries(tableName) {
         
         let thead, tbody, tfoot;
         let tr, th, td;
+        let button;
 
         if (response.length !== 0) {
             // ---------- THEAD ----------
@@ -47,11 +48,35 @@ function listRegistries(tableName) {
                     tr.append(td);
                 });
                 // options
-                td = document.createElement("td");
-                td.innerHTML = `<button class="button" onclick="loadAccountContent(${id}, addWindow('Editar conta', account('editRegistry(this)')));">Editar</button>`;
+                td = document.createElement("td"); // Edit
+                button = document.createElement("button");
+                button.innerText = "Editar";
+                button.className = "button";
+                button.onclick = () => {
+                    getRegistry(tableName, id).then((data) => {
+                        switch (tableName) {
+                            case "users":     if (container.querySelector(`#user-form-${id}`) === null) addWindow("Editar usuário",    userForm(data));     break;
+                            case "suppliers": addWindow("Editar fornecedor", supplierForm(data)); break;
+                            case "customers": addWindow("Editar cliente",    customerForm(data)); break;
+                            case "stock":     addWindow("Editar produto",    productForm(data));  break;
+                            default:
+                                break;
+                        }
+                    });
+                };
+                td.append(button);
                 tr.append(td);
-                td = document.createElement("td");
-                td.innerHTML = `<button class="button" onclick="deleteRegistry(${id});">Excluir</button>`;
+
+                td = document.createElement("td"); // Delete
+                button = document.createElement("button");
+                button.innerText = "Excluir";
+                button.className = "button";
+                button.onclick = () => {
+                    if (confirm("Deseja realmente excluir?")) {
+                        deleteRegistry(id);
+                    }
+                };
+                td.append(button);
                 tr.append(td);
     
                 tbody.append(tr);
@@ -67,7 +92,20 @@ function listRegistries(tableName) {
         th = document.createElement("th");
         th.colSpan = 100;
         th.scope = "row";
-        th.innerHTML = `<button class="button" onclick="addWindow('Criar conta', account('createAccount(this)'))">&plus; Criar novo</button>`;
+        button = document.createElement("button");
+        button.innerHTML = "&plus; Criar novo";
+        button.className = "button";
+        button.onclick = () => {
+            switch (tableName) {
+                case "users":     addWindow("Criar usuário",    userForm());     break;
+                case "suppliers": addWindow("Criar fornecedor", supplierForm()); break;
+                case "customers": addWindow("Criar cliente",    customerForm()); break;
+                case "stock":     addWindow("Criar produto",    productForm());  break;
+                default:
+                    break;
+            }
+        };
+        th.append(button);
         tfoot.append(th);
         
         // APPEND
@@ -100,10 +138,10 @@ function tableRow(id, name, user) {
     tr.append(td);
 
     // options
-    td = document.createElement("td");
-    td.innerHTML = `<button onclick="loadAccountContent(${id}, addWindow('Editar conta', account('editAccount(this)')));">Editar</button>`;
+    td = document.createElement("td"); // Edit
+    td.innerHTML = `<button onclick="getRegistry(${id}, addWindow('Editar conta', account('editAccount(this)')));">Editar</button>`;
     tr.append(td);
-    td = document.createElement("td");
+    td = document.createElement("td"); // Delete
     td.innerHTML = `<button onclick="deleteAccount(${id});">Excluir</button>`;
     tr.append(td);
 
@@ -261,6 +299,6 @@ async function getRegistry(table, primaryKey) {
 /**
  * Sets registry.
  */
-function SetRegistry() {
+function setRegistry() {
 
 }

@@ -1,4 +1,4 @@
-let form = document.querySelector("#form");
+const form = document.querySelector("#form");
 
 function authenticate() {
     let formData = new FormData(form);
