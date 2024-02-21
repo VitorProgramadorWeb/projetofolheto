@@ -2,48 +2,37 @@
 //           Add and Remove window           //
 ///////////////////////////////////////////////
 
+
 // After adding a window, this number is increased by 1
 let windowNumber = 1;
 
+// Windows container
+const container = document.getElementById("container");
+
 function addWindow(windowLabel = "", windowContent = none()) {
-    // Windows container
-    const container = document.getElementById("container");
+
+    const lastWindow = container.lastChild; // Position relative to last window
 
     // Window
     const win = document.createElement("div");
     win.setAttribute("class", "window");
-    win.style.top = "50%";
-    win.style.left = "50%";
-    win.style.transform = "translate(-50%, -50%)";
-    // Position relative to previous window
-    let lastWindow = container.lastChild;
-    if (lastWindow != null) {
-        let topLasWindow = lastWindow.style.top;
-        let leftLastWindow = lastWindow.style.left;
-        if (win.style.top.includes("%")) {
-            win.style.top = (Number(topLasWindow.replace("%", "")) + 5) + "%";
-            win.style.left = (Number(leftLastWindow.replace("%", "")) - 5) + "%";
-        } else if (win.style.top.includes("px")){
-            win.style.top = (Number(topLasWindow.replace("px", "")) + 5) + "px";
-            win.style.left = (Number(leftLastWindow.replace("px", "")) - 5) + "px";
-        }
-    }
 
     /* ----------------------------- HEADER ----------------------------- */
     // Window bar
-    let bar = document.createElement("div");
+    const bar = document.createElement("div");
     bar.setAttribute("class", "window-bar");
-    bar.setAttribute("onmousedown", "mouseDown(event, this)");
-    bar.setAttribute("onmouseup", "mouseUp()");
+    bar.setAttribute("onmousedown", "this.style.cursor = 'grabbing'; mouseDown(event, this)");
+    bar.setAttribute("onmouseup", "this.style.cursor = 'grab'");
+    bar.setAttribute("onmouseleave", "this.style.cursor = 'grab'");
 
-    // window label
-    let label = document.createElement("span");
+    // Window label
+    const label = document.createElement("span");
     label.setAttribute("class", "window-label");
     label.innerText = windowLabel;
 
     // Close button
-    let closeButton = document.createElement("button");
-    closeButton.setAttribute("class", "close-button");
+    const closeButton = document.createElement("button");
+    closeButton.setAttribute("class", "button close-button");
     closeButton.setAttribute("onmousedown", "event.stopPropagation()");
     closeButton.setAttribute("onclick", "removeWindow(this)");
     closeButton.innerHTML = "&times;";
@@ -56,6 +45,23 @@ function addWindow(windowLabel = "", windowContent = none()) {
     win.append(windowContent);
 
     container.append(win);
+
+    /* ----- window position ----- */
+    win.style.top = ((innerHeight/2) - (win.clientHeight/2)) + "px";
+    win.style.left = ((innerWidth/2) - (win.clientWidth/2)) + "px";
+    if (lastWindow != null) {
+        let topLastWindow = lastWindow.style.top;
+        let leftLastWindow = lastWindow.style.left;
+
+        if ((Number(topLastWindow.replace("px", "")) + 10) > 0 && 
+        ((Number(topLastWindow.replace("px", "")) + 10) + win.clientHeight) < innerHeight) {
+            win.style.top = (Number(topLastWindow.replace("px", "")) + 10) + "px";
+        }
+        if ((Number(leftLastWindow.replace("px", "")) - 10) > 0 &&
+        ((Number(leftLastWindow.replace("px", "")) - 10) + win.clientWidth) < innerWidth) {
+            win.style.left = (Number(leftLastWindow.replace("px", "")) - 10) + "px";
+        }
+    }
 
     windowNumber++;
     return win;
@@ -90,12 +96,27 @@ function removeWindow(element) {
 //              Window contents              //
 ///////////////////////////////////////////////
 
+const resizeObserver = new ResizeObserver((entries) => {
+    const targ = entries[0].target;
+    const windowContent = targ.getElementsByClassName("window-content")[0];
+
+    if (((Number(targ.style.top.replace("px", "")) + 10) + windowContent.clientHeight) > innerHeight) {
+        windowContent.style.height = (innerHeight - Number(targ.style.top.replace("px", "")) - 5) + "px";
+    }
+    if (((Number(targ.style.left.replace("px", "")) - 10) + windowContent.clientWidth) > innerWidth) {
+        windowContent.style.width = (innerWidth - Number(targ.style.left.replace("px", "")) - 5) + "px";
+    }
+});
+
 function account(action = "") {
     /* ----------------------------- ACCOUNT ----------------------------- */
     // Form
     let form = document.createElement("form");
     form.setAttribute("class", "window-content content-account");
     form.setAttribute("onsubmit", `event.preventDefault(); ${action};`);
+    form.setAttribute("onmousedown", `windowFocus(this)`);
+    form.style.minWidth = "330px";
+    form.style.minHeight = "290px";
     
     // ----- Fields ----- //
     // ID
@@ -106,6 +127,7 @@ function account(action = "") {
         inputType: "number",
         inputDisabled: true
     });
+    idField.removeAttribute("class");
 
     // User
     let userField = createField({
@@ -326,8 +348,8 @@ function none() {
     let none = document.createElement("div");
     none.setAttribute("class", "window-content");
     // size
-    none.style.width = "200px";
-    none.style.height = "150px";
+    none.style.minWidth = "200px";
+    none.style.minHeight = "150px";
 
     return none;
 }
@@ -353,7 +375,7 @@ let yWindow;
 // Window movimentatino [mouseDown -> moveWindow -> mouseUp]
 function mouseDown(e, bar) {
     // Window element
-    var win = bar.parentElement;
+    let win = bar.parentElement;
 
     // Focus on window (places it in front)
     focusedWindow = windowFocus(win);
@@ -362,9 +384,8 @@ function mouseDown(e, bar) {
     document.addEventListener("mousemove", moveWindow);
 
     // TOP and LEFT CSS values of window
-    // window != win
-    var topWindow = window.getComputedStyle(win).getPropertyValue("top"); // "px"
-    var leftWindow = window.getComputedStyle(win).getPropertyValue("left");
+    let topWindow = win.style.top; // "px"
+    let leftWindow = win.style.left;
     
     // Calculating the X and Y distance from the top left corner of the window to the mouse
     yWindow = e.pageY - Number(topWindow.replace("px", "")); // Ex: str("10px") -> num(10)
@@ -372,18 +393,40 @@ function mouseDown(e, bar) {
 }
 function moveWindow(e) {
     // Defines the TOP and LEFT css of the window based on where the mouse is grabbing on the Bar
-    focusedWindow.style.top = (e.pageY - yWindow) + "px";
-    focusedWindow.style.left = (e.pageX - xWindow) + "px";
+    if ((e.pageY - yWindow) > 0 &&
+    ((e.pageY - yWindow) + focusedWindow.clientHeight) < innerHeight) {
+        focusedWindow.style.top = (e.pageY - yWindow) + "px";
+    }
+    if ((e.pageX - xWindow) > 0 &&
+    ((e.pageX - xWindow) + focusedWindow.clientWidth) < innerWidth) {
+        focusedWindow.style.left = (e.pageX - xWindow) + "px";
+    }
 }
+
+document.addEventListener("mouseleave", mouseUp);
+document.addEventListener("mouseup", mouseUp);
 function mouseUp() {
     document.removeEventListener("mousemove", moveWindow);
 }
 
 // Places window in front
 function windowFocus(win) {
+    const lastWindow = container.lastChild;
+    
     while(win.tagName != "BODY") {
         if(win.className == "window") {
-            document.getElementById("container").append(win);
+            if (win !== lastWindow) {
+                document.getElementById("container").append(win);
+            }
+            // resize if out of window
+            const windowContent = win.getElementsByClassName("window-content")[0];
+
+            if ((Number(win.style.top.replace("px", "")) + win.clientHeight) >= innerHeight) {
+            windowContent.style.height = (innerHeight - Number(win.style.top.replace("px", "")) - 30) + "px"; // -30px (bug?)
+            }
+            if ((Number(win.style.left.replace("px", "")) + win.clientWidth) >= innerWidth) {
+            windowContent.style.width = (innerWidth - Number(win.style.left.replace("px", ""))) + "px";
+            }
 
             return win; // Success
 
@@ -394,4 +437,3 @@ function windowFocus(win) {
 
     return false; // Failure
 }
-

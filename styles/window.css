@@ -1,28 +1,46 @@
 .window {
     border: 1px solid black;
-    width: fit-content;
     position: fixed; /* remove to disable window mode */
     background-color: white;
-}
 
-.window-bar {
-    border-bottom: 1px solid black;
-    display: flex;
-    justify-content: space-between;
-}
+    .window-label {
+        padding: 5px;
+    }
 
-.window-content {
-    display: grid;
-
-    .field {
+    .close-button {
+        padding: 0px;
+        width: 28px;
+    }
+    
+    .window-bar {
+        border-bottom: 1px solid black;
+        display: flex;
+        justify-content: space-between;
+        cursor: grab;
+        user-select: none;
+    }
+    
+    .window-content {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-
-        .input {
-            box-sizing: border-box;
-        }
-        .wrapper {
-            display: flex;
+        resize: both;
+        overflow: auto;
+        box-sizing: border-box;
+        padding: 5px;
+        
+        .field {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            padding: 5px;
+    
+            .input[type=checkbox] {
+                margin: 4px;
+            }
+            .wrapper {
+                display: flex;
+                .input[type=password], input[type=text] {
+                    width: 100%;
+                }
+            }
         }
     }
 }

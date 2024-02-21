@@ -48,10 +48,10 @@ function listRegistries(tableName) {
                 });
                 // options
                 td = document.createElement("td");
-                td.innerHTML = `<button onclick="loadAccountContent(${id}, addWindow('Editar conta', account('editRegistry(this)')));">Editar</button>`;
+                td.innerHTML = `<button class="button" onclick="loadAccountContent(${id}, addWindow('Editar conta', account('editRegistry(this)')));">Editar</button>`;
                 tr.append(td);
                 td = document.createElement("td");
-                td.innerHTML = `<button onclick="deleteRegistry(${id});">Excluir</button>`;
+                td.innerHTML = `<button class="button" onclick="deleteRegistry(${id});">Excluir</button>`;
                 tr.append(td);
     
                 tbody.append(tr);
@@ -67,7 +67,7 @@ function listRegistries(tableName) {
         th = document.createElement("th");
         th.colSpan = 100;
         th.scope = "row";
-        th.innerHTML = `<button onclick="addWindow('Criar conta', account('createAccount(this)'))">&plus; Criar novo</button>`;
+        th.innerHTML = `<button class="button" onclick="addWindow('Criar conta', account('createAccount(this)'))">&plus; Criar novo</button>`;
         tfoot.append(th);
         
         // APPEND
