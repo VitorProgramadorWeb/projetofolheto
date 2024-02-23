@@ -117,7 +117,7 @@ function userForm(data) {
     /* ID */ dataName = "id";
     const idField = document.createElement("div");
     idField.hidden = true;
-    idField.className = fieldClassName;
+    //idField.className = fieldClassName;
 
     const idInput = document.createElement("input");
     idInput.hidden = true;
