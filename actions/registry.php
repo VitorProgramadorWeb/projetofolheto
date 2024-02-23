@@ -60,14 +60,77 @@ switch ($action) {
             
             default:
                 echo json_encode([
-                    "error" => "Table does not exists"
+                    "failure" => "Table does not exists"
+                ]);
+        }
+        break;
+
+    case "tet":
+        $table = $_POST["table"];
+        $primary_key = $_POST["primary_key"];
+
+        switch ($table) {
+            case "users":
+                $id      = $_POST["id"];
+                $user      = $_POST["user"];
+                $password  = $_POST["password"];
+                $name      = $_POST["name"];
+                $birthdate = $_POST["birthdate"] == "" ? null : $_POST["birthdate"];
+                $address   = $_POST["address"];
+                $email     = $_POST["email"];
+                $phone     = $_POST["phone"];
+                $cpf       = $_POST["cpf"];
+
+                $sql = "UPDATE users SET user = '$user', password = '$password', name = '$name', ".($birthdate == null ? "" :  "birthdate = '$birthdate', ")."address = '$address', email = '$email', phone = '$phone', cpf = '$cpf' WHERE id = '$id'";
+
+                echo json_encode([
+                    "edited" => $conn->query($sql),
+                    "id" => $id,
+                    "name" => $name,
+                    "user" => $user
+                ]);
+                break;
+            
+            case "suppliers":
+                if ($primary_key == "*") { // All
+                    $sql = "SELECT * FROM $table"; // WHERE privilege = '$privilege'
+                    $response = $conn->query($sql);
+    
+                    echo json_encode($response->fetch_all(MYSQLI_ASSOC));
+
+                } else {
+                    $sql = "SELECT * FROM $table WHERE id = '$primary_key'";
+                    $response = $conn->query($sql);
+    
+                    echo json_encode($response->fetch_assoc());
+                }
+                break;
+            
+            case "customers":
+                if ($primary_key == "*") { // All
+                    $sql = "SELECT * FROM $table"; // WHERE privilege = '$privilege'
+                    $response = $conn->query($sql);
+    
+                    echo json_encode($response->fetch_all(MYSQLI_ASSOC));
+
+                } else {
+                    $sql = "SELECT * FROM $table WHERE id = '$primary_key'";
+                    $response = $conn->query($sql);
+    
+                    echo json_encode($response->fetch_assoc());
+                }
+                break;
+            
+            default:
+                echo json_encode([
+                    "failure" => "Table does not exists"
                 ]);
         }
         break;
 
     default:
         echo json_encode([
-            "error" => "Action does not exists"
+            "failure" => "Action does not exists"
         ]);
 }
 

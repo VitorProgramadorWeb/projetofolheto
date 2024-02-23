@@ -240,53 +240,11 @@ function editRegistry(form) {
 }
 
 /**
- * Loads registry contents in a form.
- * @param {number} id - The registry id to load.
- * @param {HTMLElement} win - The window with the form.
- */
-function loadRegistry(id, win) {
-
-    let data = new FormData();
-    data.append("action", "read");
-    data.append("id", id);
-
-    fetch("/projetointegrador/actions/accounts.php", {
-        method: "post",
-        body: data
-    }).then(res => res.json())
-    .then(response => {
-
-        let form = win.getElementsByClassName("content-account")[0];
-
-        let inputId = form.getElementsByClassName("id")[0];
-        let inputUser = form.getElementsByClassName("user")[0];
-        let inputPassword = form.getElementsByClassName("password")[0];
-        let inputName = form.getElementsByClassName("name")[0];
-        let inputBirthdate = form.getElementsByClassName("birthdate")[0];
-        let inputAddress = form.getElementsByClassName("address")[0];
-        let inputEmail = form.getElementsByClassName("email")[0];
-        let inputPhone = form.getElementsByClassName("phone")[0];
-        let inputCpf = form.getElementsByClassName("cpf")[0];
-
-        inputId.value = response.id;
-        inputUser.value = response.user;
-        inputPassword.value = response.password;
-        inputName.value = response.name;
-        inputBirthdate.value = response.birthdate;
-        inputAddress.value = response.address;
-        inputEmail.value = response.email;
-        inputPhone.value = response.phone;
-        inputCpf.value = response.cpf;
-        
-    });
-}
-
-/**
  * Gets registry.
  * @async
- * @param {string} table - Database table name.
- * @param {string | number} primaryKey - The registry primary key of 'table' to get. Also can be '*' to get all available registries.
- * @returns {Promise<object>} Promise json.
+ * @param {string} table Database table name.
+ * @param {string | number} primaryKey The registry primary key of 'table' to get. Also can be '*' to get all available registries.
+ * @returns {Promise<object>} A Promise json for the registry data.
  */
 async function getRegistry(table, primaryKey) {
     return await fetch("/projetointegrador/actions/registry.php", {
@@ -297,8 +255,18 @@ async function getRegistry(table, primaryKey) {
 }
 
 /**
- * Sets registry.
+ * Sets registry. Used to INSERT or UPDATE a registry.
+ * @async
+ * @param {string} table Database table name.
+ * @param {FormData} formData Data to set. If registry primary key of 'table' to set is ommited, inserts instead of update.
+ * @returns {Promise<object>} A Promise json for success or failure.
  */
-function setRegistry() {
+async function setRegistry(table, formData) {
+    formData.append("action", "set");
+    formData.append("table", table);
 
+    return await fetch("/projetointegrador/actions/registry.php", {
+        method: "post",
+        body: formData
+    }).then(response => response.json());
 }

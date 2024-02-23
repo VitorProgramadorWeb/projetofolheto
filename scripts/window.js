@@ -101,100 +101,202 @@ function removeWindow(element) {
 function userForm(data) {
     /* ----------------------------- USER ----------------------------- */
     // Form
-    let form = document.createElement("form");
+    const form = document.createElement("form");
+    form.id = "user-form-" + (data != undefined ? data.id : "#");
     form.className = "window-content content-user";
-    form.id = `user-form-${data.id}`;
-    form.onsubmit = (e) => {e.preventDefault(); setRegistry(form)};
+    form.onsubmit = (e) => {e.preventDefault(); setRegistry("users", new FormData(form))};
     form.onmousedown = () => windowFocus(form);
     form.style.minWidth = "330px";
     form.style.minHeight = "290px";
     
-    // ----- Fields ----- //
-    // ID
-    let idField = createField({
-        hidden: true,
-        labelTextContent: "ID",
-        inputName: "id",
-        inputType: "number",
-        inputDisabled: true,
-        inputValue: data.id
-    });
-    idField.removeAttribute("class");
+    let dataName; // Data name (reseted each data);
+    const fieldClassName = "field"; // All field's class
+    const inputClassName = "input"; // All inputs's class
+    const labelClassName = "label"; // All labels's class
+    // ---------- Fields ---------- //
+    /* ID */ dataName = "id";
+    const idField = document.createElement("div");
+    idField.hidden = true;
+    idField.className = fieldClassName;
 
-    // User
-    let userField = createField({
-        labelTextContent: "Usuário",
-        inputName: "user",
-        inputType: "text",
-        inputRequired: true,
-        inputValue: data.user
-    });
+    const idInput = document.createElement("input");
+    idInput.hidden = true;
+    idInput.disabled = true;
+    idInput.required = true;
+    idInput.name = dataName;
+    idInput.type = "number";
+    idInput.className = inputClassName + ` ${dataName}-input`;
+    idInput.id = dataName + `-${windowNumber}`;
+
+    const idLabel = document.createElement("label");
+    idLabel.hidden = true;
+    idLabel.className = labelClassName;
+    idLabel.textContent = "ID";
+    idLabel.htmlFor = idInput.id;
+
+    idField.append(idLabel);
+    idField.append(idInput);
     
-    // Password
-    let passwordField = createField({
-        labelTextContent: "Senha",
-        inputName: "password",
-        inputType: "password",
-        inputRequired: true,
-        inputValue: data.password
-    });
+    /* User */ dataName = "user";
+    const userField = document.createElement("div");
+    userField.className = fieldClassName;
 
-    // Name
-    let nameField = createField({
-        labelTextContent: "Nome",
-        inputName: "name",
-        inputType: "text",
-        inputValue: data.name
-    });
+    const userInput = document.createElement("input");
+    userInput.required = true;
+    userInput.name = dataName;
+    userInput.type = "text";
+    userInput.className = inputClassName + ` ${dataName}-input`;
+    userInput.id = dataName + `-${windowNumber}`;
+
+    const userLabel = document.createElement("label");
+    userLabel.className = labelClassName;
+    userLabel.textContent = "Usuário";
+    userLabel.htmlFor = userInput.id;
+
+    userField.append(userLabel);
+    userField.append(userInput);
     
-    // Birthdate
-    let birthdateField = createField({
-        labelTextContent: "Nascimento",
-        inputName: "birthdate",
-        inputType: "date",
-        inputValue: data.birthdate
-    });
+    /* Password */ dataName = "password";
+    const passwordField = document.createElement("div");
+    passwordField.className = fieldClassName;
+
+    const passwordInput = document.createElement("input");
+    passwordInput.required = true;
+    passwordInput.name = dataName;
+    passwordInput.type = "password";
+    passwordInput.className = inputClassName + ` ${dataName}-input`;
+    passwordInput.id = dataName + `-${windowNumber}`;
+
+    const passwordLabel = document.createElement("label");
+    passwordLabel.className = labelClassName;
+    passwordLabel.textContent = "Senha";
+    passwordLabel.htmlFor = passwordInput.id;
+
+    passwordField.append(passwordLabel);
+    passwordField.append(passwordInput);
     
-    // Address
-    let addressField = createField({
-        labelTextContent: "Endereço",
-        inputName: "address",
-        inputType: "text",
-        inputValue: data.address
-    });
+    /* Name */ dataName = "name";
+    const nameField = document.createElement("div");
+    nameField.className = fieldClassName;
 
-    // Email
-    let emailField = createField({
-        labelTextContent: "E-mail",
-        inputName: "email",
-        inputType: "email",
-        inputValue: data.email
-    });
+    const nameInput = document.createElement("input");
+    nameInput.name = dataName;
+    nameInput.type = "text";
+    nameInput.className = inputClassName + ` ${dataName}-input`;
+    nameInput.id = dataName + `-${windowNumber}`;
+
+    const nameLabel = document.createElement("label");
+    nameLabel.className = labelClassName;
+    nameLabel.textContent = "Nome";
+    nameLabel.htmlFor = nameInput.id;
+
+    nameField.append(nameLabel);
+    nameField.append(nameInput);
     
-    // Phone
-    let phoneField = createField({
-        labelTextContent: "Telefone",
-        inputName: "phone",
-        inputType: "tel",
-        inputPlaceHolder: "(__)_____-____",
-        inputValue: data.phone
-    });
+    /* Birthdate */ dataName = "birthdate";
+    const birthdateField = document.createElement("div");
+    birthdateField.className = fieldClassName;
 
-    // CPF
-    let cpfField = createField({
-        labelTextContent: "CPF",
-        inputName: "cpf",
-        inputType: "text",
-        inputPlaceHolder: "___.___.___-__",
-        inputValue: data.cpf
-    });
+    const birthdateInput = document.createElement("input");
+    birthdateInput.name = dataName;
+    birthdateInput.type = "date";
+    birthdateInput.className = inputClassName + ` ${dataName}-input`;
+    birthdateInput.id = dataName + `-${windowNumber}`;
 
-    // Submit button
-    let submitButton = createField({
-        inputType: "submit",
-        inputValue: "Salvar"
-    });
+    const birthdateLabel = document.createElement("label");
+    birthdateLabel.className = labelClassName;
+    birthdateLabel.textContent = "Nascimento";
+    birthdateLabel.htmlFor = birthdateInput.id;
 
+    birthdateField.append(birthdateLabel);
+    birthdateField.append(birthdateInput);
+    
+    /* Address */ dataName = "address";
+    const addressField = document.createElement("div");
+    addressField.className = fieldClassName;
+
+    const addressInput = document.createElement("input");
+    addressInput.name = dataName;
+    addressInput.type = "text";
+    addressInput.className = inputClassName + ` ${dataName}-input`;
+    addressInput.id = dataName + `-${windowNumber}`;
+
+    const addressLabel = document.createElement("label");
+    addressLabel.className = labelClassName;
+    addressLabel.textContent = "Endereço";
+    addressLabel.htmlFor = addressInput.id;
+
+    addressField.append(addressLabel);
+    addressField.append(addressInput);
+    
+    /* Email */ dataName = "email";
+    const emailField = document.createElement("div");
+    emailField.className = fieldClassName;
+
+    const emailInput = document.createElement("input");
+    emailInput.name = dataName;
+    emailInput.type = "email";
+    emailInput.className = inputClassName + ` ${dataName}-input`;
+    emailInput.id = dataName + `-${windowNumber}`;
+
+    const emailLabel = document.createElement("label");
+    emailLabel.className = labelClassName;
+    emailLabel.textContent = "E-mail";
+    emailLabel.htmlFor = emailInput.id;
+
+    emailField.append(emailLabel);
+    emailField.append(emailInput);
+    
+    /* Phone */ dataName = "phone";
+    const phoneField = document.createElement("div");
+    phoneField.className = fieldClassName;
+
+    const phoneInput = document.createElement("input");
+    phoneInput.name = dataName;
+    phoneInput.type = "tel";
+    phoneInput.className = inputClassName + ` ${dataName}-input`;
+    phoneInput.id = dataName + `-${windowNumber}`;
+    phoneInput.placeholder = "(__)_____-____";
+
+    const phoneLabel = document.createElement("label");
+    phoneLabel.className = labelClassName;
+    phoneLabel.textContent = "Telefone";
+    phoneLabel.htmlFor = phoneInput.id;
+
+    phoneField.append(phoneLabel);
+    phoneField.append(phoneInput);
+    
+    /* CPF */ dataName = "cpf";
+    const cpfField = document.createElement("div");
+    cpfField.className = fieldClassName;
+
+    const cpfInput = document.createElement("input");
+    cpfInput.name = dataName;
+    cpfInput.type = "text";
+    cpfInput.className = inputClassName + ` ${dataName}-input`;
+    cpfInput.id = dataName + `-${windowNumber}`;
+    cpfInput.placeholder = "___.___.___-__";
+
+    const cpfLabel = document.createElement("label");
+    cpfLabel.className = labelClassName;
+    cpfLabel.textContent = "CPF";
+    cpfLabel.htmlFor = cpfInput.id;
+
+    cpfField.append(cpfLabel);
+    cpfField.append(cpfInput);
+    
+    /* Submit */
+    const submitField = document.createElement("div");
+    submitField.className = fieldClassName;
+
+    const submitInput = document.createElement("input");
+    submitInput.name = dataName;
+    submitInput.type = "submit";
+    submitInput.value = "Salvar";
+
+    submitField.append(submitInput);
+    
+    // Appends
     form.append(idField);
     form.append(userField);
     form.append(passwordField);
@@ -204,8 +306,20 @@ function userForm(data) {
     form.append(emailField);
     form.append(phoneField);
     form.append(cpfField);
+    form.append(submitField);
     
-    form.append(submitButton);
+    // Inserting data
+    if (data != undefined) {
+        idInput.value =        data.id,
+        userInput.value =      data.user,
+        passwordInput.value =  data.password,
+        nameInput.value =      data.name,
+        birthdateInput.value = data.birthdate,
+        addressInput.value =   data.address,
+        emailInput.value =     data.email,
+        phoneInput.value =     data.phone,
+        cpfInput.value =       data.cpf
+    }
 
     return form;
 
