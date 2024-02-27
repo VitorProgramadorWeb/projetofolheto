@@ -6,227 +6,213 @@ session_start();
 // $privilege = 777;
 
 $action = $_POST["action"];
-
 switch ($action) {
     case "get":
         $table = $_POST["table"];
         $primary_key = $_POST["primary_key"];
 
-        switch ($table) {
-            case "users":
-                if ($primary_key == "*") { // All
-                    $sql = "SELECT * FROM $table"; // WHERE privilege = '$privilege'
-                    $response = $conn->query($sql);
-    
-                    echo json_encode($response->fetch_all(MYSQLI_ASSOC));
-
-                } else {
-                    $sql = "SELECT * FROM $table WHERE id = '$primary_key'";
-                    $response = $conn->query($sql);
-    
-                    echo json_encode($response->fetch_assoc());
-                }
-                break;
-            
-            case "suppliers":
-                if ($primary_key == "*") { // All
-                    $sql = "SELECT * FROM $table"; // WHERE privilege = '$privilege'
-                    $response = $conn->query($sql);
-    
-                    echo json_encode($response->fetch_all(MYSQLI_ASSOC));
-
-                } else {
-                    $sql = "SELECT * FROM $table WHERE id = '$primary_key'";
-                    $response = $conn->query($sql);
-    
-                    echo json_encode($response->fetch_assoc());
-                }
-                break;
-            
-            case "customers":
-                if ($primary_key == "*") { // All
-                    $sql = "SELECT * FROM $table"; // WHERE privilege = '$privilege'
-                    $response = $conn->query($sql);
-    
-                    echo json_encode($response->fetch_all(MYSQLI_ASSOC));
-
-                } else {
-                    $sql = "SELECT * FROM $table WHERE id = '$primary_key'";
-                    $response = $conn->query($sql);
-    
-                    echo json_encode($response->fetch_assoc());
-                }
-                break;
-            
-            default:
-                echo json_encode([
-                    "failure" => "Table does not exists"
-                ]);
-        }
+        echo getRegistry($table, $primary_key);
         break;
+    
+    case "set":
+        $table = $_POST["table"];
 
-    case "tet":
+        echo setRegistry($table);
+        break;
+    
+    case "delete":
         $table = $_POST["table"];
         $primary_key = $_POST["primary_key"];
 
-        switch ($table) {
-            case "users":
-                $id      = $_POST["id"];
-                $user      = $_POST["user"];
-                $password  = $_POST["password"];
-                $name      = $_POST["name"];
-                $birthdate = $_POST["birthdate"] == "" ? null : $_POST["birthdate"];
-                $address   = $_POST["address"];
-                $email     = $_POST["email"];
-                $phone     = $_POST["phone"];
-                $cpf       = $_POST["cpf"];
-
-                $sql = "UPDATE users SET user = '$user', password = '$password', name = '$name', ".($birthdate == null ? "" :  "birthdate = '$birthdate', ")."address = '$address', email = '$email', phone = '$phone', cpf = '$cpf' WHERE id = '$id'";
-
-                echo json_encode([
-                    "edited" => $conn->query($sql),
-                    "id" => $id,
-                    "name" => $name,
-                    "user" => $user
-                ]);
-                break;
-            
-            case "suppliers":
-                if ($primary_key == "*") { // All
-                    $sql = "SELECT * FROM $table"; // WHERE privilege = '$privilege'
-                    $response = $conn->query($sql);
-    
-                    echo json_encode($response->fetch_all(MYSQLI_ASSOC));
-
-                } else {
-                    $sql = "SELECT * FROM $table WHERE id = '$primary_key'";
-                    $response = $conn->query($sql);
-    
-                    echo json_encode($response->fetch_assoc());
-                }
-                break;
-            
-            case "customers":
-                if ($primary_key == "*") { // All
-                    $sql = "SELECT * FROM $table"; // WHERE privilege = '$privilege'
-                    $response = $conn->query($sql);
-    
-                    echo json_encode($response->fetch_all(MYSQLI_ASSOC));
-
-                } else {
-                    $sql = "SELECT * FROM $table WHERE id = '$primary_key'";
-                    $response = $conn->query($sql);
-    
-                    echo json_encode($response->fetch_assoc());
-                }
-                break;
-            
-            default:
-                echo json_encode([
-                    "failure" => "Table does not exists"
-                ]);
-        }
+        echo deleteRegistry($table, $primary_key);
         break;
-
+    
     default:
         echo json_encode([
-            "failure" => "Action does not exists"
-        ]);
+            "status"  => "fail",
+            "message" => "Action does not exists"
+        ], JSON_PRETTY_PRINT);
+        break;
 }
 
-// switch ($action) {
-//     case "create":
-//         $user      = $_POST["user"];
-//         $password  = $_POST["password"];
-//         $name      = $_POST["name"];
-//         $birthdate = $_POST["birthdate"] == "" ? null : $_POST["birthdate"];
-//         $address   = $_POST["address"];
-//         $email     = $_POST["email"];
-//         $phone     = $_POST["phone"];
-//         $cpf       = $_POST["cpf"];
 
-//         // Verifying if username already exists
-//         $sql = "SELECT id, user FROM users WHERE user = '$user'"; // WHERE privilege = '$privilege'
-//         $response = $conn->query($sql);
-//         if ($response->num_rows > 0) {
 
-//             echo json_encode(["invalidUser" => true]);
 
-//         } else {
-//             // Creating
-//             $sql = "INSERT INTO users(user, password, name,".($birthdate == null ? "" : " birthdate,")." address, email, phone, cpf) " . 
-//             "values('$user', '$password', '$name',".($birthdate == null ? "" : " 'birthdate',")." '$address', '$email', '$phone', '$cpf')";
-//             $conn->query($sql);
-    
-//             // getting id
-//             $sql = "SELECT id, name, user FROM users WHERE user='$user'";
-//             $response = $conn->query($sql);
-    
-//             if ($response != false) {
-//                 $response = $response->fetch_assoc();
-    
-//                 echo json_encode([
-//                     "created" => true,
-//                     "id" => $response["id"],
-//                     "name" => $response["name"],
-//                     "user" => $response["user"]
-//                 ]);
-//             } else {
-//                 echo json_encode(["created" => false]);
-//             }
-//         }
+
+function getRegistry($table, $primary_key) {
+    $conn = database_connection();
+
+    switch ($table) {
+        case "users":
+            if ($primary_key == "*") { // All
+                $sql = "SELECT * FROM $table"; // WHERE privilege = '$privilege'
+                $response = $conn->query($sql);
+
+                return json_encode($response->fetch_all(MYSQLI_ASSOC), JSON_PRETTY_PRINT);
+
+            } else {
+                $sql = "SELECT * FROM $table WHERE id = '$primary_key'";
+                $response = $conn->query($sql);
+
+                return json_encode($response->fetch_assoc(), JSON_PRETTY_PRINT);
+
+            }
+            break;
         
-//         break;
+        case "suppliers":
+            if ($primary_key == "*") { // All
+                $sql = "SELECT * FROM $table"; // WHERE privilege = '$privilege'
+                $response = $conn->query($sql);
+
+                return json_encode($response->fetch_all(MYSQLI_ASSOC), JSON_PRETTY_PRINT);
+
+            } else {
+                $sql = "SELECT * FROM $table WHERE id = '$primary_key'";
+                $response = $conn->query($sql);
+
+                return json_encode($response->fetch_assoc(), JSON_PRETTY_PRINT);
+
+            }
+            break;
         
-//     case "list":
-//         $sql = "SELECT id, name, user FROM users"; // WHERE privilege = '$privilege'
-//         $response = $conn->query($sql);
+        case "customers":
+            if ($primary_key == "*") { // All
+                $sql = "SELECT * FROM $table"; // WHERE privilege = '$privilege'
+                $response = $conn->query($sql);
+
+                return json_encode($response->fetch_all(MYSQLI_ASSOC), JSON_PRETTY_PRINT);
+
+            } else {
+                $sql = "SELECT * FROM $table WHERE id = '$primary_key'";
+                $response = $conn->query($sql);
+
+                return json_encode($response->fetch_assoc(), JSON_PRETTY_PRINT);
+
+            }
+            break;
         
-//         echo json_encode($response->fetch_all(MYSQLI_ASSOC));
-//         break;
+        default:
+            return json_encode([
+                "status"  => "fail",
+                "message" => "Table does not exists"
+            ], JSON_PRETTY_PRINT);
+            break;
+    }
 
-//     case "edit":
-//         $id      = $_POST["id"];
-//         $user      = $_POST["user"];
-//         $password  = $_POST["password"];
-//         $name      = $_POST["name"];
-//         $birthdate = $_POST["birthdate"] == "" ? null : $_POST["birthdate"];
-//         $address   = $_POST["address"];
-//         $email     = $_POST["email"];
-//         $phone     = $_POST["phone"];
-//         $cpf       = $_POST["cpf"];
+    $conn->close();
+}
 
-//         $sql = "UPDATE users SET user = '$user', password = '$password', name = '$name', ".($birthdate == null ? "" :  "birthdate = '$birthdate', ")."address = '$address', email = '$email', phone = '$phone', cpf = '$cpf' WHERE id = '$id'";
+function setRegistry($table) {
+    $conn = database_connection();
 
-//         echo json_encode([
-//             "edited" => $conn->query($sql),
-//             "id" => $id,
-//             "name" => $name,
-//             "user" => $user
-//         ]);
-//         break;
+    switch ($table) {
+        case "users":
 
-//     case "delete":
-//         $id = $_POST["id"];
+            $id        = $_POST["id"];
+            $user      = $_POST["user"];
+            $password  = $_POST["password"];
+            $name      = $_POST["name"];
+            $birthdate = $_POST["birthdate"];
+            $address   = $_POST["address"];
+            $email     = $_POST["email"];
+            $phone     = $_POST["phone"];
+            $cpf       = $_POST["cpf"];
+            
+            // Update (Edit)
+            if ($id != "") {
 
-//         $sql = "DELETE FROM users WHERE id='$id'";
-//         $response = $conn->query($sql);
+                $sql = "UPDATE users SET user = '$user', password = '$password', name = '$name', ".($birthdate == "" ? "" :  "birthdate = '$birthdate', ")."address = '$address', email = '$email', phone = '$phone', cpf = '$cpf' WHERE id = '$id'";
+                $response = $conn->query($sql);
 
-//         if ($response != false) {
-//             echo json_encode(["deleted" => true, "id" => $id, "sessionId" => $_SESSION["id"]]);
-//         } else {
-//             echo json_encode(["deleted" => false]);
-//         }
-//         break;
+                return json_encode([
+                    "status"  => $response ? "ok": "fail",
+                    "message" => $response ? "Usuário editado com sucesso.": "Falha ao editar usuário.",
+                    // other info:
+                    "id"      => $id,
+                    "name"    => $name,
+                    "user"    => $user
+                ], JSON_PRETTY_PRINT);
+
+            // Insert (Create)
+            } else {
+                //Verifying if username already exists
+                $sql = "SELECT id, user FROM users WHERE user = '$user'"; // WHERE privilege = '$privilege'
+                $response = $conn->query($sql);
+                if ($response->num_rows > 0) {
+
+                    return json_encode([
+                        "status"  => "fail",
+                        "message" => "Nome de usuário já existe."
+                    ], JSON_PRETTY_PRINT);
+
+                } else {
+                    $sql = "INSERT INTO users(user, password, name,".($birthdate == "" ? "" : " birthdate,")." address, email, phone, cpf) " . 
+                    "values('$user', '$password', '$name',".($birthdate == "" ? "" : " 'birthdate',")." '$address', '$email', '$phone', '$cpf')";
+                    $response = $conn->query($sql);
+            
+                    if ($response) {
+                        return json_encode([
+                            "status"  => "ok",
+                            "message" => "Usuário criado com sucesso.",
+                            "action"  => "create"
+                        ], JSON_PRETTY_PRINT);
+
+                    } else {
+                        return json_encode([
+                            "status"  => "fail",
+                            "message" => "Falha ao criar usuário."
+                        ], JSON_PRETTY_PRINT);
+                    }
+                }
+            }
+
+            break;
+        
+        default:
+            return json_encode([
+                "status"  => "fail",
+                "message" => "Table does not exists"
+            ], JSON_PRETTY_PRINT);
+            break;
+    }
+
+    $conn->close();
+}
+
+function deleteRegistry($table, $primary_key) {
+    $conn = database_connection();
+
+    switch ($table) {
+        case "users":
+            $id = $primary_key;
+
+            $sql = "DELETE FROM users WHERE id='$id'";
+            $response = $conn->query($sql);
+
+            if ($response) {
+                return json_encode([
+                    "status"  => "ok",
+                    "message" => "Usuário excluido com sucesso."
+                ], JSON_PRETTY_PRINT);
+
+            } else {
+                return json_encode([
+                    "status"  => "fail",
+                    "message" => "Não foi possível excluir o usuário."
+                ], JSON_PRETTY_PRINT);
+
+            }
+            break;
+        
+        default:
+            return json_encode([
+                "status"  => "fail",
+                "message" => "Table does not exists"
+            ], JSON_PRETTY_PRINT);
+            break;
+    }
     
-//     case "read":
-//         $id = $_POST["id"];
-//         $sql = "SELECT * FROM users WHERE id = '$id'";
-//         $response = $conn->query($sql);
+    $conn->close();
+}
 
-//         echo json_encode($response->fetch_assoc());
-//         break;
-// }
-
-$conn->close();
 ?>

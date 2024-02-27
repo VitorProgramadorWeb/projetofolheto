@@ -1,5 +1,6 @@
 <?php
 include "actions/conn.php";
+$conn = database_connection();
 
 $user     = $_POST["user"];
 $password = $_POST["password"];

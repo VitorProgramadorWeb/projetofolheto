@@ -104,7 +104,26 @@ function userForm(data) {
     const form = document.createElement("form");
     form.id = "user-form-" + (data != undefined ? data.id : "#");
     form.className = "window-content content-user";
-    form.onsubmit = (e) => {e.preventDefault(); setRegistry("users", new FormData(form))};
+    form.onsubmit = (e) => {
+        e.preventDefault();
+        setRegistry("users", new FormData(form)).then(response =>{
+            if (response.status == "ok") {
+                alert(response.message);
+                removeWindow(form);
+                if (response.action == "create") {
+                    document.getElementsByTagName("tbody")[0].append(createRow([
+                        ["", ""],
+                        ["", ""],
+                        ["", ""],
+                        ["", ""],
+                        ["", ""]
+                    ]));
+                }
+            } else {
+                alert(response.message);
+            }
+        });
+    };
     form.onmousedown = () => windowFocus(form);
     form.style.minWidth = "330px";
     form.style.minHeight = "290px";
@@ -121,8 +140,7 @@ function userForm(data) {
 
     const idInput = document.createElement("input");
     idInput.hidden = true;
-    idInput.disabled = true;
-    idInput.required = true;
+    //idInput.disabled = true; // Does not send on submit
     idInput.name = dataName;
     idInput.type = "number";
     idInput.className = inputClassName + ` ${dataName}-input`;
@@ -180,6 +198,7 @@ function userForm(data) {
     nameField.className = fieldClassName;
 
     const nameInput = document.createElement("input");
+    nameInput.required = true;
     nameInput.name = dataName;
     nameInput.type = "text";
     nameInput.className = inputClassName + ` ${dataName}-input`;
@@ -291,6 +310,7 @@ function userForm(data) {
 
     const submitInput = document.createElement("input");
     submitInput.name = dataName;
+    submitInput.className = "button";
     submitInput.type = "submit";
     submitInput.value = "Salvar";
 
