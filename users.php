@@ -12,6 +12,7 @@ include "patterns/logged/header.php";
     
     <script src="/projetointegrador/scripts/window.js"></script>
     <script src="/projetointegrador/scripts/registry.js"></script>
+    <script src="/projetointegrador/scripts/verifications.js"></script>
     <script>listRegistries("users")</script>
     
     <!-- ?php include "footer.php" ?> -->
