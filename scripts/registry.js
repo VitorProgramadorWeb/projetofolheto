@@ -34,7 +34,7 @@ function listRegistries(tableName) {
             tbody = document.createElement("tbody");
             tbody.setAttribute("class", "tbody");
             response.forEach((row) => {
-                tbody.append(createRow(Object.entries(row)));
+                tbody.append(createRow(tableName, Object.entries(row)));
             });
 
             // APPEND
@@ -68,7 +68,7 @@ function listRegistries(tableName) {
     });
 }
 
-function createRow(data) {
+function createRow(tableName, data) {
 
     let id;
     let tr = document.createElement("tr");
