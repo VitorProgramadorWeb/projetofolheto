@@ -295,6 +295,23 @@ function userForm(data) {
     cpfInput.className = inputClassName + ` ${dataName}-input`;
     cpfInput.id = dataName + `-${windowNumber}`;
     cpfInput.placeholder = "___.___.___-__";
+    cpfInput.onblur = (e) => {
+        /** @type {HTMLElement} */
+        let input = e.currentTarget;
+        /** @type {string} */
+        let cpf = input.value.replace(/\D/g, "");
+
+        if (cpf != "") {
+            if (verifyCpf(cpf)) {
+                input.style.removeProperty("outline-color");
+                input.value = cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
+            } else {
+                input.style.outlineColor = "red";
+                
+                alert("CPF inválido");
+            }
+        }
+    };
 
     const cpfLabel = document.createElement("label");
     cpfLabel.className = labelClassName;
