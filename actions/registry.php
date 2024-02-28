@@ -29,8 +29,8 @@ switch ($action) {
     
     default:
         echo json_encode([
-            "status"  => "fail",
-            "message" => "Action does not exists"
+            "status"  => "failure",
+            "message" => "Action does not exists."
         ], JSON_PRETTY_PRINT);
         break;
 }
@@ -93,8 +93,8 @@ function getRegistry($table, $primary_key) {
         
         default:
             return json_encode([
-                "status"  => "fail",
-                "message" => "Table does not exists"
+                "status"  => "failure",
+                "message" => "Table does not exists."
             ], JSON_PRETTY_PRINT);
             break;
     }
@@ -125,7 +125,7 @@ function setRegistry($table) {
                 $response = $conn->query($sql);
 
                 return json_encode([
-                    "status"  => $response ? "ok": "fail",
+                    "status"  => $response ? "edited": "failure",
                     "message" => $response ? "Usuário editado com sucesso.": "Falha ao editar usuário.",
                     // other info:
                     "id"      => $id,
@@ -141,7 +141,7 @@ function setRegistry($table) {
                 if ($response->num_rows > 0) {
 
                     return json_encode([
-                        "status"  => "fail",
+                        "status"  => "failure",
                         "message" => "Nome de usuário já existe."
                     ], JSON_PRETTY_PRINT);
 
@@ -152,14 +152,13 @@ function setRegistry($table) {
             
                     if ($response) {
                         return json_encode([
-                            "status"  => "ok",
+                            "status"  => "created",
                             "message" => "Usuário criado com sucesso.",
-                            "action"  => "create"
                         ], JSON_PRETTY_PRINT);
 
                     } else {
                         return json_encode([
-                            "status"  => "fail",
+                            "status"  => "failure",
                             "message" => "Falha ao criar usuário."
                         ], JSON_PRETTY_PRINT);
                     }
@@ -170,7 +169,7 @@ function setRegistry($table) {
         
         default:
             return json_encode([
-                "status"  => "fail",
+                "status"  => "failure",
                 "message" => "Table does not exists"
             ], JSON_PRETTY_PRINT);
             break;
@@ -191,13 +190,13 @@ function deleteRegistry($table, $primary_key) {
 
             if ($response) {
                 return json_encode([
-                    "status"  => "ok",
+                    "status"  => "deleted",
                     "message" => "Usuário excluido com sucesso."
                 ], JSON_PRETTY_PRINT);
 
             } else {
                 return json_encode([
-                    "status"  => "fail",
+                    "status"  => "failure",
                     "message" => "Não foi possível excluir o usuário."
                 ], JSON_PRETTY_PRINT);
 
@@ -206,7 +205,7 @@ function deleteRegistry($table, $primary_key) {
         
         default:
             return json_encode([
-                "status"  => "fail",
+                "status"  => "failure",
                 "message" => "Table does not exists"
             ], JSON_PRETTY_PRINT);
             break;
