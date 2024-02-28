@@ -32,7 +32,6 @@ function listRegistries(tableName) {
     
             // ---------- TBODY ----------
             tbody = document.createElement("tbody");
-            tbody.setAttribute("class", "tbody");
             response.forEach((row) => {
                 tbody.append(createRow(tableName, Object.entries(row)));
             });
