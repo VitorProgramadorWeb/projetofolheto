@@ -11,21 +11,27 @@ const container = document.getElementById("container");
 
 function addWindow(windowLabel = "", windowContent = none()) {
 
-    
-
     const lastWindow = container.lastChild; // Position relative to last window
 
     // Window
     const win = document.createElement("div");
-    win.setAttribute("class", "window");
+    win.className = "window";
+    win.style.zIndex = 1;
 
     /* ----------------------------- HEADER ----------------------------- */
     // Window bar
     const bar = document.createElement("div");
     bar.className = "window-bar";
-    bar.setAttribute("onmousedown", "this.style.cursor = 'grabbing'; mouseDown(event, this)");
-    bar.setAttribute("onmouseup", "this.style.cursor = 'grab'");
-    bar.setAttribute("onmouseleave", "this.style.cursor = 'grab'");
+    bar.onmousedown = (e) => {
+        bar.style.cursor = "grabbing";
+        e.preventDefault();
+        mouseDown(e, bar);
+    }
+    bar.onmouseup = () => {
+        bar.style.cursor = "grab";
+        mouseUp();
+    }
+    //bar.setAttribute("onmouseleave", "this.style.cursor = 'grab'");
 
     // Window label
     const label = document.createElement("span");
@@ -544,6 +550,7 @@ function mouseDown(e, bar) {
     yWindow = e.pageY - Number(topWindow.replace("px", "")); // Ex: str("10px") -> num(10)
     xWindow = e.pageX - Number(leftWindow.replace("px", ""));
 }
+
 function moveWindow(e) {
     // Defines the TOP and LEFT css of the window based on where the mouse is grabbing on the Bar
     if ((e.pageY - yWindow) > 0 && ((e.pageY - yWindow) + focusedWindow.clientHeight) < innerHeight) {
@@ -563,7 +570,7 @@ function moveWindow(e) {
     }
 }
 
-document.addEventListener("mouseleave", mouseUp);
+// document.addEventListener("mouseleave", mouseUp);
 document.addEventListener("mouseup", mouseUp);
 function mouseUp() {
     document.removeEventListener("mousemove", moveWindow);
