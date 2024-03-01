@@ -107,18 +107,20 @@ function userForm(data) {
     form.onsubmit = (e) => {
         e.preventDefault();
         setRegistry("users", new FormData(form)).then(response =>{
-            if (response.status == "created") {
+            if (response.status != "failure") {
                 alert(response.message);
+                
+                let tbody = document.getElementsByClassName("registries-table")[0].getElementsByTagName("tbody")[0];
+                if (response.status == "created") {
+
+                    tbody.append(createRow("users", Object.entries(response.registry)));
+
+                } else if (response.status == "edited") {
+                    //
+                }
+
                 removeWindow(form);
-                document.getElementsByClassName("registries-table")[0].getElementsByTagName("tbody");
-                let tbody
-                document.getElementsByTagName("tbody")[0].append(createRow([
-                    ["", ""],
-                    ["", ""],
-                    ["", ""],
-                    ["", ""],
-                    ["", ""]
-                ]));
+
             } else {
                 alert(response.message);
             }

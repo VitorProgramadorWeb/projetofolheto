@@ -24,6 +24,7 @@ function listRegistries(tableName) {
             });
             // options
             th = document.createElement("th");
+            th.className = "option";
             th.colSpan = 2;
             th.innerHTML = "Opções";
             tr.append(th);
@@ -86,6 +87,7 @@ function createRow(tableName, data) {
 
     // options
     td = document.createElement("td"); // Edit
+    td.className = "option";
     button = document.createElement("button");
     button.innerText = "Editar";
     button.className = "button";
@@ -105,6 +107,7 @@ function createRow(tableName, data) {
     tr.append(td);
 
     td = document.createElement("td"); // Delete
+    td.className = "option";
     button = document.createElement("button");
     button.innerText = "Excluir";
     button.className = "button";
@@ -112,6 +115,7 @@ function createRow(tableName, data) {
         getRegistry(tableName, id).then(registry => {
             if (confirm(`Deseja realmente excluir o usuário ${registry.user}, nome ${registry.name}?`)) {
                 deleteRegistry(tableName, id).then(response => {
+                    removeRow(button);
                     alert(response.message);
                 });
             }
@@ -121,6 +125,22 @@ function createRow(tableName, data) {
     tr.append(td);
     
     return tr;
+}
+
+function removeRow(element) {
+    // tr > td > button
+    while(element.tagName != "BODY") {
+        if(element.tagName == "TR") {
+            element.remove();
+
+            return true; // Success
+
+        } else {
+            element = element.parentElement;
+        }
+    }
+
+    return false; // Failure
 }
 
 /**

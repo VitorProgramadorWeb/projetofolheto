@@ -2,9 +2,29 @@ table {
     border-collapse: collapse;
     border: 1px solid black;
     text-align: left;
+
+    width: 100%;
 }
 
 th, td {
+    background-color: white;
     border: 1px solid black;
     padding: 5px;
+
+    text-wrap: nowrap;
+}
+
+td {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 10px;
+}
+
+td.option {
+    min-width: fit-content;
+    max-width: fit-content;
+}
+
+th.option {
+    max-width: fit-content;
 }
