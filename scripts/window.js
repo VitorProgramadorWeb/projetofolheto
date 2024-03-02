@@ -292,7 +292,33 @@ function userForm(data) {
     phoneInput.type = "tel";
     phoneInput.className = inputClassName + ` ${dataName}-input`;
     phoneInput.id = dataName + `-${windowNumber}`;
-    phoneInput.placeholder = "(__)_____-____";
+    phoneInput.placeholder = "(__) _.____-____";
+    phoneInput.maxLength = 16;
+    phoneInput.oninput = (e) => {
+        /** @type {string} */
+        let phone = phoneInput.value.replace(/\D/g, "");
+
+        // get cursor position
+        let cursorPosition = phoneInput.selectionStart;
+
+        phoneInput.value = phone.replace(/(\d{1,2})(\d{1})?(\d{1,4})?(\d{1,4})?/, (match, p1, p2, p3, p4) => {
+            let formatedCpf = "(" + p1;
+            if (p2?.length > 0) formatedCpf += `) ${p2}`;
+            if (p3?.length > 0) formatedCpf += `.${p3}`;
+            if (p4?.length > 0) formatedCpf += `-${p4}`;
+
+            if (e.inputType == "insertText") {
+                if (p2?.length == 1 || p3?.length == 1 || p4?.length == 1) {
+                    cursorPosition++;
+                }
+            }
+
+            return formatedCpf;
+        });
+
+        // set cursor position
+        //cpfInput.setSelectionRange(cursorPosition, cursorPosition);
+    };
 
     const phoneLabel = document.createElement("label");
     phoneLabel.className = labelClassName;
@@ -312,20 +338,89 @@ function userForm(data) {
     cpfInput.className = inputClassName + ` ${dataName}-input`;
     cpfInput.id = dataName + `-${windowNumber}`;
     cpfInput.placeholder = "___.___.___-__";
-    cpfInput.onblur = (e) => {
-        /** @type {HTMLElement} */
-        let input = e.currentTarget;
+    cpfInput.maxLength = 14;
+    cpfInput.oninput = (e) => {
         /** @type {string} */
-        let cpf = input.value.replace(/\D/g, "");
+        let cpf = cpfInput.value.replace(/\D/g, "");
+
+        // get cursor position
+        let cursorPosition = cpfInput.selectionStart;
+
+        cpfInput.value = cpf.replace(/(\d{1,3})(\d{1,3})?(\d{1,3})?(\d{1,2})?/, (match, p1, p2, p3, p4) => {
+            let formatedCpf = p1;
+            if (p2?.length > 0) formatedCpf += `.${p2}`;
+            if (p3?.length > 0) formatedCpf += `.${p3}`;
+            if (p4?.length > 0) formatedCpf += `-${p4}`;
+
+            if (e.inputType == "insertText") {
+                if (p2?.length == 1 || p3?.length == 1 || p4?.length == 1) {
+                    cursorPosition++;
+                }
+            }
+
+            return formatedCpf;
+        });
+
+        // Backspace and delete
+        if (e.data == null) {
+            let deletedChar = cpfInput.value.charAt(cursorPosition);
+
+            if (deletedChar == "." || deletedChar == "-") {
+                if (e.inputType == "deleteContentBackward") {
+                    cpf = cpfInput.value.substring(0, cursorPosition-1) + cpfInput.value.substring(cursorPosition);
+                    cursorPosition--;
+                } else if (e.inputType == "deleteContentForward") {
+                    cpf = cpfInput.value.substring(0, cursorPosition) + cpfInput.value.substring(cursorPosition+2);
+                }
+            }
+        }
+
+        cpf = cpf.replace(/\D/g, "");
+        cpfInput.value = cpf.replace(/(\d{1,3})(\d{1,3})?(\d{1,3})?(\d{1,2})?/, (match, p1, p2, p3, p4) => {
+            let formatedCpf = p1;
+            if (p2?.length > 0) formatedCpf += `.${p2}`;
+            if (p3?.length > 0) formatedCpf += `.${p3}`;
+            if (p4?.length > 0) formatedCpf += `-${p4}`;
+
+            if (e.inputType == "insertText") {
+                if (p2?.length == 1 || p3?.length == 1 || p4?.length == 1) {
+                    cursorPosition++;
+                }
+            }
+
+            return formatedCpf;
+        });
+
+        // set cursor position
+        cpfInput.setSelectionRange(cursorPosition, cursorPosition);
+
+        if (cpf.length == 11) {
+            if (!verifyCpf(cpf)) {
+                cpfInput.style.outlineColor = "red";
+                cpfInput.style.color = "red";
+            } else {
+                cpfInput.style.removeProperty("outline-color");
+                cpfInput.style.removeProperty("color");
+            }
+        } else if (cpf.length > 11) {
+            cpfInput.style.outlineColor = "red";
+            cpfInput.style.color = "red";
+        } else {
+            cpfInput.style.removeProperty("outline-color");
+            cpfInput.style.removeProperty("color");
+        }
+    };
+    cpfInput.onblur = (e) => {
+        /** @type {string} */
+        let cpf = cpfInput.value.replace(/\D/g, "");
 
         if (cpf != "") {
             if (verifyCpf(cpf)) {
-                input.style.removeProperty("outline-color");
-                input.value = cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
+                cpfInput.style.removeProperty("outline-color");
+                cpfInput.style.removeProperty("color");
             } else {
-                input.style.outlineColor = "red";
-                
-                alert("CPF inválido");
+                cpfInput.style.outlineColor = "red";
+                cpfInput.style.color = "red";
             }
         }
     };
