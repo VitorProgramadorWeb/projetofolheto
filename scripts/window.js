@@ -127,11 +127,10 @@ function userForm(data) {
                 
                 let tbody = document.getElementsByClassName("registries-table")[0].getElementsByTagName("tbody")[0];
                 if (response.status == "created") {
-
-                    tbody.append(createRow("users", Object.entries(response.registry)));
+                    tbody.append(createTableRow("users", response.registry));
 
                 } else if (response.status == "edited") {
-                    //
+                    window.location.reload();
                 }
 
                 removeWindow(form);

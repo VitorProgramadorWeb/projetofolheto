@@ -9,9 +9,9 @@ $action = $_POST["action"];
 switch ($action) {
     case "get":
         $table = $_POST["table"];
-        $primary_key = $_POST["primary_key"];
+        $id = $_POST["id"];
 
-        echo getRegistry($table, $primary_key);
+        echo getRegistry($table, $id);
         break;
     
     case "set":
@@ -22,9 +22,9 @@ switch ($action) {
     
     case "delete":
         $table = $_POST["table"];
-        $primary_key = $_POST["primary_key"];
+        $id = $_POST["id"];
 
-        echo deleteRegistry($table, $primary_key);
+        echo deleteRegistry($table, $id);
         break;
     
     default:

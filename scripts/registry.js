@@ -1,4 +1,32 @@
-let registriesTable = document.querySelector(".registries-table");
+const registriesTable = document.querySelector(".registries-table");
+
+const columnNames = {
+    users: {
+        id: "ID",
+        user: "Usuário",
+        name: "Nome",
+        email: "E-mail",
+        phone: "Telefone"
+        //birthdate: "Nascimento"
+        //password: "Senha"
+        //address: "Endereço"
+        //cpf: "CPF"
+    },
+    suppliers: {
+        id: "ID",
+        name: "Nome",
+        email: "E-mail",
+        phone: "Telefone"
+        //address: "Endereço"
+    },
+    customers: {
+        id: "ID",
+        name: "Nome",
+        email: "E-mail",
+        phone: "Telefone"
+        //address: "Endereço"
+    }
+};
 
 /**
  * List Registries available to edit/delete or even create, in a table. Also the options to do that.
@@ -9,24 +37,25 @@ function listRegistries(tableName) {
     getRegistry(tableName, "*").then(response => {
         
         let thead, tbody, tfoot;
-        let tr, th, td;
+        let tr, th;
         let button;
 
         if (response.length !== 0) {
             // ---------- THEAD ----------
             thead = document.createElement("thead");
             tr = document.createElement("tr");
-            Object.keys(response[0]).forEach((key) => {
+            // column headers
+            for (const columnName in columnNames[tableName]) {
                 th = document.createElement("th");
-                th.innerHTML = key;
-                if (key == "id") th.hidden = true; // Hide ID
+                th.innerText = columnNames[tableName][columnName];
+                if (columnName == "id") th.hidden = true; // Hide ID
                 tr.append(th);
-            });
-            // options
+            }
+        
+            // options header
             th = document.createElement("th");
             th.className = "option";
-            th.colSpan = 2;
-            th.innerHTML = "Opções";
+            th.innerText = "Opções";
             tr.append(th);
     
             thead.append(tr);
@@ -34,7 +63,7 @@ function listRegistries(tableName) {
             // ---------- TBODY ----------
             tbody = document.createElement("tbody");
             response.forEach((row) => {
-                tbody.append(createRow(tableName, Object.entries(row)));
+                tbody.append(createTableRow(tableName, row));
             });
 
             // APPEND
@@ -47,7 +76,7 @@ function listRegistries(tableName) {
         tr = document.createElement("tr");
         th = document.createElement("th");
         th.className = "option";
-        th.colSpan = 100;
+        //th.colSpan = 100;
         th.scope = "row";
         button = document.createElement("button");
         button.innerHTML = "&plus; Criar novo";
@@ -70,23 +99,28 @@ function listRegistries(tableName) {
         registriesTable.append(tfoot);
     });
 }
-
-function createRow(tableName, data) {
+/**
+ * 
+ * @param {*} tableName 
+ * @param {object} data {columnName: "value"}
+ * @returns {HTMLTableRowElement}
+ */
+function createTableRow(tableName, data) {
 
     let id;
     let tr = document.createElement("tr");
     let td;
 
-    data.forEach(([key, value]) => {
+    for (const column in columnNames[tableName]) {
         td = document.createElement("td");
-        td.setAttribute("class", key);
-        td.innerText = value;
-        if (key == "id") {
+        td.setAttribute("class", column);
+        td.innerText = data[column];
+        if (column == "id") {
             td.hidden = true; // Hide ID
-            id = value;
+            id = data[column];
         }
         tr.append(td);
-    });
+    }
 
     // options
     td = document.createElement("td");
@@ -98,10 +132,22 @@ function createRow(tableName, data) {
     button.onclick = () => {
         getRegistry(tableName, id).then((data) => {
             switch (tableName) {
-                case "users":     if (container.querySelector(`#user-form-${id}`) === null) addWindow("Editar usuário",    userForm(data));     break;
-                case "suppliers": addWindow("Editar fornecedor", supplierForm(data)); break;
-                case "customers": addWindow("Editar cliente",    customerForm(data)); break;
-                case "stock":     addWindow("Editar produto",    productForm(data));  break;
+                case "users":
+                    if (container.querySelector(`#user-form-${id}`) === null) addWindow("Editar usuário", userForm(data));
+                    break;
+                    
+                case "suppliers":
+                    if (container.querySelector(`#supplier-form-${id}`) === null) addWindow("Editar fornecedor", supplierForm(data));
+                    break;
+
+                case "customers":
+                    if (container.querySelector(`#customer-form-${id}`) === null) addWindow("Editar cliente", customerForm(data));
+                    break;
+
+                case "stock":
+                    if (container.querySelector(`#product-form-${id}`) === null) addWindow("Editar produto", productForm(data));
+                    break;
+
                 default:
                     break;
             }
@@ -114,9 +160,9 @@ function createRow(tableName, data) {
     button.className = "button delete-button";
     button.onclick = () => {
         getRegistry(tableName, id).then(registry => {
-            if (confirm(`Deseja realmente excluir o usuário ${registry.user}, nome ${registry.name}?`)) {
+            if (confirm(`Deseja realmente excluir o usuário ${registry.user}?`)) {
                 deleteRegistry(tableName, id).then(response => {
-                    removeRow(button);
+                    removeTableRow(tr);
                     alert(response.message);
                 });
             }
@@ -128,7 +174,7 @@ function createRow(tableName, data) {
     return tr;
 }
 
-function removeRow(element) {
+function removeTableRow(element) {
     // tr > td > button
     while(element.tagName != "BODY") {
         if(element.tagName == "TR") {
@@ -148,14 +194,14 @@ function removeRow(element) {
  * Deletes registry.
  * @async
  * @param {string} table Database table name.
- * @param {string | number} primaryKey The registry primary key of 'table' to delete.
+ * @param {string | number} id The registry id of 'table' to delete.
  * @returns {Promise<object>} A Promise json for success or failure.
  */
-async function deleteRegistry(table, primaryKey) {
+async function deleteRegistry(table, id) {
     return await fetch("/projetointegrador/actions/registry.php", {
         method: "post",
         headers: {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"},
-        body: `action=delete&table=${table}&primary_key=${primaryKey}`
+        body: `action=delete&table=${table}&id=${id}`
     }).then(response => response.json());
     
     // // Auto destruction
@@ -168,14 +214,14 @@ async function deleteRegistry(table, primaryKey) {
  * Gets registry.
  * @async
  * @param {string} table Database table name.
- * @param {string | number} primaryKey The registry primary key of 'table' to get. Also can be '*' to get all available registries.
+ * @param {string | number} id The registry id of 'table' to get. Also can be '*' to get all available registries.
  * @returns {Promise<object>} A Promise json for the registry data.
  */
-async function getRegistry(table, primaryKey) {
+async function getRegistry(table, id) {
     return await fetch("/projetointegrador/actions/registry.php", {
         method: "post",
         headers: {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"},
-        body: `action=get&table=${table}&primary_key=${primaryKey}`
+        body: `action=get&table=${table}&id=${id}`
     }).then(response => response.json());
 }
 
