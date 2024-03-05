@@ -44,12 +44,14 @@ function listRegistries(tableName) {
         
         // ---------- TFOOT ----------
         tfoot = document.createElement("tfoot");
+        tr = document.createElement("tr");
         th = document.createElement("th");
+        th.className = "option";
         th.colSpan = 100;
         th.scope = "row";
         button = document.createElement("button");
         button.innerHTML = "&plus; Criar novo";
-        button.className = "button";
+        button.className = "button create-button";
         button.onclick = () => {
             switch (tableName) {
                 case "users":     addWindow("Criar usuário",    userForm());     break;
@@ -61,7 +63,8 @@ function listRegistries(tableName) {
             }
         };
         th.append(button);
-        tfoot.append(th);
+        tr.append(th);
+        tfoot.append(tr);
         
         // APPEND
         registriesTable.append(tfoot);
@@ -86,11 +89,12 @@ function createRow(tableName, data) {
     });
 
     // options
-    td = document.createElement("td"); // Edit
+    td = document.createElement("td");
     td.className = "option";
-    button = document.createElement("button");
+
+    button = document.createElement("button"); // Edit
     button.innerText = "Editar";
-    button.className = "button";
+    button.className = "button edit-button";
     button.onclick = () => {
         getRegistry(tableName, id).then((data) => {
             switch (tableName) {
@@ -104,13 +108,10 @@ function createRow(tableName, data) {
         });
     };
     td.append(button);
-    tr.append(td);
 
-    td = document.createElement("td"); // Delete
-    td.className = "option";
-    button = document.createElement("button");
+    button = document.createElement("button"); // Delete
     button.innerText = "Excluir";
-    button.className = "button";
+    button.className = "button delete-button";
     button.onclick = () => {
         getRegistry(tableName, id).then(registry => {
             if (confirm(`Deseja realmente excluir o usuário ${registry.user}, nome ${registry.name}?`)) {

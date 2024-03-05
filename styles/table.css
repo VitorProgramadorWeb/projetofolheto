@@ -1,10 +1,11 @@
 table {
-    border-collapse: collapse;
     border: 1px solid black;
+    border-spacing: 0;
     text-align: left;
 
-    width: 100%;
-    
+    display: block;
+    max-width: fit-content;
+    overflow-x: auto;
 }
 
 th, td {
@@ -15,17 +16,18 @@ th, td {
     text-wrap: nowrap;
 }
 
-td {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    max-width: 10px;
+button + button {
+    margin-left: 5px;
 }
 
-td.option {
-    min-width: fit-content;
-    max-width: fit-content;
+tbody td.option, thead th.option {
+    position: sticky;
+    right: 0;
 }
 
-th.option {
-    max-width: fit-content;
+tfoot th.option {
+    border: none;
+    display: block;
+    position: sticky;
+    left: 0;
 }

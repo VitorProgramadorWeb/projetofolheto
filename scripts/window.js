@@ -11,32 +11,47 @@ const container = document.getElementById("container");
 
 function addWindow(windowLabel = "", windowContent = none()) {
 
-    
-
     const lastWindow = container.lastChild; // Position relative to last window
 
     // Window
     const win = document.createElement("div");
-    win.setAttribute("class", "window");
+    win.className = "window";
+    win.style.zIndex = 1;
 
     /* ----------------------------- HEADER ----------------------------- */
     // Window bar
     const bar = document.createElement("div");
     bar.className = "window-bar";
-    bar.setAttribute("onmousedown", "this.style.cursor = 'grabbing'; mouseDown(event, this)");
-    bar.setAttribute("onmouseup", "this.style.cursor = 'grab'");
-    bar.setAttribute("onmouseleave", "this.style.cursor = 'grab'");
+    bar.onmousedown = (e) => {
+        bar.style.cursor = "grabbing";
+        e.preventDefault();
+        mouseDown(e, bar);
+        document.onmouseup = () => {
+            bar.style.cursor = "grab";
+            mouseUp(win);
+        }
+    }
+    bar.ontouchstart = (e) => {
+        bar.style.cursor = "grabbing";
+        e.preventDefault();
+        touchStart(e, bar);
+        document.ontouchend = () => {
+            bar.style.cursor = "grab";
+            touchEnd(win);
+        }
+    }
 
     // Window label
     const label = document.createElement("span");
-    label.setAttribute("class", "window-label");
+    label.className = "window-label";
     label.innerText = windowLabel;
 
     // Close button
     const closeButton = document.createElement("button");
-    closeButton.setAttribute("class", "button close-button");
-    closeButton.setAttribute("onmousedown", "event.stopPropagation()");
-    closeButton.setAttribute("onclick", "removeWindow(this)");
+    closeButton.className = "button close-button";
+    closeButton.onmousedown = (e) => e.stopPropagation();
+    closeButton.ontouchstart = (e) => e.stopPropagation();
+    closeButton.onclick = () => removeWindow(win);
     closeButton.innerHTML = "&times;";
     
     /* ----- appends ----- */
@@ -128,7 +143,7 @@ function userForm(data) {
     };
     form.onmousedown = () => windowFocus(form);
     form.style.minWidth = "330px";
-    form.style.minHeight = "290px";
+    form.style.minHeight = "295px";
     
     let dataName; // Data name (reseted each data);
     const fieldClassName = "field"; // All field's class
@@ -277,7 +292,33 @@ function userForm(data) {
     phoneInput.type = "tel";
     phoneInput.className = inputClassName + ` ${dataName}-input`;
     phoneInput.id = dataName + `-${windowNumber}`;
-    phoneInput.placeholder = "(__)_____-____";
+    phoneInput.placeholder = "(__) _.____-____";
+    phoneInput.maxLength = 16;
+    phoneInput.oninput = (e) => {
+        /** @type {string} */
+        let phone = phoneInput.value.replace(/\D/g, "");
+
+        // get cursor position
+        let cursorPosition = phoneInput.selectionStart;
+
+        phoneInput.value = phone.replace(/(\d{1,2})(\d{1})?(\d{1,4})?(\d{1,4})?/, (match, p1, p2, p3, p4) => {
+            let formatedCpf = "(" + p1;
+            if (p2?.length > 0) formatedCpf += `) ${p2}`;
+            if (p3?.length > 0) formatedCpf += `.${p3}`;
+            if (p4?.length > 0) formatedCpf += `-${p4}`;
+
+            if (e.inputType == "insertText") {
+                if (p2?.length == 1 || p3?.length == 1 || p4?.length == 1) {
+                    cursorPosition++;
+                }
+            }
+
+            return formatedCpf;
+        });
+
+        // set cursor position
+        //cpfInput.setSelectionRange(cursorPosition, cursorPosition);
+    };
 
     const phoneLabel = document.createElement("label");
     phoneLabel.className = labelClassName;
@@ -297,20 +338,89 @@ function userForm(data) {
     cpfInput.className = inputClassName + ` ${dataName}-input`;
     cpfInput.id = dataName + `-${windowNumber}`;
     cpfInput.placeholder = "___.___.___-__";
-    cpfInput.onblur = (e) => {
-        /** @type {HTMLElement} */
-        let input = e.currentTarget;
+    cpfInput.maxLength = 14;
+    cpfInput.oninput = (e) => {
         /** @type {string} */
-        let cpf = input.value.replace(/\D/g, "");
+        let cpf = cpfInput.value.replace(/\D/g, "");
+
+        // get cursor position
+        let cursorPosition = cpfInput.selectionStart;
+
+        cpfInput.value = cpf.replace(/(\d{1,3})(\d{1,3})?(\d{1,3})?(\d{1,2})?/, (match, p1, p2, p3, p4) => {
+            let formatedCpf = p1;
+            if (p2?.length > 0) formatedCpf += `.${p2}`;
+            if (p3?.length > 0) formatedCpf += `.${p3}`;
+            if (p4?.length > 0) formatedCpf += `-${p4}`;
+
+            if (e.inputType == "insertText") {
+                if (p2?.length == 1 || p3?.length == 1 || p4?.length == 1) {
+                    cursorPosition++;
+                }
+            }
+
+            return formatedCpf;
+        });
+
+        // Backspace and delete
+        if (e.data == null) {
+            let deletedChar = cpfInput.value.charAt(cursorPosition);
+
+            if (deletedChar == "." || deletedChar == "-") {
+                if (e.inputType == "deleteContentBackward") {
+                    cpf = cpfInput.value.substring(0, cursorPosition-1) + cpfInput.value.substring(cursorPosition);
+                    cursorPosition--;
+                } else if (e.inputType == "deleteContentForward") {
+                    cpf = cpfInput.value.substring(0, cursorPosition) + cpfInput.value.substring(cursorPosition+2);
+                }
+            }
+        }
+
+        cpf = cpf.replace(/\D/g, "");
+        cpfInput.value = cpf.replace(/(\d{1,3})(\d{1,3})?(\d{1,3})?(\d{1,2})?/, (match, p1, p2, p3, p4) => {
+            let formatedCpf = p1;
+            if (p2?.length > 0) formatedCpf += `.${p2}`;
+            if (p3?.length > 0) formatedCpf += `.${p3}`;
+            if (p4?.length > 0) formatedCpf += `-${p4}`;
+
+            if (e.inputType == "insertText") {
+                if (p2?.length == 1 || p3?.length == 1 || p4?.length == 1) {
+                    cursorPosition++;
+                }
+            }
+
+            return formatedCpf;
+        });
+
+        // set cursor position
+        cpfInput.setSelectionRange(cursorPosition, cursorPosition);
+
+        if (cpf.length == 11) {
+            if (!verifyCpf(cpf)) {
+                cpfInput.style.outlineColor = "red";
+                cpfInput.style.color = "red";
+            } else {
+                cpfInput.style.removeProperty("outline-color");
+                cpfInput.style.removeProperty("color");
+            }
+        } else if (cpf.length > 11) {
+            cpfInput.style.outlineColor = "red";
+            cpfInput.style.color = "red";
+        } else {
+            cpfInput.style.removeProperty("outline-color");
+            cpfInput.style.removeProperty("color");
+        }
+    };
+    cpfInput.onblur = (e) => {
+        /** @type {string} */
+        let cpf = cpfInput.value.replace(/\D/g, "");
 
         if (cpf != "") {
             if (verifyCpf(cpf)) {
-                input.style.removeProperty("outline-color");
-                input.value = cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
+                cpfInput.style.removeProperty("outline-color");
+                cpfInput.style.removeProperty("color");
             } else {
-                input.style.outlineColor = "red";
-                
-                alert("CPF inválido");
+                cpfInput.style.outlineColor = "red";
+                cpfInput.style.color = "red";
             }
         }
     };
@@ -361,128 +471,6 @@ function userForm(data) {
     }
 
     return form;
-
-
-    
-    
-    function createField(params = {
-        "labelTextContent": "Texto",
-        "inputName": "text",
-        "inputType": "text"
-        //"inputValue": ""
-        //"inputDisabled": false
-        //"inputRequired": false
-        //"inputPlaceHolder": ""
-        //"hidden": false
-    }) {
-        let field, label, input;
-
-        if("inputType" in params)
-        switch (params.inputType) {
-    
-            case "submit":
-                // Field
-                field = document.createElement("div");
-                field.setAttribute("class", "field");
-                if("hidden" in params) field.setAttribute("hidden", params.hidden);
-                
-                // Input
-                input = document.createElement("input");
-                input.setAttribute("class", `input ${params.inputType}`);
-                input.setAttribute("type", params.inputType);
-                input.setAttribute("value", params.inputValue);
-                if("inputDisabled" in params) input.setAttribute("disabled", params.inputDisabled);
-                if("hidden" in params) input.setAttribute("hidden", params.hidden);
-
-                field.append(input);
-                
-                return field;
-                //break;
-
-            case "checkbox":
-                // Field
-                field = document.createElement("div");
-                field.setAttribute("class", "field");
-                if("hidden" in params) field.setAttribute("hidden", params.hidden);
-                
-                // Label
-                label = document.createElement("label");
-                label.textContent = params.labelTextContent;
-
-                // Input
-                input = document.createElement("input");
-                input.setAttribute("class", `input ${params.inputType}`);
-                input.setAttribute("type", params.inputType);
-                if("inputValue" in params) input.setAttribute("value", params.inputValue);
-                if("inputDisabled" in params) input.setAttribute("disabled", params.inputDisabled);
-                if("hidden" in params) input.setAttribute("hidden", params.hidden);
-
-                label.append(input);
-                field.append(label);
-                
-                return field;
-                //break;
-
-            default:
-                let inputID = params.inputName + `-${windowNumber}`;
-
-                // Field
-                field = document.createElement("div");
-                field.setAttribute("class", "field");
-                if("hidden" in params) field.setAttribute("hidden", params.hidden);
-                
-                // Label
-                label = document.createElement("label");
-                label.setAttribute("class", "label");
-                label.setAttribute("for", inputID);
-                label.textContent = params.labelTextContent;
-                if("hidden" in params) label.setAttribute("hidden", params.hidden);
-                
-                // Input
-                input = document.createElement("input");
-                input.setAttribute("class", `input ${params.inputName}`);
-                input.setAttribute("type", params.inputType);
-                input.setAttribute("name", params.inputName);
-                input.setAttribute("id", inputID);
-                if("inputValue" in params) input.setAttribute("value", params.inputValue);
-                if("inputPlaceHolder" in params) input.setAttribute("placeholder", params.inputPlaceHolder);
-                if("inputDisabled" in params) input.setAttribute("disabled", params.inputDisabled);
-                if("inputRequired" in params) input.setAttribute("required", params.inputRequired);
-                if("hidden" in params) input.setAttribute("hidden", params.hidden);
-
-                field.append(label);
-                
-                if(params.inputType == "password") {
-                    // Wrapper password + toggle
-                    let div = document.createElement("div");
-                    div.setAttribute("class", "wrapper");
-
-                    // Password visibility toggle
-                    let toggle = document.createElement("input");
-                    toggle.setAttribute("class", `input checkbox`);
-                    toggle.setAttribute("type", "checkbox");
-                    toggle.addEventListener("click", (e) => {
-                        let inputPassword = toggle.parentElement.getElementsByClassName("password")[0];
-                        if (inputPassword.type == "password") {
-                            inputPassword.type = "text";
-                        } else {
-                            inputPassword.type = "password";
-                        }
-                    });
-
-                    div.append(input);
-                    div.append(toggle);
-                    field.append(div);
-                } else {
-                    field.append(input);
-                }
-                
-                return field;
-                //break;
-        }
-    }
-
-    // function createButton() {}
 }
 
 function supplierForm() {
@@ -544,6 +532,27 @@ function mouseDown(e, bar) {
     yWindow = e.pageY - Number(topWindow.replace("px", "")); // Ex: str("10px") -> num(10)
     xWindow = e.pageX - Number(leftWindow.replace("px", ""));
 }
+
+function touchStart(e, bar) {
+    // Window element
+    let win = bar.parentElement;
+
+    // Focus on window (places it in front)
+    focusedWindow = windowFocus(win);
+
+    // Capture mouse moves
+    document.addEventListener("touchmove", touchMoveWindow);
+
+    // TOP and LEFT CSS values of window
+    let topWindow = win.style.top; // "px"
+    let leftWindow = win.style.left;
+    
+    e = e.touches[0];
+    // Calculating the X and Y distance from the top left corner of the window to the mouse
+    yWindow = e.pageY - Number(topWindow.replace("px", "")); // Ex: str("10px") -> num(10)
+    xWindow = e.pageX - Number(leftWindow.replace("px", ""));
+}
+
 function moveWindow(e) {
     // Defines the TOP and LEFT css of the window based on where the mouse is grabbing on the Bar
     if ((e.pageY - yWindow) > 0 && ((e.pageY - yWindow) + focusedWindow.clientHeight) < innerHeight) {
@@ -562,14 +571,68 @@ function moveWindow(e) {
         focusedWindow.style.left = (innerWidth - focusedWindow.clientWidth) + "px";
     }
 }
+/**
+ * 
+ * @param {TouchEvent} e 
+ */
+function touchMoveWindow(e) {
+    e = e.touches[0];
+    // Defines the TOP and LEFT css of the window based on where the mouse is grabbing on the Bar
+    if ((e.pageY - yWindow) > 0 && ((e.pageY - yWindow) + focusedWindow.clientHeight) < innerHeight) {
+        focusedWindow.style.top = (e.pageY - yWindow) + "px";
+    } else if ((e.pageY - yWindow) < 0) {
+        focusedWindow.style.top = 0 + "px";
+    } else if (((e.pageY - yWindow) + focusedWindow.clientHeight) > innerHeight) {
+        focusedWindow.style.top = (innerHeight - focusedWindow.clientHeight) + "px";
+    }
 
-document.addEventListener("mouseleave", mouseUp);
-document.addEventListener("mouseup", mouseUp);
-function mouseUp() {
+    if ((e.pageX - xWindow) > 0 && ((e.pageX - xWindow) + focusedWindow.clientWidth) < innerWidth) {
+        focusedWindow.style.left = (e.pageX - xWindow) + "px";
+    } else if ((e.pageX - xWindow) < 0) {
+        focusedWindow.style.left = 0 + "px";
+    } else if (((e.pageX - xWindow) + focusedWindow.clientWidth) > innerWidth) {
+        focusedWindow.style.left = (innerWidth - focusedWindow.clientWidth) + "px";
+    }
+}
+
+// document.addEventListener("mouseleave", mouseUp);
+// document.addEventListener("mouseup", mouseUp);
+function mouseUp(win) {
     document.removeEventListener("mousemove", moveWindow);
 
     // window elements
-    const win = focusedWindow;
+    const windowContent = win.getElementsByClassName("window-content")[0];
+    const windowBar = win.getElementsByClassName("window-bar")[0];
+    // resize if out of window
+    const top = Number(win.style.top.replace("px", ""));
+    const bottomTop = Number(win.style.top.replace("px", "")) + win.clientHeight;
+    const left = Number(win.style.left.replace("px", ""));
+    const rightLeft = Number(win.style.left.replace("px", "")) + win.clientWidth;
+
+    
+    if (win.clientHeight > innerHeight) {
+        win.style.top = 0 + "px";
+        windowContent.style.height = (innerHeight - windowBar.style.height - 29) + "px"; // - bar.height
+    } else if (top < 0) {
+        win.style.top = 0 + "px";
+    } else if (bottomTop > innerHeight) {
+        win.style.top = (innerHeight - win.clientHeight) + "px";
+    }
+
+    if (win.clientWidth > innerWidth) {
+        win.style.left = 0 + "px";
+        windowContent.style.width = innerWidth + "px";
+    } else if (left < 0) {
+        win.style.left = 0 + "px";
+    } else if (rightLeft > innerWidth) {
+        win.style.left = (innerWidth - win.clientWidth) + "px";
+    }
+}
+
+function touchEnd(win) {
+    document.removeEventListener("touchmove", touchMoveWindow);
+
+    // window elements
     const windowContent = win.getElementsByClassName("window-content")[0];
     const windowBar = win.getElementsByClassName("window-bar")[0];
     // resize if out of window
