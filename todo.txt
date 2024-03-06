@@ -2,7 +2,7 @@
 [] Mudar o getRegistry, do php, para prepared statement
 [] Inserir privilégios para os usuários
 [] Fazer o cadastro de produtos
-[] Colocar imagem como parte do registro
+[] Colocar imagem como parte do registro (ver BLOB e SHA-1)
     [] Users
     [] Suppliers
     [] Customers
@@ -14,3 +14,16 @@
     [] Suppliers
     [] Customers
     [] Products/Stock
+[] Gerador de registros aleatórios (usuários, fornecedores, clientes, produtos)
+[] Adicionar ícones esconder/mostrar senha no login
+[] ícones de editar e excluir nas tabelas
+[] Criar cadastro de usuário (com privilégio baixo, pode editar somente os próprios produtos)
+[] Aumentar a segurança contra erros de entradas de dados do usuário (FrontEnd JS & HTML)
+[] Aumentar a segurança contra erros de entradas de dados do usuário (PHP)
+[] Revisar as mensagens de resposta do servidor
+[] Revisar os códigos, limpar, deixar mais legível, comentar (fazer a documentação JS doc)
+[] Usar Try-catch e revisar o tratamento de erros e exceções
+[] Desabilitar a função request DELETE do servidor apache
+[] Mobile first
+[] Switch toggle theme (light/dark)
+[] Adicionar indicação de carregamento (ex.: tuberipper, quadrado mexendo ao buscar link)
