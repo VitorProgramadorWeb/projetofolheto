@@ -1,0 +1,16 @@
+[] Alterar a forma de senhas atuais para HASH + Salt
+[] Mudar o getRegistry, do php, para prepared statement
+[] Inserir privilégios para os usuários
+[] Fazer o cadastro de produtos
+[] Colocar imagem como parte do registro
+    [] Users
+    [] Suppliers
+    [] Customers
+    [] Products/Stock
+[] alterar o nome da propriedade 'user' para 'username' em Users
+[] Alterar o nome da tabela 'stocks' para 'products'
+[] Refazer o layout dos formulários
+    [] Users
+    [] Suppliers
+    [] Customers
+    [] Products/Stock
