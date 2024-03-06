@@ -99,6 +99,7 @@ function listRegistries(tableName) {
         registriesTable.append(tfoot);
     });
 }
+
 /**
  * 
  * @param {*} tableName 

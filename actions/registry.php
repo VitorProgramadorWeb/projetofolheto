@@ -107,7 +107,6 @@ function setRegistry($table) {
 
     switch ($table) {
         case "users":
-
             $id        = $_POST["id"];
             $user      = $_POST["user"];
             $password  = $_POST["password"];

@@ -117,7 +117,7 @@ function userForm(data) {
     /* ----------------------------- USER ----------------------------- */
     // Form
     const form = document.createElement("form");
-    form.id = "user-form-" + (data != undefined ? data.id : "#");
+    form.id = "user-form-" + (data != undefined ? data.id : "0");
     form.className = "window-content content-user";
     form.onsubmit = (e) => {
         e.preventDefault();
@@ -134,7 +134,7 @@ function userForm(data) {
                         return (tr.querySelector(".id").innerText == response.registry.id);
                     });
                     tableRow.replaceWith(createTableRow("users", response.registry));
-                    
+
                 }
 
                 removeWindow(form);
@@ -318,9 +318,6 @@ function userForm(data) {
 
             return formatedCpf;
         });
-
-        // set cursor position
-        //cpfInput.setSelectionRange(cursorPosition, cursorPosition);
     };
 
     const phoneLabel = document.createElement("label");
@@ -476,8 +473,195 @@ function userForm(data) {
     return form;
 }
 
-function supplierForm() {
+function supplierForm(data) {
+    /* ----------------------------- USER ----------------------------- */
+    // Form
+    const form = document.createElement("form");
+    form.id = "supplier-form-" + (data != undefined ? data.id : "0");
+    form.className = "window-content content-supplier";
+    form.onsubmit = (e) => {
+        e.preventDefault();
+        setRegistry("suppliers", new FormData(form)).then(response =>{
+            if (response.status != "failure") {
+                alert(response.message);
+                
+                const tbody = document.querySelector(".registries-table").querySelector("tbody");
+                if (response.status == "created") {
+                    tbody.append(createTableRow("suppliers", response.registry));
 
+                } else if (response.status == "edited") {
+                    let tableRow = [...tbody.querySelectorAll("tr")].find((tr) => {
+                        return (tr.querySelector(".id").innerText == response.registry.id);
+                    });
+                    tableRow.replaceWith(createTableRow("suppliers", response.registry));
+
+                }
+
+                removeWindow(form);
+
+            } else {
+                alert(response.message);
+            }
+        });
+    };
+    form.onmousedown = () => windowFocus(form);
+    form.style.minWidth = "275px";
+    form.style.minHeight = "170px";
+    
+    let dataName; // Data name (reseted each data);
+    const fieldClassName = "field"; // All field's class
+    const inputClassName = "input"; // All inputs's class
+    const labelClassName = "label"; // All labels's class
+    // ---------- Fields ---------- //
+    /* ID */ dataName = "id";
+    const idField = document.createElement("div");
+    idField.hidden = true;
+    //idField.className = fieldClassName;
+
+    const idInput = document.createElement("input");
+    idInput.hidden = true;
+    //idInput.disabled = true; // Does not send on submit
+    idInput.name = dataName;
+    idInput.type = "number";
+    idInput.className = inputClassName + ` ${dataName}-input`;
+    idInput.id = dataName + `-${windowNumber}`;
+
+    const idLabel = document.createElement("label");
+    idLabel.hidden = true;
+    idLabel.className = labelClassName;
+    idLabel.textContent = "ID";
+    idLabel.htmlFor = idInput.id;
+
+    idField.append(idLabel);
+    idField.append(idInput);
+    
+    /* Name */ dataName = "name";
+    const nameField = document.createElement("div");
+    nameField.className = fieldClassName;
+
+    const nameInput = document.createElement("input");
+    nameInput.required = true;
+    nameInput.name = dataName;
+    nameInput.type = "text";
+    nameInput.className = inputClassName + ` ${dataName}-input`;
+    nameInput.id = dataName + `-${windowNumber}`;
+
+    const nameLabel = document.createElement("label");
+    nameLabel.className = labelClassName;
+    nameLabel.textContent = "Nome";
+    nameLabel.htmlFor = nameInput.id;
+
+    nameField.append(nameLabel);
+    nameField.append(nameInput);
+    
+    /* Address */ dataName = "address";
+    const addressField = document.createElement("div");
+    addressField.className = fieldClassName;
+
+    const addressInput = document.createElement("input");
+    addressInput.name = dataName;
+    addressInput.type = "text";
+    addressInput.className = inputClassName + ` ${dataName}-input`;
+    addressInput.id = dataName + `-${windowNumber}`;
+
+    const addressLabel = document.createElement("label");
+    addressLabel.className = labelClassName;
+    addressLabel.textContent = "Endereço";
+    addressLabel.htmlFor = addressInput.id;
+
+    addressField.append(addressLabel);
+    addressField.append(addressInput);
+    
+    /* Email */ dataName = "email";
+    const emailField = document.createElement("div");
+    emailField.className = fieldClassName;
+
+    const emailInput = document.createElement("input");
+    emailInput.name = dataName;
+    emailInput.type = "email";
+    emailInput.className = inputClassName + ` ${dataName}-input`;
+    emailInput.id = dataName + `-${windowNumber}`;
+
+    const emailLabel = document.createElement("label");
+    emailLabel.className = labelClassName;
+    emailLabel.textContent = "E-mail";
+    emailLabel.htmlFor = emailInput.id;
+
+    emailField.append(emailLabel);
+    emailField.append(emailInput);
+    
+    /* Phone */ dataName = "phone";
+    const phoneField = document.createElement("div");
+    phoneField.className = fieldClassName;
+
+    const phoneInput = document.createElement("input");
+    phoneInput.name = dataName;
+    phoneInput.type = "tel";
+    phoneInput.className = inputClassName + ` ${dataName}-input`;
+    phoneInput.id = dataName + `-${windowNumber}`;
+    phoneInput.placeholder = "(__) _.____-____";
+    phoneInput.maxLength = 16;
+    phoneInput.oninput = (e) => {
+        /** @type {string} */
+        let phone = phoneInput.value.replace(/\D/g, "");
+
+        // get cursor position
+        let cursorPosition = phoneInput.selectionStart;
+
+        phoneInput.value = phone.replace(/(\d{1,2})(\d{1})?(\d{1,4})?(\d{1,4})?/, (match, p1, p2, p3, p4) => {
+            let formatedCpf = "(" + p1;
+            if (p2?.length > 0) formatedCpf += `) ${p2}`;
+            if (p3?.length > 0) formatedCpf += `.${p3}`;
+            if (p4?.length > 0) formatedCpf += `-${p4}`;
+
+            if (e.inputType == "insertText") {
+                if (p2?.length == 1 || p3?.length == 1 || p4?.length == 1) {
+                    cursorPosition++;
+                }
+            }
+
+            return formatedCpf;
+        });
+    };
+
+    const phoneLabel = document.createElement("label");
+    phoneLabel.className = labelClassName;
+    phoneLabel.textContent = "Telefone";
+    phoneLabel.htmlFor = phoneInput.id;
+
+    phoneField.append(phoneLabel);
+    phoneField.append(phoneInput);
+    
+    /* Submit */
+    const submitField = document.createElement("div");
+    submitField.className = fieldClassName;
+
+    const submitInput = document.createElement("input");
+    submitInput.name = dataName;
+    submitInput.className = "button";
+    submitInput.type = "submit";
+    submitInput.value = "Salvar";
+
+    submitField.append(submitInput);
+    
+    // Appends
+    form.append(idField);
+    form.append(nameField);
+    form.append(addressField);
+    form.append(emailField);
+    form.append(phoneField);
+    form.append(submitField);
+    
+    // Inserting data
+    if (data != undefined) {
+        idInput.value =        data.id,
+        nameInput.value =      data.name,
+        addressInput.value =   data.address,
+        emailInput.value =     data.email,
+        phoneInput.value =     data.phone
+    }
+
+    return form;
 }
 
 function customerForm() {
