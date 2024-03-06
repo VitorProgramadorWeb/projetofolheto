@@ -125,12 +125,16 @@ function userForm(data) {
             if (response.status != "failure") {
                 alert(response.message);
                 
-                let tbody = document.getElementsByClassName("registries-table")[0].getElementsByTagName("tbody")[0];
+                const tbody = document.querySelector(".registries-table").querySelector("tbody");
                 if (response.status == "created") {
                     tbody.append(createTableRow("users", response.registry));
 
                 } else if (response.status == "edited") {
-                    window.location.reload();
+                    let tableRow = [...tbody.querySelectorAll("tr")].find((tr) => {
+                        return (tr.querySelector(".id").innerText == response.registry.id);
+                    });
+                    tableRow.replaceWith(createTableRow("users", response.registry));
+                    
                 }
 
                 removeWindow(form);
