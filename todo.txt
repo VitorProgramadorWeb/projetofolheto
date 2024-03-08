@@ -1,5 +1,5 @@
 [] Alterar a forma de senhas atuais para HASH + Salt
-[] Fazer formulário de cadastro de usuário
+[] Fazer formulário de cadastro de usuário (no login)
 [] Mudar o getRegistry, do php, para prepared statement
 [] Inserir privilégios para os usuários
 [] Fazer o cadastro de produtos

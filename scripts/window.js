@@ -145,8 +145,8 @@ function userForm(data) {
         });
     };
     form.onmousedown = () => windowFocus(form);
-    form.style.minWidth = "330px";
-    form.style.minHeight = "295px";
+    form.style.minWidth = "408px";
+    form.style.minHeight = "322px";
     
     let dataName; // Data name (reseted each data);
     const fieldClassName = "field"; // All field's class
@@ -198,23 +198,87 @@ function userForm(data) {
     const passwordField = document.createElement("div");
     passwordField.className = fieldClassName;
 
-    if (data == undefined) {
-    const passwordInput = document.createElement("input");
-    passwordInput.required = true;
-    passwordInput.name = dataName;
-    passwordInput.type = "password";
-    passwordInput.className = inputClassName + ` ${dataName}-input`;
-    passwordInput.id = dataName + `-${windowNumber}`;
+    const createPasswordField = document.createElement("div");
+    createPasswordField.className = fieldClassName;
 
-    const passwordLabel = document.createElement("label");
-    passwordLabel.className = labelClassName;
-    passwordLabel.textContent = "Senha";
-    passwordLabel.htmlFor = passwordInput.id;
-        passwordLabel.htmlFor = passwordInput.id;
+    const confirmPasswordField = document.createElement("div");
+    confirmPasswordField.className = fieldClassName;
 
-    passwordField.append(passwordLabel);
-    passwordField.append(passwordInput);
-    } else {
+    if (data == undefined) { // create and confirm password
+        /* Create password */ dataName = "password";
+        const createPasswordAndToggleField = document.createElement("div");
+
+        const createPasswordInput = document.createElement("input");
+        createPasswordInput.required = true;
+        createPasswordInput.name = `create-${dataName}`;
+        createPasswordInput.type = "password";
+        createPasswordInput.className = inputClassName + ` ${dataName}-input`;
+        createPasswordInput.id = `create-${dataName}-${windowNumber}`;
+        
+        const createPasswordToggle = document.createElement("button");
+        createPasswordToggle.className = "button";
+        createPasswordToggle.innerHTML = "Mostrar";
+        createPasswordToggle.tabIndex = "-1";
+        createPasswordToggle.style.position = "absolute";
+        createPasswordToggle.style.right = "10px";
+        createPasswordToggle.onclick = () => {
+            if (createPasswordInput.type === "password") {
+                createPasswordInput.type = "text";
+                createPasswordToggle.innerHTML = "Ocultar";
+            } else {
+                createPasswordInput.type = "password";
+                createPasswordToggle.innerHTML = "Mostrar";
+            }
+        };
+
+        createPasswordAndToggleField.append(createPasswordInput);
+        createPasswordAndToggleField.append(createPasswordToggle);
+
+        const createPasswordLabel = document.createElement("label");
+        createPasswordLabel.className = labelClassName;
+        createPasswordLabel.textContent = "Senha";
+        createPasswordLabel.htmlFor = createPasswordInput.id;
+
+        createPasswordField.append(createPasswordLabel);
+        createPasswordField.append(createPasswordAndToggleField);
+
+        /* Confirm password */ dataName = "password";
+        const confirmPasswordAndToggleField = document.createElement("div");
+
+        const confirmPasswordInput = document.createElement("input");
+        confirmPasswordInput.required = true;
+        confirmPasswordInput.name = `confirm-${dataName}`;
+        confirmPasswordInput.type = "password";
+        confirmPasswordInput.className = inputClassName + ` ${dataName}-input`;
+        confirmPasswordInput.id = `confirm-${dataName}-${windowNumber}`;
+        
+        const confirmPasswordToggle = document.createElement("button");
+        confirmPasswordToggle.className = "button";
+        confirmPasswordToggle.innerHTML = "Mostrar";
+        confirmPasswordToggle.tabIndex = "-1";
+        confirmPasswordToggle.style.position = "absolute";
+        confirmPasswordToggle.style.right = "10px";
+        confirmPasswordToggle.onclick = () => {
+            if (confirmPasswordInput.type === "password") {
+                confirmPasswordInput.type = "text";
+                confirmPasswordToggle.innerHTML = "Ocultar";
+            } else {
+                confirmPasswordInput.type = "password";
+                confirmPasswordToggle.innerHTML = "Mostrar";
+            }
+        };
+
+        confirmPasswordAndToggleField.append(confirmPasswordInput);
+        confirmPasswordAndToggleField.append(confirmPasswordToggle);
+
+        const confirmPasswordLabel = document.createElement("label");
+        confirmPasswordLabel.className = labelClassName;
+        confirmPasswordLabel.textContent = "Confirmar senha";
+        confirmPasswordLabel.htmlFor = confirmPasswordInput.id;
+
+        confirmPasswordField.append(confirmPasswordLabel);
+        confirmPasswordField.append(confirmPasswordAndToggleField);
+    } else { // change password
         const passwordLink = document.createElement("a");
         passwordLink.innerHTML = "Alterar senha";
         passwordLink.href = "#";
@@ -466,7 +530,12 @@ function userForm(data) {
     // Appends
     form.append(idField);
     form.append(userField);
-    form.append(passwordField);
+    if (data == undefined) {
+        form.append(createPasswordField);
+        form.append(confirmPasswordField);
+    } else {
+        form.append(passwordField);
+    }
     form.append(nameField);
     form.append(birthdateField);
     form.append(addressField);
@@ -479,7 +548,6 @@ function userForm(data) {
     if (data != undefined) {
         idInput.value =        data.id,
         userInput.value =      data.user,
-        passwordInput.value =  data.password,
         nameInput.value =      data.name,
         birthdateInput.value = data.birthdate,
         addressInput.value =   data.address,
@@ -697,6 +765,159 @@ function none() {
     none.style.minHeight = "150px";
 
     return none;
+}
+
+function changePassword(data = {id: 0}) {
+    const form = document.createElement("form");
+    form.id = "changepassword-form-" + data.id;
+    form.className = "window-content content-changepassword";
+    form.onsubmit = (e) => {
+        e.preventDefault();
+        // ...
+    };
+    form.onmousedown = () => windowFocus(form);
+    form.style.minWidth = "515px";
+    form.style.minHeight = "135px";
+
+    let dataName; // Data name (reseted each data);
+    const fieldClassName = "field"; // All field's class
+    const inputClassName = "input"; // All inputs's class
+    const labelClassName = "label"; // All labels's class
+
+    /* Old password */ dataName = "password";
+    const oldPasswordField = document.createElement("div");
+    oldPasswordField.className = fieldClassName;
+
+    const oldPasswordAndToggleField = document.createElement("div");
+
+    const oldPasswordInput = document.createElement("input");
+    oldPasswordInput.name = dataName;
+    oldPasswordInput.type = "password";
+    oldPasswordInput.className = inputClassName + ` ${dataName}-input`;
+    oldPasswordInput.id = `old-${dataName}-${windowNumber}`;
+    
+    const oldPasswordToggle = document.createElement("button");
+    oldPasswordToggle.className = "button";
+    oldPasswordToggle.innerHTML = "Mostrar";
+    oldPasswordToggle.tabIndex = "-1";
+    oldPasswordToggle.style.position = "absolute";
+    oldPasswordToggle.style.right = "10px";
+    oldPasswordToggle.onclick = () => {
+        if (oldPasswordInput.type === "password") {
+            oldPasswordInput.type = "text";
+            oldPasswordToggle.innerHTML = "Ocultar";
+        } else {
+            oldPasswordInput.type = "password";
+            oldPasswordToggle.innerHTML = "Mostrar";
+        }
+    };
+
+    oldPasswordAndToggleField.append(oldPasswordInput);
+    oldPasswordAndToggleField.append(oldPasswordToggle);
+
+    const oldPasswordLabel = document.createElement("label");
+    oldPasswordLabel.className = labelClassName;
+    oldPasswordLabel.textContent = "Senha antiga";
+    oldPasswordLabel.htmlFor = oldPasswordInput.id;
+
+    oldPasswordField.append(oldPasswordLabel);
+    oldPasswordField.append(oldPasswordAndToggleField);
+
+    /* New password */ dataName = "password";
+    const newPasswordField = document.createElement("div");
+    newPasswordField.className = fieldClassName;
+
+    const newPasswordAndToggleField = document.createElement("div");
+
+    const newPasswordInput = document.createElement("input");
+    newPasswordInput.name = dataName;
+    newPasswordInput.type = "password";
+    newPasswordInput.className = inputClassName + ` ${dataName}-input`;
+    newPasswordInput.id = `new-${dataName}-${windowNumber}`;
+    
+    const newPasswordToggle = document.createElement("button");
+    newPasswordToggle.className = "button";
+    newPasswordToggle.innerHTML = "Mostrar";
+    newPasswordToggle.tabIndex = "-1";
+    newPasswordToggle.style.position = "absolute";
+    newPasswordToggle.style.right = "10px";
+    newPasswordToggle.onclick = () => {
+        if (newPasswordInput.type === "password") {
+            newPasswordInput.type = "text";
+            newPasswordToggle.innerHTML = "Ocultar";
+        } else {
+            newPasswordInput.type = "password";
+            newPasswordToggle.innerHTML = "Mostrar";
+        }
+    };
+
+    newPasswordAndToggleField.append(newPasswordInput);
+    newPasswordAndToggleField.append(newPasswordToggle);
+
+    const newPasswordLabel = document.createElement("label");
+    newPasswordLabel.className = labelClassName;
+    newPasswordLabel.textContent = "Senha nova";
+    newPasswordLabel.htmlFor = newPasswordInput.id;
+
+    newPasswordField.append(newPasswordLabel);
+    newPasswordField.append(newPasswordAndToggleField);
+
+    /* New password confirmation */ dataName = "password";
+    const newPasswordConfirmationField = document.createElement("div");
+    newPasswordConfirmationField.className = fieldClassName;
+
+    const newPasswordConfirmationAndToggleField = document.createElement("div");
+
+    const newPasswordConfirmationInput = document.createElement("input");
+    newPasswordConfirmationInput.name = dataName;
+    newPasswordConfirmationInput.type = "password";
+    newPasswordConfirmationInput.className = inputClassName + ` ${dataName}-input`;
+    newPasswordConfirmationInput.id = `new-${dataName}-confirmation-${windowNumber}`;
+    
+    const newPasswordConfirmationToggle = document.createElement("button");
+    newPasswordConfirmationToggle.className = "button";
+    newPasswordConfirmationToggle.innerHTML = "Mostrar";
+    newPasswordConfirmationToggle.tabIndex = "-1";
+    newPasswordConfirmationToggle.style.position = "absolute";
+    newPasswordConfirmationToggle.style.right = "10px";
+    newPasswordConfirmationToggle.onclick = () => {
+        if (newPasswordConfirmationInput.type === "password") {
+            newPasswordConfirmationInput.type = "text";
+            newPasswordConfirmationToggle.innerHTML = "Ocultar";
+        } else {
+            newPasswordConfirmationInput.type = "password";
+            newPasswordConfirmationToggle.innerHTML = "Mostrar";
+        }
+    };
+
+    newPasswordConfirmationAndToggleField.append(newPasswordConfirmationInput);
+    newPasswordConfirmationAndToggleField.append(newPasswordConfirmationToggle);
+
+    const newPasswordConfirmationLabel = document.createElement("label");
+    newPasswordConfirmationLabel.className = labelClassName;
+    newPasswordConfirmationLabel.textContent = "Confirmar senha nova";
+    newPasswordConfirmationLabel.htmlFor = newPasswordConfirmationInput.id;
+
+    newPasswordConfirmationField.append(newPasswordConfirmationLabel);
+    newPasswordConfirmationField.append(newPasswordConfirmationAndToggleField);
+    
+    /* Submit */
+    const submitField = document.createElement("div");
+    submitField.className = fieldClassName;
+    
+    const submitInput = document.createElement("input");
+    submitInput.className = "button";
+    submitInput.type = "submit";
+    submitInput.value = "Alterar senha";
+    
+    submitField.append(submitInput);
+
+    form.append(oldPasswordField);
+    form.append(newPasswordField);
+    form.append(newPasswordConfirmationField);
+    form.append(submitField);
+
+    return form;
 }
 
 

@@ -53,6 +53,7 @@ function getRegistry($table, $id) {
             } else {
                 $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
                 $stmt->bind_param("i", $id);
+                $stmt->execute();
                 $db_response = $stmt->get_result();
 
                 $stmt->close();
@@ -71,6 +72,7 @@ function getRegistry($table, $id) {
             } else {
                 $stmt = $conn->prepare("SELECT * FROM suppliers WHERE id = ?");
                 $stmt->bind_param("i", $id);
+                $stmt->execute();
                 $db_response = $stmt->get_result();
 
                 $stmt->close();
@@ -89,6 +91,7 @@ function getRegistry($table, $id) {
             } else {
                 $stmt = $conn->prepare("SELECT * FROM customers WHERE id = ?");
                 $stmt->bind_param("i", $id);
+                $stmt->execute();
                 $db_response = $stmt->get_result();
 
                 $stmt->close();
@@ -115,7 +118,9 @@ function setRegistry($table) {
         case "users":
             $id        = $_POST["id"];
             $user      = $_POST["user"];
-            $password  = $_POST["password"];
+            $create_password  = $_POST["create-password"];
+            $confirm_password = $_POST["confirm-password"];
+            $hashed_password  = password_hash($create_password, PASSWORD_DEFAULT);
             $name      = $_POST["name"];
             $birthdate = $_POST["birthdate"];
             $address   = $_POST["address"];
@@ -127,7 +132,7 @@ function setRegistry($table) {
             if ($id != "") {
                 
                 $stmt = $conn->prepare("UPDATE users SET user = ?, password = ?, name = ?, birthdate = ?, address = ?, email = ?, phone = ?, cpf = ? WHERE id = ?");
-                $stmt->bind_param("ssssssssi", $user, $password, $name, $birthdate, $address, $email, $phone, $cpf, $id);
+                $stmt->bind_param("ssssssssi", $user, $create_password, $name, $birthdate, $address, $email, $phone, $cpf, $id);
                 $db_response_status = $stmt->execute();
 
                 $server_response = [
@@ -176,7 +181,7 @@ function setRegistry($table) {
 
                 } else {
                     $stmt = $conn->prepare("INSERT INTO users(user, password, name, birthdate, address, email, phone, cpf) values(?, ?, ?, ?, ?, ?, ?, ?)"); // WHERE privilege = '$privilege'
-                    $stmt->bind_param("ssssssss", $user, $password, $name, $birthdate, $address, $email, $phone, $cpf);
+                    $stmt->bind_param("ssssssss", $user, $hashed_password, $name, $birthdate, $address, $email, $phone, $cpf);
                     $db_response = $stmt->execute();
                     
                     $server_response = [

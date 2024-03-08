@@ -30,7 +30,12 @@
         .field {
             display: grid;
             grid-template-columns: 1fr 2fr;
+            align-items: center;
             padding: 5px;
+        }
+
+        label {
+            text-wrap: nowrap;
         }
 
         input {
