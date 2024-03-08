@@ -45,48 +45,54 @@ function getRegistry($table, $id) {
     switch ($table) {
         case "users":
             if ($id == "*") { // All
-                $sql = "SELECT * FROM $table"; // WHERE privilege = '$privilege'
-                $response = $conn->query($sql);
+                $sql = "SELECT * FROM users"; // WHERE privilege = '$privilege'
+                $db_response = $conn->query($sql);
 
-                return json_encode($response->fetch_all(MYSQLI_ASSOC), JSON_PRETTY_PRINT);
+                return json_encode($db_response->fetch_all(MYSQLI_ASSOC), JSON_PRETTY_PRINT);
 
             } else {
-                $sql = "SELECT * FROM $table WHERE id = '$id'";
-                $response = $conn->query($sql);
+                $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+                $stmt->bind_param("i", $id);
+                $db_response = $stmt->get_result();
 
-                return json_encode($response->fetch_assoc(), JSON_PRETTY_PRINT);
+                $stmt->close();
+                return json_encode($db_response->fetch_assoc(), JSON_PRETTY_PRINT);
 
             }
             break;
         
         case "suppliers":
             if ($id == "*") { // All
-                $sql = "SELECT * FROM $table"; // WHERE privilege = '$privilege'
-                $response = $conn->query($sql);
+                $sql = "SELECT * FROM suppliers"; // WHERE privilege = '$privilege'
+                $db_response = $conn->query($sql);
 
-                return json_encode($response->fetch_all(MYSQLI_ASSOC), JSON_PRETTY_PRINT);
+                return json_encode($db_response->fetch_all(MYSQLI_ASSOC), JSON_PRETTY_PRINT);
 
             } else {
-                $sql = "SELECT * FROM $table WHERE id = '$id'";
-                $response = $conn->query($sql);
+                $stmt = $conn->prepare("SELECT * FROM suppliers WHERE id = ?");
+                $stmt->bind_param("i", $id);
+                $db_response = $stmt->get_result();
 
-                return json_encode($response->fetch_assoc(), JSON_PRETTY_PRINT);
+                $stmt->close();
+                return json_encode($db_response->fetch_assoc(), JSON_PRETTY_PRINT);
 
             }
             break;
         
         case "customers":
             if ($id == "*") { // All
-                $sql = "SELECT * FROM $table"; // WHERE privilege = '$privilege'
-                $response = $conn->query($sql);
+                $sql = "SELECT * FROM customers"; // WHERE privilege = '$privilege'
+                $db_response = $conn->query($sql);
 
-                return json_encode($response->fetch_all(MYSQLI_ASSOC), JSON_PRETTY_PRINT);
+                return json_encode($db_response->fetch_all(MYSQLI_ASSOC), JSON_PRETTY_PRINT);
 
             } else {
-                $sql = "SELECT * FROM $table WHERE id = '$id'";
-                $response = $conn->query($sql);
+                $stmt = $conn->prepare("SELECT * FROM customers WHERE id = ?");
+                $stmt->bind_param("i", $id);
+                $db_response = $stmt->get_result();
 
-                return json_encode($response->fetch_assoc(), JSON_PRETTY_PRINT);
+                $stmt->close();
+                return json_encode($db_response->fetch_assoc(), JSON_PRETTY_PRINT);
 
             }
             break;
