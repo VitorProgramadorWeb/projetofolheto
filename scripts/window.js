@@ -198,6 +198,7 @@ function userForm(data) {
     const passwordField = document.createElement("div");
     passwordField.className = fieldClassName;
 
+    if (data == undefined) {
     const passwordInput = document.createElement("input");
     passwordInput.required = true;
     passwordInput.name = dataName;
@@ -209,9 +210,27 @@ function userForm(data) {
     passwordLabel.className = labelClassName;
     passwordLabel.textContent = "Senha";
     passwordLabel.htmlFor = passwordInput.id;
+        passwordLabel.htmlFor = passwordInput.id;
 
     passwordField.append(passwordLabel);
     passwordField.append(passwordInput);
+    } else {
+        const passwordLink = document.createElement("a");
+        passwordLink.innerHTML = "Alterar senha";
+        passwordLink.href = "#";
+        passwordLink.onclick = () => {
+            addWindow("Alterar senha", changePassword());
+        };
+        passwordLink.id = dataName + `-${windowNumber}`;
+        
+        const passwordLabel = document.createElement("label");
+        passwordLabel.className = labelClassName;
+        passwordLabel.textContent = "Senha";
+        passwordLabel.htmlFor = passwordLink.id;
+    
+        passwordField.append(passwordLabel);
+        passwordField.append(passwordLink);
+    }
     
     /* Name */ dataName = "name";
     const nameField = document.createElement("div");
