@@ -438,7 +438,6 @@ function userForm(data) {
     submitField.className = fieldClassName;
 
     const submitInput = document.createElement("input");
-    submitInput.name = dataName;
     submitInput.className = "button";
     submitInput.type = "submit";
     submitInput.value = "Salvar";
@@ -637,7 +636,6 @@ function supplierForm(data) {
     submitField.className = fieldClassName;
 
     const submitInput = document.createElement("input");
-    submitInput.name = dataName;
     submitInput.className = "button";
     submitInput.type = "submit";
     submitInput.value = "Salvar";
