@@ -1,30 +1,28 @@
-const form = document.querySelector("#form");
+const form = document.getElementsByTagName("form")[0];
 
-function authenticate() {
+function signin() {
     let formData = new FormData(form);
 
-    fetch("/projetointegrador/actions/login.php", {
+    fetch("/projetointegrador/actions/signin.php", {
         method: "post",
         body: formData
     }).then(response => response.json())
     .then(data => {
 
-        if (data.auth) {
+        if (data.status == "authenticated") {
             window.location.href = "/projetointegrador/home.php";
-        }
-
-        // Message
-        let spanMessage = document.querySelector("#message");
-        spanMessage.innerHTML = data.message;
-        if (data.message != "") {
+        } else {
+            // Message
+            let spanMessage = document.querySelector("#message");
+            spanMessage.innerHTML = data.message;
         }
     });
 }
 
-form.addEventListener("submit", (e) => {
+form.onsubmit = (e) => {
     e.preventDefault();
-    authenticate();
-});
+    signin();
+};
 
 /**
  * Toggle password visibility by a button inner a div with the password input

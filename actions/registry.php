@@ -118,9 +118,9 @@ function setRegistry($table) {
         case "users":
             $id        = $_POST["id"];
             $user      = $_POST["user"];
-            $create_password  = $_POST["create-password"];
+            $password  = $_POST["password"];
             $confirm_password = $_POST["confirm-password"];
-            $hashed_password  = password_hash($create_password, PASSWORD_DEFAULT);
+            $hashed_password  = password_hash($password, PASSWORD_DEFAULT);
             $name      = $_POST["name"];
             $birthdate = $_POST["birthdate"];
             $address   = $_POST["address"];

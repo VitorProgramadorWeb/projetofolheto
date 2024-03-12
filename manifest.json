@@ -1,0 +1,16 @@
+{
+    "name": "Packman",
+    "short_name": "Packman",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "description": "App legal",
+    "icons": [
+        {
+            "src": "/projetointegrador/images/packman_256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        }
+    ]
+}

@@ -15,7 +15,7 @@ form {
 
 }
 
-.sign-in {
+div.sign-in, div.sign-up {
     
     padding: 20px;
     
@@ -24,16 +24,18 @@ form {
 
     /* Centering div in page */
     width: fit-content;
-    margin: auto;
+    margin: 20px auto;
 
     /* Horizontal row */
     hr {
-        border: 1px solid gray;
+        border: none;
+        border-top: 1px solid gray;
     }
 
     /* Link */
     a {
         color: blue;
+        font-size: small;
         text-decoration: none;
     }
 
