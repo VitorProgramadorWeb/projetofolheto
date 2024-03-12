@@ -3,35 +3,39 @@ include "actions/conn.php";
 $conn = database_connection();
 
 $user     = $_POST["user"];
-$password = $_POST["password"];
+$password = password_verify($_POST["password"], PASSWORD_DEFAULT);
 $json = [
-    "auth" => false,
+    "status" => "failure",
     "message" => ""
 ];
 
 $sql = "SELECT id, password FROM users WHERE user = '$user'";
-$response = $conn->query($sql);
+$stmt = $conn->prepare("SELECT id, user, password FROM users WHERE user = ? AND password = ?");
+$stmt->bind_param("ss", $user, $password);
+$stmt->execute();
 
-if($response->num_rows > 0) {
-    //user found
-    $user_data = $response->fetch_assoc();
+$db_response = $stmt->get_result()->fetch_assoc();
 
-    if($password == $user_data["password"]) {
-        //correct password
-        $json["auth"] = true;
-
+if($db_response != null) {
+    // authenticated
         session_start();
-        $_SESSION["id"]   = $user_data["id"];
+        $_SESSION["id"]   = $db_response["id"];
         $_SESSION["user"] = $user;
 
-    } else {
-        $json["message"] = "Dados inválidos";
-    }
+        $server_response = [
+            "status"  => "authenticated",
+            "message" => "Usuário autenticado."
+        ];
+
 } else {
-    $json["message"] = "Dados inválidos";
+    $server_response = [
+        "status"  => "failure",
+        "message" => "Usuário ou/e senha incorreto(s)"
+    ];
 }
 
-echo json_encode($json);
+$stmt->close();
+echo json_encode($server_response, JSON_PRETTY_PRINT);
 
 $conn->close();
 ?>

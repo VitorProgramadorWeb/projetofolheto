@@ -1,0 +1,51 @@
+form {
+    div.field {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
+    div.password {
+        display: flex;
+    }
+
+    input {
+        width: 100%;
+    }
+
+}
+
+.sign-in {
+    
+    padding: 20px;
+    
+    border: 1px solid gray;
+    border-radius: 10px;
+
+    /* Centering div in page */
+    width: fit-content;
+    margin: auto;
+
+    /* Horizontal row */
+    hr {
+        border: 1px solid gray;
+    }
+
+    /* Link */
+    a {
+        color: blue;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+}
+
+.sign-out {
+
+}
+
+.sign-up {
+
+}

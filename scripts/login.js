@@ -25,3 +25,17 @@ form.addEventListener("submit", (e) => {
     e.preventDefault();
     authenticate();
 });
+
+/**
+ * Toggle password visibility by a button inner a div with the password input
+ * @param {HTMLButtonElement} button - toggle button
+ */
+function togglePasswordVisibility(button) {
+    let input = button.parentElement.getElementsByTagName('input')[0];
+    
+    if (input.type === 'password') {
+        input.type = 'text'; button.innerText = 'Ocultar'
+    } else {
+        input.type = 'password'; button.innerText = 'Mostrar'
+    }
+}
