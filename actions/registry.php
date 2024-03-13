@@ -116,17 +116,16 @@ function setRegistry($table) {
 
     switch ($table) {
         case "users":
-            $id        = $_POST["id"];
-            $user      = $_POST["user"];
-            $password  = $_POST["password"];
-            $confirm_password = $_POST["confirm-password"];
+            $id        = isset($_POST["id"]) ? $_POST["id"] : null;
+            $user      = isset($_POST["user"]) ? $_POST["user"] : null;
+            $password  = isset($_POST["password"]) ? $_POST["password"] : null;
             $hashed_password  = password_hash($password, PASSWORD_DEFAULT);
-            $name      = $_POST["name"];
-            $birthdate = $_POST["birthdate"];
-            $address   = $_POST["address"];
-            $email     = $_POST["email"];
-            $phone     = $_POST["phone"];
-            $cpf       = $_POST["cpf"];
+            $name      = isset($_POST["name"]) ? $_POST["name"] : null;
+            $birthdate = isset($_POST["birthdate"]) ? $_POST["birthdate"] : null;
+            $address   = isset($_POST["address"]) ? $_POST["address"] : null;
+            $email     = isset($_POST["email"]) ? $_POST["email"] : null;
+            $phone     = isset($_POST["phone"]) ? $_POST["phone"] : null;
+            $cpf       = isset($_POST["cpf"]) ? $_POST["cpf"] : null;
             
             // Update (Edit)
             if ($id != "") {

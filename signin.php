@@ -18,7 +18,7 @@ include "patterns/unlogged/header.php";
                     <button class="button" type="button" tabindex="-1" onclick="event.preventDefault(); togglePasswordVisibility(this);">Mostrar</button>
                 </div>
             </div>
-            <span id="message"></span>
+            <div id="message"></div>
             <input class="button" type="submit" value="Entrar">
         </form>
 

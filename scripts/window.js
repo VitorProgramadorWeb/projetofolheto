@@ -9,7 +9,7 @@ let windowNumber = 1;
 // Windows container
 const container = document.getElementById("container");
 
-function addWindow(windowLabel = "", windowContent = none()) {
+function addWindow(windowLabel = "", content = none()) {
 
     const lastWindow = container.lastChild; // Position relative to last window
 
@@ -42,7 +42,7 @@ function addWindow(windowLabel = "", windowContent = none()) {
     }
 
     // Window label
-    const label = document.createElement("span");
+    const label = document.createElement("div");
     label.className = "window-label";
     label.innerText = windowLabel;
 
@@ -53,12 +53,18 @@ function addWindow(windowLabel = "", windowContent = none()) {
     closeButton.ontouchstart = (e) => e.stopPropagation();
     closeButton.onclick = () => removeWindow(win);
     closeButton.innerHTML = "&times;";
+
+    // Window content
+    const windowContent = document.createElement("div");
+    windowContent.className = "window-content";
+    windowContent.style.marginTop = "30px";
     
     /* ----- appends ----- */
     bar.append(label);
     bar.append(closeButton);
 
     win.append(bar);
+    windowContent.append(content);
     win.append(windowContent);
 
     container.append(win);
@@ -118,7 +124,7 @@ function userForm(data) {
     // Form
     const form = document.createElement("form");
     form.id = "user-form-" + (data != undefined ? data.id : "0");
-    form.className = "window-content content-user";
+    form.className = "content-user";
     form.onsubmit = (e) => {
         e.preventDefault();
         setRegistry("users", new FormData(form)).then(response =>{
@@ -145,8 +151,8 @@ function userForm(data) {
         });
     };
     form.onmousedown = () => windowFocus(form);
-    form.style.minWidth = "408px";
-    form.style.minHeight = "322px";
+    form.style.minWidth = "120px";
+    form.style.minHeight = "fit-content";
     
     let dataName; // Data name (reseted each data);
     const fieldClassName = "field"; // All field's class
@@ -174,7 +180,23 @@ function userForm(data) {
 
     idField.append(idLabel);
     idField.append(idInput);
-    
+
+    /* Image */ dataName = "image";
+    const imageField = document.createElement("div");
+    imageField.className = fieldClassName;
+
+    const image = document.createElement("img");
+    image.src = "/projetointegrador/images/user.svg";
+    image.className = inputClassName + ` ${dataName}-input`;
+    image.id = dataName + `-${windowNumber}`;
+
+    const imageContainer = document.createElement("div");
+    imageContainer.className = `${dataName}-container`;
+
+    imageContainer.append(image);
+
+    imageField.append(imageContainer);
+
     /* User */ dataName = "user";
     const userField = document.createElement("div");
     userField.className = fieldClassName;
@@ -204,84 +226,48 @@ function userForm(data) {
     const confirmPasswordField = document.createElement("div");
     confirmPasswordField.className = fieldClassName;
 
-    if (data == undefined) { // create and confirm password
-        /* Create password */ dataName = "password";
-        const createPasswordAndToggleField = document.createElement("div");
+    if (data == undefined) { // create password
+        /* Password */ dataName = "password";
+        const passwordAndToggleField = document.createElement("div");
+        passwordAndToggleField.className = "password";
 
-        const createPasswordInput = document.createElement("input");
-        createPasswordInput.required = true;
-        createPasswordInput.name = `create-${dataName}`;
-        createPasswordInput.type = "password";
-        createPasswordInput.className = inputClassName + ` ${dataName}-input`;
-        createPasswordInput.id = `create-${dataName}-${windowNumber}`;
+        const passwordInput = document.createElement("input");
+        passwordInput.required = true;
+        passwordInput.name = dataName;
+        passwordInput.type = "password";
+        passwordInput.className = inputClassName + ` ${dataName}-input`;
+        passwordInput.id = `${dataName}-${windowNumber}`;
         
-        const createPasswordToggle = document.createElement("button");
-        createPasswordToggle.className = "button";
-        createPasswordToggle.innerHTML = "Mostrar";
-        createPasswordToggle.tabIndex = "-1";
-        createPasswordToggle.style.position = "absolute";
-        createPasswordToggle.style.right = "10px";
-        createPasswordToggle.onclick = () => {
-            if (createPasswordInput.type === "password") {
-                createPasswordInput.type = "text";
-                createPasswordToggle.innerHTML = "Ocultar";
+        const passwordToggle = document.createElement("button");
+        passwordToggle.className = "button";
+        passwordToggle.type = "button";
+        passwordToggle.innerHTML = "Mostrar";
+        passwordToggle.tabIndex = "-1";
+        passwordToggle.onclick = () => {
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                passwordToggle.innerHTML = "Ocultar";
             } else {
-                createPasswordInput.type = "password";
-                createPasswordToggle.innerHTML = "Mostrar";
+                passwordInput.type = "password";
+                passwordToggle.innerHTML = "Mostrar";
             }
         };
 
-        createPasswordAndToggleField.append(createPasswordInput);
-        createPasswordAndToggleField.append(createPasswordToggle);
+        passwordAndToggleField.append(passwordInput);
+        passwordAndToggleField.append(passwordToggle);
 
-        const createPasswordLabel = document.createElement("label");
-        createPasswordLabel.className = labelClassName;
-        createPasswordLabel.textContent = "Senha";
-        createPasswordLabel.htmlFor = createPasswordInput.id;
+        const passwordLabel = document.createElement("label");
+        passwordLabel.className = labelClassName;
+        passwordLabel.textContent = "Senha";
+        passwordLabel.htmlFor = passwordInput.id;
 
-        createPasswordField.append(createPasswordLabel);
-        createPasswordField.append(createPasswordAndToggleField);
+        createPasswordField.append(passwordLabel);
+        createPasswordField.append(passwordAndToggleField);
 
-        /* Confirm password */ dataName = "password";
-        const confirmPasswordAndToggleField = document.createElement("div");
-
-        const confirmPasswordInput = document.createElement("input");
-        confirmPasswordInput.required = true;
-        confirmPasswordInput.name = `confirm-${dataName}`;
-        confirmPasswordInput.type = "password";
-        confirmPasswordInput.className = inputClassName + ` ${dataName}-input`;
-        confirmPasswordInput.id = `confirm-${dataName}-${windowNumber}`;
-        
-        const confirmPasswordToggle = document.createElement("button");
-        confirmPasswordToggle.className = "button";
-        confirmPasswordToggle.innerHTML = "Mostrar";
-        confirmPasswordToggle.tabIndex = "-1";
-        confirmPasswordToggle.style.position = "absolute";
-        confirmPasswordToggle.style.right = "10px";
-        confirmPasswordToggle.onclick = () => {
-            if (confirmPasswordInput.type === "password") {
-                confirmPasswordInput.type = "text";
-                confirmPasswordToggle.innerHTML = "Ocultar";
-            } else {
-                confirmPasswordInput.type = "password";
-                confirmPasswordToggle.innerHTML = "Mostrar";
-            }
-        };
-
-        confirmPasswordAndToggleField.append(confirmPasswordInput);
-        confirmPasswordAndToggleField.append(confirmPasswordToggle);
-
-        const confirmPasswordLabel = document.createElement("label");
-        confirmPasswordLabel.className = labelClassName;
-        confirmPasswordLabel.textContent = "Confirmar senha";
-        confirmPasswordLabel.htmlFor = confirmPasswordInput.id;
-
-        confirmPasswordField.append(confirmPasswordLabel);
-        confirmPasswordField.append(confirmPasswordAndToggleField);
     } else { // change password
         const passwordLink = document.createElement("a");
         passwordLink.innerHTML = "Alterar senha";
-        passwordLink.href = "#";
+        passwordLink.href = "#change-password";
         passwordLink.onclick = () => {
             addWindow("Alterar senha", changePassword());
         };
@@ -301,7 +287,6 @@ function userForm(data) {
     nameField.className = fieldClassName;
 
     const nameInput = document.createElement("input");
-    nameInput.required = true;
     nameInput.name = dataName;
     nameInput.type = "text";
     nameInput.className = inputClassName + ` ${dataName}-input`;
@@ -529,10 +514,10 @@ function userForm(data) {
     
     // Appends
     form.append(idField);
+    form.append(imageField);
     form.append(userField);
     if (data == undefined) {
         form.append(createPasswordField);
-        form.append(confirmPasswordField);
     } else {
         form.append(passwordField);
     }
@@ -560,11 +545,11 @@ function userForm(data) {
 }
 
 function supplierForm(data) {
-    /* ----------------------------- USER ----------------------------- */
+    /* ----------------------------- SUPPLIER ----------------------------- */
     // Form
     const form = document.createElement("form");
     form.id = "supplier-form-" + (data != undefined ? data.id : "0");
-    form.className = "window-content content-supplier";
+    form.className = "content-supplier";
     form.onsubmit = (e) => {
         e.preventDefault();
         setRegistry("suppliers", new FormData(form)).then(response =>{
@@ -789,6 +774,7 @@ function changePassword(data = {id: 0}) {
     oldPasswordField.className = fieldClassName;
 
     const oldPasswordAndToggleField = document.createElement("div");
+    oldPasswordAndToggleField.className = "password";
 
     const oldPasswordInput = document.createElement("input");
     oldPasswordInput.name = dataName;
@@ -798,10 +784,9 @@ function changePassword(data = {id: 0}) {
     
     const oldPasswordToggle = document.createElement("button");
     oldPasswordToggle.className = "button";
+    oldPasswordToggle.type = "button";
     oldPasswordToggle.innerHTML = "Mostrar";
     oldPasswordToggle.tabIndex = "-1";
-    oldPasswordToggle.style.position = "absolute";
-    oldPasswordToggle.style.right = "10px";
     oldPasswordToggle.onclick = () => {
         if (oldPasswordInput.type === "password") {
             oldPasswordInput.type = "text";
@@ -828,6 +813,7 @@ function changePassword(data = {id: 0}) {
     newPasswordField.className = fieldClassName;
 
     const newPasswordAndToggleField = document.createElement("div");
+    newPasswordAndToggleField.className = "password";
 
     const newPasswordInput = document.createElement("input");
     newPasswordInput.name = dataName;
@@ -837,10 +823,9 @@ function changePassword(data = {id: 0}) {
     
     const newPasswordToggle = document.createElement("button");
     newPasswordToggle.className = "button";
+    newPasswordToggle.type = "button";
     newPasswordToggle.innerHTML = "Mostrar";
     newPasswordToggle.tabIndex = "-1";
-    newPasswordToggle.style.position = "absolute";
-    newPasswordToggle.style.right = "10px";
     newPasswordToggle.onclick = () => {
         if (newPasswordInput.type === "password") {
             newPasswordInput.type = "text";
@@ -861,45 +846,6 @@ function changePassword(data = {id: 0}) {
 
     newPasswordField.append(newPasswordLabel);
     newPasswordField.append(newPasswordAndToggleField);
-
-    /* New password confirmation */ dataName = "password";
-    const newPasswordConfirmationField = document.createElement("div");
-    newPasswordConfirmationField.className = fieldClassName;
-
-    const newPasswordConfirmationAndToggleField = document.createElement("div");
-
-    const newPasswordConfirmationInput = document.createElement("input");
-    newPasswordConfirmationInput.name = dataName;
-    newPasswordConfirmationInput.type = "password";
-    newPasswordConfirmationInput.className = inputClassName + ` ${dataName}-input`;
-    newPasswordConfirmationInput.id = `new-${dataName}-confirmation-${windowNumber}`;
-    
-    const newPasswordConfirmationToggle = document.createElement("button");
-    newPasswordConfirmationToggle.className = "button";
-    newPasswordConfirmationToggle.innerHTML = "Mostrar";
-    newPasswordConfirmationToggle.tabIndex = "-1";
-    newPasswordConfirmationToggle.style.position = "absolute";
-    newPasswordConfirmationToggle.style.right = "10px";
-    newPasswordConfirmationToggle.onclick = () => {
-        if (newPasswordConfirmationInput.type === "password") {
-            newPasswordConfirmationInput.type = "text";
-            newPasswordConfirmationToggle.innerHTML = "Ocultar";
-        } else {
-            newPasswordConfirmationInput.type = "password";
-            newPasswordConfirmationToggle.innerHTML = "Mostrar";
-        }
-    };
-
-    newPasswordConfirmationAndToggleField.append(newPasswordConfirmationInput);
-    newPasswordConfirmationAndToggleField.append(newPasswordConfirmationToggle);
-
-    const newPasswordConfirmationLabel = document.createElement("label");
-    newPasswordConfirmationLabel.className = labelClassName;
-    newPasswordConfirmationLabel.textContent = "Confirmar senha nova";
-    newPasswordConfirmationLabel.htmlFor = newPasswordConfirmationInput.id;
-
-    newPasswordConfirmationField.append(newPasswordConfirmationLabel);
-    newPasswordConfirmationField.append(newPasswordConfirmationAndToggleField);
     
     /* Submit */
     const submitField = document.createElement("div");
@@ -914,7 +860,6 @@ function changePassword(data = {id: 0}) {
 
     form.append(oldPasswordField);
     form.append(newPasswordField);
-    form.append(newPasswordConfirmationField);
     form.append(submitField);
 
     return form;

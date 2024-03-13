@@ -2,44 +2,40 @@
     border: 1px solid black;
     position: fixed; /* remove to disable window mode */
     background-color: white;
+    width: fit-content;
 
     .window-label {
         padding: 5px;
+
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 
     .close-button {
         padding: 0px;
-        width: 28px;
+        min-width: 30px;
+        max-width: 30px;
+        min-height: 30px;
+        max-height: 30px;
     }
     
     .window-bar {
         border-bottom: 1px solid black;
         display: flex;
         justify-content: space-between;
+        align-items: center;
         cursor: grab;
         user-select: none;
+
+        position: absolute;
+        left: 0;
+        right: 0;
     }
     
     .window-content {
-        display: grid;
         resize: both;
         overflow: auto;
-        box-sizing: border-box;
-        padding: 5px;
-        
-        .field {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            align-items: center;
-            padding: 5px;
-        }
-
-        label {
-            text-wrap: nowrap;
-        }
-
-        input {
-            width: 100%;
-        }
+        padding: 20px;
     }
 }
