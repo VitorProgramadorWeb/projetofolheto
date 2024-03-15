@@ -1,6 +1,6 @@
-[] Alterar a forma de senhas atuais para HASH + Salt
-[] Fazer formulário de cadastro de usuário (no login)
-[] Mudar o getRegistry, do php, para prepared statement
+[x] Alterar a forma de senhas atuais para HASH + Salt
+[x] Fazer formulário de cadastro de usuário (no login)
+[x] Mudar o getRegistry, do php, para prepared statement
 [] Inserir privilégios para os usuários
 [] Fazer o cadastro de produtos
 [] Colocar imagem como parte do registro (ver BLOB e SHA-1)
@@ -9,8 +9,8 @@
     [] Suppliers
     [] Customers
     [] Products/Stock
-[] alterar o nome da propriedade 'user' para 'username' em Users
-[] Alterar o nome da tabela 'stocks' para 'products'
+[x] alterar o nome da propriedade 'user' para 'username' em Users
+[x] Alterar o nome da tabela 'stocks' para 'products'
 [] Refazer o layout dos formulários
     [] Users
     [] Suppliers
