@@ -3,6 +3,7 @@ const registriesTable = document.querySelector(".registries-table");
 const columnNames = {
     users: {
         id: "ID",
+        image: "Imagem",
         username: "Usuário",
         name: "Nome",
         email: "E-mail",
@@ -115,10 +116,21 @@ function createTableRow(tableName, data) {
     for (const column in columnNames[tableName]) {
         td = document.createElement("td");
         td.setAttribute("class", column);
-        td.innerText = data[column];
-        if (column == "id") {
-            td.hidden = true; // Hide ID
-            id = data[column];
+
+        if (column == "image") {
+            let img = document.createElement("img");
+            if (data[column] == null || data[column] == "") {
+                img.src = "/projetointegrador/images/user.svg";
+            } else {
+                img.src = `data:image/png;base64, ${data[column]}`;
+            }
+            td.append(img);
+        } else {
+            td.innerText = data[column];
+            if (column == "id") {
+                td.hidden = true; // Hide ID
+                id = data[column];
+            }
         }
         tr.append(td);
     }

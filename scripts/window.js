@@ -187,7 +187,6 @@ function userForm(data) {
 
     const image = document.createElement("img");
     image.src = "/projetointegrador/images/user.svg";
-    image.className = inputClassName + ` ${dataName}-input`;
     image.id = dataName + `-${windowNumber}`;
 
     const imageContainer = document.createElement("div");
@@ -195,9 +194,45 @@ function userForm(data) {
 
     imageContainer.append(image);
 
-    imageField.append(imageContainer);
+    // adicionar / remover
+    const editImageField = document.createElement("div");
+    editImageField.className = "add-remove-image";
 
-    /* User */ dataName = "user";
+    const imageInput = document.createElement("input");
+    imageInput.type = "file";
+    imageInput.name = "image";
+    imageInput.className = inputClassName + ` ${dataName}-input`;
+    imageInput.id = `input-${dataName}-${windowNumber}`;
+    imageInput.style.display = "none";
+    imageInput.onchange = () => {
+        const [file] = imageInput.files;
+        if (file) {
+            image.src = URL.createObjectURL(file);
+        }
+    };
+
+    const imageInputLabel = document.createElement("label");
+    imageInputLabel.className = labelClassName + " button";
+    imageInputLabel.textContent = "Adicionar";
+    imageInputLabel.htmlFor = imageInput.id;
+    
+    const removeImage = document.createElement("a");
+    removeImage.href = "#remove-image";
+    removeImage.innerHTML = "Remover";
+    removeImage.onclick = () => {
+        imageInput.value = "";
+        image.src = "/projetointegrador/images/user.svg";
+    }
+
+    editImageField.append(imageInputLabel);
+    editImageField.append(imageInput);
+    editImageField.append(" / ");
+    editImageField.append(removeImage);
+
+    imageField.append(imageContainer);
+    imageField.append(editImageField);
+
+    /* Username */ dataName = "username";
     const userField = document.createElement("div");
     userField.className = fieldClassName;
 
@@ -531,14 +566,18 @@ function userForm(data) {
     
     // Inserting data
     if (data != undefined) {
-        idInput.value =        data.id,
-        userInput.value =      data.username,
-        nameInput.value =      data.name,
-        birthdateInput.value = data.birthdate,
-        addressInput.value =   data.address,
-        emailInput.value =     data.email,
-        phoneInput.value =     data.phone,
-        cpfInput.value =       data.cpf
+        idInput.value =        data.id;
+        userInput.value =      data.username;
+        nameInput.value =      data.name;
+        birthdateInput.value = data.birthdate;
+        addressInput.value =   data.address;
+        emailInput.value =     data.email;
+        phoneInput.value =     data.phone;
+        cpfInput.value =       data.cpf;
+        // Inserting image
+        if (!(data.image == null || data.image == "")) {
+            image.src =  `data:image/png;base64, ${data.image}`;
+        }
     }
 
     return form;

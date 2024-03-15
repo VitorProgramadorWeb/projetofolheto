@@ -45,19 +45,34 @@ function getRegistry($table, $id) {
     switch ($table) {
         case "users":
             if ($id == "*") { // All
-                $sql = "SELECT * FROM users"; // WHERE privilege = '$privilege'
-                $db_response = $conn->query($sql);
+                $stmt = $conn->prepare("SELECT * FROM users");
+                $stmt->execute();
+                $db_response = $stmt->get_result();
+                $server_response = $db_response->fetch_all(MYSQLI_ASSOC);
+                for ($i=0; $i < count($server_response); $i++) { 
+                    foreach ($server_response[$i] as $column => $value) {
+                        if ($column == "image") {
+                            $server_response[$i][$column] = base64_encode($value);
+                        }
+                    }
+                }
 
-                return json_encode($db_response->fetch_all(MYSQLI_ASSOC), JSON_PRETTY_PRINT);
+                return json_encode($server_response, JSON_PRETTY_PRINT);
 
             } else {
                 $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
                 $stmt->bind_param("i", $id);
                 $stmt->execute();
                 $db_response = $stmt->get_result();
+                $server_response = $db_response->fetch_assoc();
+                foreach ($server_response as $column => $value) {
+                    if ($column == "image") {
+                        $server_response[$column] = base64_encode($value);
+                    }
+                }
 
                 $stmt->close();
-                return json_encode($db_response->fetch_assoc(), JSON_PRETTY_PRINT);
+                return json_encode($server_response, JSON_PRETTY_PRINT);
 
             }
             break;
@@ -117,7 +132,8 @@ function setRegistry($table) {
     switch ($table) {
         case "users":
             $id        = isset($_POST["id"]) ? $_POST["id"] : null;
-            $username      = isset($_POST["username"]) ? $_POST["username"] : null;
+            $image     = isset($_POST["image"]) ? $_POST["image"] : null;
+            $username  = isset($_POST["username"]) ? $_POST["username"] : null;
             $password  = isset($_POST["password"]) ? $_POST["password"] : null;
             $hashed_password  = password_hash($password, PASSWORD_DEFAULT);
             $name      = isset($_POST["name"]) ? $_POST["name"] : null;
@@ -179,8 +195,9 @@ function setRegistry($table) {
                     ], JSON_PRETTY_PRINT);
 
                 } else {
-                    $stmt = $conn->prepare("INSERT INTO users(username, password, name, birthdate, address, email, phone, cpf) values(?, ?, ?, ?, ?, ?, ?, ?)"); // WHERE privilege = '$privilege'
-                    $stmt->bind_param("ssssssss", $username, $hashed_password, $name, $birthdate, $address, $email, $phone, $cpf);
+                    $stmt = $conn->prepare("INSERT INTO users(image, username, password, name, birthdate, address, email, phone, cpf) values(?, ?, ?, ?, ?, ?, ?, ?, ?)"); // WHERE privilege = '$privilege'
+                    $stmt->bind_param("bssssssss", $image, $username, $hashed_password, $name, $birthdate, $address, $email, $phone, $cpf);
+                    $stmt->send_long_data(0, file_get_contents($_FILES["image"]["tmp_name"]));
                     $db_response = $stmt->execute();
                     
                     $server_response = [
@@ -197,6 +214,7 @@ function setRegistry($table) {
                         // append user info:
                         $server_response["registry"] = [
                             "id"        => $db_response["id"],
+                            "image"     => $db_response["image"],
                             "username"  => $db_response["username"],
                             "password"  => $db_response["password"],
                             "name"      => $db_response["name"],
