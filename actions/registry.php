@@ -131,17 +131,17 @@ function setRegistry($table) {
 
     switch ($table) {
         case "users":
-            $id        = isset($_POST["id"]) ? $_POST["id"] : null;
-            $image     = isset($_POST["image"]) ? $_POST["image"] : null;
-            $username  = isset($_POST["username"]) ? $_POST["username"] : null;
-            $password  = isset($_POST["password"]) ? $_POST["password"] : null;
+            $id        = getPost("id");
+            $image     = getPost("image");
+            $username  = getPost("username");
+            $password  = getPost("password");
             $hashed_password  = password_hash($password, PASSWORD_DEFAULT);
-            $name      = isset($_POST["name"]) ? $_POST["name"] : null;
-            $birthdate = isset($_POST["birthdate"]) ? $_POST["birthdate"] : null;
-            $address   = isset($_POST["address"]) ? $_POST["address"] : null;
-            $email     = isset($_POST["email"]) ? $_POST["email"] : null;
-            $phone     = isset($_POST["phone"]) ? $_POST["phone"] : null;
-            $cpf       = isset($_POST["cpf"]) ? $_POST["cpf"] : null;
+            $name      = getPost("name");
+            $birthdate = getPost("birthdate");
+            $address   = getPost("address");
+            $email     = getPost("email");
+            $phone     = getPost("phone");
+            $cpf       = getPost("cpf");
             
             // Update (Edit)
             if ($id != "") {
@@ -186,19 +186,30 @@ function setRegistry($table) {
                 $stmt->execute();
 
                 $db_response = $stmt->get_result();
-
+                
                 if ($db_response->num_rows > 0) {
                     $stmt->close();
                     return json_encode([
                         "status"  => "failure",
                         "message" => "Nome de usuário já existe."
                     ], JSON_PRETTY_PRINT);
-
+                    
                 } else {
-                    $stmt = $conn->prepare("INSERT INTO users(image, username, password, name, birthdate, address, email, phone, cpf) values(?, ?, ?, ?, ?, ?, ?, ?, ?)"); // WHERE privilege = '$privilege'
-                    $stmt->bind_param("bssssssss", $image, $username, $hashed_password, $name, $birthdate, $address, $email, $phone, $cpf);
-                    $stmt->send_long_data(0, file_get_contents($_FILES["image"]["tmp_name"]));
-                    $db_response = $stmt->execute();
+                    try {
+                        $stmt = $conn->prepare("INSERT INTO users(image, username, password, name, birthdate, address, email, phone, cpf) values(?, ?, ?, ?, ?, ?, ?, ?, ?)"); // WHERE privilege = '$privilege'
+                        $stmt->bind_param("bssssssss", $image, $username, $hashed_password, $name, $birthdate, $address, $email, $phone, $cpf);
+                        if ($_FILES["image"]["tmp_name"] != "") {
+                            $stmt->send_long_data(0, file_get_contents($_FILES["image"]["tmp_name"]));
+                        }
+                        $db_response = $stmt->execute();
+                    } catch (\Throwable $th) {
+                        $server_response = [
+                            "status"  => "error",
+                            "message" => $th->__toString()
+                        ];
+
+                        return json_encode($server_response, JSON_PRETTY_PRINT);
+                    }
                     
                     $server_response = [
                         "status"  => $db_response ? "created": "failure",
@@ -209,12 +220,21 @@ function setRegistry($table) {
                         $stmt->bind_param("s", $username);
                         $stmt->execute();
 
-                        $db_response = $stmt->get_result()->fetch_assoc();
+                        try {
+                            $db_response = $stmt->get_result()->fetch_assoc();
+                        } catch (\Throwable $th) {
+                            $server_response = [
+                                "status"  => "error",
+                                "message" => $th->getMessage()
+                            ];
     
+                            return json_encode($server_response, JSON_PRETTY_PRINT);
+                        }
+
                         // append user info:
                         $server_response["registry"] = [
                             "id"        => $db_response["id"],
-                            "image"     => $db_response["image"],
+                            "image"     => base64_encode($db_response["image"]),
                             "username"  => $db_response["username"],
                             "password"  => $db_response["password"],
                             "name"      => $db_response["name"],
@@ -471,6 +491,14 @@ function deleteRegistry($table, $id) {
     }
     
     $conn->close();
+}
+
+function getPost($post) {
+    if (isset($_POST[$post]) && ($_POST[$post] != null)) {
+        return $_POST[$post];
+    } else {
+        return null;
+    }
 }
 
 ?>

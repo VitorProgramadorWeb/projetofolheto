@@ -119,6 +119,7 @@ function createTableRow(tableName, data) {
 
         if (column == "image") {
             let img = document.createElement("img");
+            img.loading = "lazy";
             if (data[column] == null || data[column] == "") {
                 img.src = "/projetointegrador/images/user.svg";
             } else {

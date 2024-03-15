@@ -186,6 +186,7 @@ function userForm(data) {
     imageField.className = fieldClassName;
 
     const image = document.createElement("img");
+    image.loading = "lazy";
     image.src = "/projetointegrador/images/user.svg";
     image.id = dataName + `-${windowNumber}`;
 

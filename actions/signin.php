@@ -2,10 +2,9 @@
 include "actions/conn.php";
 $conn = database_connection();
 
-$username     = $_POST["username"];
+$username = $_POST["username"];
 $password = $_POST["password"];
 
-$sql = "SELECT id, password FROM users WHERE username = '$username'";
 $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
