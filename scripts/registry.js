@@ -3,7 +3,7 @@ const registriesTable = document.querySelector(".registries-table");
 const columnNames = {
     users: {
         id: "ID",
-        user: "Usuário",
+        username: "Usuário",
         name: "Nome",
         email: "E-mail",
         phone: "Telefone"
@@ -161,7 +161,7 @@ function createTableRow(tableName, data) {
     button.className = "button delete-button";
     button.onclick = () => {
         getRegistry(tableName, id).then(registry => {
-            if (confirm(`Deseja realmente excluir o usuário ${registry.user}?`)) {
+            if (confirm(`Deseja realmente excluir o usuário ${registry.username}?`)) {
                 deleteRegistry(tableName, id).then(response => {
                     removeTableRow(tr);
                     alert(response.message);

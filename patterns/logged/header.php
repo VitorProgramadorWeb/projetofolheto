@@ -2,7 +2,7 @@
 function customHeader() {
 
     session_start();
-    $isLogged = isset($_SESSION["user"]);
+    $isLogged = isset($_SESSION["username"]);
 
     if(!$isLogged) {
         header("location: /projetointegrador/login.php");

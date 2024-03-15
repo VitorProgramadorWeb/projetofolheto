@@ -2,7 +2,7 @@
 include "actions/conn.php";
 
 session_start();
-// $user      = $_SESSION["user"];
+// $username      = $_SESSION["username"];
 // $privilege = 777;
 
 $action = $_POST["action"];
@@ -117,7 +117,7 @@ function setRegistry($table) {
     switch ($table) {
         case "users":
             $id        = isset($_POST["id"]) ? $_POST["id"] : null;
-            $user      = isset($_POST["user"]) ? $_POST["user"] : null;
+            $username      = isset($_POST["username"]) ? $_POST["username"] : null;
             $password  = isset($_POST["password"]) ? $_POST["password"] : null;
             $hashed_password  = password_hash($password, PASSWORD_DEFAULT);
             $name      = isset($_POST["name"]) ? $_POST["name"] : null;
@@ -130,8 +130,8 @@ function setRegistry($table) {
             // Update (Edit)
             if ($id != "") {
                 
-                $stmt = $conn->prepare("UPDATE users SET user = ?, password = ?, name = ?, birthdate = ?, address = ?, email = ?, phone = ?, cpf = ? WHERE id = ?");
-                $stmt->bind_param("ssssssssi", $user, $create_password, $name, $birthdate, $address, $email, $phone, $cpf, $id);
+                $stmt = $conn->prepare("UPDATE users SET username = ?, password = ?, name = ?, birthdate = ?, address = ?, email = ?, phone = ?, cpf = ? WHERE id = ?");
+                $stmt->bind_param("ssssssssi", $username, $create_password, $name, $birthdate, $address, $email, $phone, $cpf, $id);
                 $db_response_status = $stmt->execute();
 
                 $server_response = [
@@ -148,7 +148,7 @@ function setRegistry($table) {
                     // append user info:
                     $server_response["registry"] = [
                         "id"        => $db_response["id"],
-                        "user"      => $db_response["user"],
+                        "username"  => $db_response["username"],
                         "password"  => $db_response["password"],
                         "name"      => $db_response["name"],
                         "birthdate" => $db_response["birthdate"],
@@ -165,8 +165,8 @@ function setRegistry($table) {
             // Insert (Create)
             } else {
                 //Verifying if username already exists
-                $stmt = $conn->prepare("SELECT id, user FROM users WHERE user = ?"); // WHERE privilege = '$privilege'
-                $stmt->bind_param("s", $user);
+                $stmt = $conn->prepare("SELECT id, username FROM users WHERE username = ?"); // WHERE privilege = '$privilege'
+                $stmt->bind_param("s", $username);
                 $stmt->execute();
 
                 $db_response = $stmt->get_result();
@@ -179,8 +179,8 @@ function setRegistry($table) {
                     ], JSON_PRETTY_PRINT);
 
                 } else {
-                    $stmt = $conn->prepare("INSERT INTO users(user, password, name, birthdate, address, email, phone, cpf) values(?, ?, ?, ?, ?, ?, ?, ?)"); // WHERE privilege = '$privilege'
-                    $stmt->bind_param("ssssssss", $user, $hashed_password, $name, $birthdate, $address, $email, $phone, $cpf);
+                    $stmt = $conn->prepare("INSERT INTO users(username, password, name, birthdate, address, email, phone, cpf) values(?, ?, ?, ?, ?, ?, ?, ?)"); // WHERE privilege = '$privilege'
+                    $stmt->bind_param("ssssssss", $username, $hashed_password, $name, $birthdate, $address, $email, $phone, $cpf);
                     $db_response = $stmt->execute();
                     
                     $server_response = [
@@ -188,8 +188,8 @@ function setRegistry($table) {
                         "message" => $db_response ? "Usuário criado com sucesso.": "Falha ao criar usuário."
                     ];
                     if ($db_response) {
-                        $stmt->prepare("SELECT * FROM users WHERE user = ?");
-                        $stmt->bind_param("s", $user);
+                        $stmt->prepare("SELECT * FROM users WHERE username = ?");
+                        $stmt->bind_param("s", $username);
                         $stmt->execute();
 
                         $db_response = $stmt->get_result()->fetch_assoc();
@@ -197,7 +197,7 @@ function setRegistry($table) {
                         // append user info:
                         $server_response["registry"] = [
                             "id"        => $db_response["id"],
-                            "user"      => $db_response["user"],
+                            "username"  => $db_response["username"],
                             "password"  => $db_response["password"],
                             "name"      => $db_response["name"],
                             "birthdate" => $db_response["birthdate"],

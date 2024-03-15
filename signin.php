@@ -8,8 +8,8 @@ include "patterns/unlogged/header.php";
         
         <form class="sign-in">
             <div class="field">
-                <label for="user">Usuário</label>
-                <input type="text" name="user" id="user" placeholder="Usuário">
+                <label for="username">Usuário</label>
+                <input type="text" name="username" id="username" placeholder="Usuário">
             </div>
             <div class="field">
                 <label for="password">Senha</label>

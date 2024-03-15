@@ -73,7 +73,7 @@ CREATE TABLE `suppliers` (
 
 CREATE TABLE `users` (
   `id` int(10) UNSIGNED NOT NULL,
-  `user` varchar(30) DEFAULT NULL,
+  `username` varchar(30) DEFAULT NULL,
   `birthdate` date DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,

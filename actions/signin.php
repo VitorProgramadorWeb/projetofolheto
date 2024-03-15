@@ -2,12 +2,12 @@
 include "actions/conn.php";
 $conn = database_connection();
 
-$user     = $_POST["user"];
+$username     = $_POST["username"];
 $password = $_POST["password"];
 
-$sql = "SELECT id, password FROM users WHERE user = '$user'";
-$stmt = $conn->prepare("SELECT id, user, password FROM users WHERE user = ?");
-$stmt->bind_param("s", $user);
+$sql = "SELECT id, password FROM users WHERE username = '$username'";
+$stmt = $conn->prepare("SELECT id, username, password FROM users WHERE username = ?");
+$stmt->bind_param("s", $username);
 $stmt->execute();
 
 $db_response = $stmt->get_result()->fetch_assoc();
@@ -20,7 +20,7 @@ if($db_response != null) {
 
         session_start();
         $_SESSION["id"]   = $db_response["id"];
-        $_SESSION["user"] = $db_response["user"];
+        $_SESSION["username"] = $db_response["username"];
         $_SESSION["hashed_password"] = $db_response["password"];
 
         $server_response = [

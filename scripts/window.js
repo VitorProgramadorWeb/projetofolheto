@@ -532,7 +532,7 @@ function userForm(data) {
     // Inserting data
     if (data != undefined) {
         idInput.value =        data.id,
-        userInput.value =      data.user,
+        userInput.value =      data.username,
         nameInput.value =      data.name,
         birthdateInput.value = data.birthdate,
         addressInput.value =   data.address,
