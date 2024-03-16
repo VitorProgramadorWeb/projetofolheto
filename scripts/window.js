@@ -151,8 +151,8 @@ function userForm(data) {
         });
     };
     form.onmousedown = () => windowFocus(form);
-    form.style.minWidth = "120px";
-    form.style.minHeight = "fit-content";
+    form.style.width = "250px";
+    form.style.height = "235px";
     
     let dataName; // Data name (reseted each data);
     const fieldClassName = "field"; // All field's class

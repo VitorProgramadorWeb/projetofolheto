@@ -1,14 +1,50 @@
+nav {
+    background-color: lightgray;
+}
+
 nav ul {
     margin: 0;
     padding: 0;
     list-style-type: none;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
+}
+
+nav ul li {
+    a {
+        display: inline-block;
+        padding: 10px;
+        text-decoration: none;
+        color: black;
+        width: 100%;
+    }
+
+    a:hover {
+        background-color: grey;
+    }
+}
+
+header nav {
+    ul {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+div.body nav {
+    display: none;
+    position: absolute;
+    ul {
+        height: 100%;
+    }
 }
 
 @media (min-width: 450px){
-    nav ul {
-        flex-direction: row;
+    
+    header nav li.menu{
+        display: none;
+    }
+    
+    div.body nav {
+        display: block;
+        position: static;
     }
 }

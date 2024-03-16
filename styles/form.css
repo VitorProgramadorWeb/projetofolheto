@@ -27,6 +27,9 @@ form {
         width: 100%;
     }
 
+    #message {
+        color: red;
+    }
 }
 
 div.sign-in, div.sign-up {
