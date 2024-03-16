@@ -21,7 +21,7 @@ nav ul li {
 }
 
 header {
-    z-index: 2;
+    z-index: 1;
 }
 
 header > nav {
@@ -32,7 +32,7 @@ header > nav {
 }
 
 body > nav {
-    z-index: 2;
+    z-index: 1;
     display: none;
     ul {
         height: 100%;
@@ -45,12 +45,7 @@ body > nav {
         display: none;
     }
     
-    header {
-        z-index: 0;
-    }
-    
     body > nav {
-        z-index: 0;
         display: block;
     }
 }

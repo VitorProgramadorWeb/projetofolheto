@@ -16,7 +16,7 @@ function addWindow(windowLabel = "", content = none()) {
     // Window
     const win = document.createElement("div");
     win.className = "window";
-    win.style.zIndex = 1;
+    win.style.zIndex = 2;
 
     /* ----------------------------- HEADER ----------------------------- */
     // Window bar
