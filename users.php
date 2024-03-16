@@ -29,6 +29,18 @@ include "patterns/logged/header.php";
     <!-- ?php include "footer.php" ?> -->
 
     <script>
+        let computerView = window.matchMedia("(min-width: 450px)");
+        computerView.onchange = () => {
+            const menu = document.querySelector("body > nav");
+            if (computerView.matches) {
+                if (menu.style.display == "none") {
+                    menu.style.display = "block";
+                }
+            } else {
+                showMenu();
+            }
+        };
+        
         function showMenu() {
             const menu = document.querySelector("body > nav");
             const img = document.querySelector("header > nav ul li.menu img");
