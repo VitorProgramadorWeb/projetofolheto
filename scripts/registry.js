@@ -112,6 +112,7 @@ function createTableRow(tableName, data) {
     let id;
     let tr = document.createElement("tr");
     let td;
+    let button, img;
 
     for (const column in columnNames[tableName]) {
         td = document.createElement("td");
@@ -141,7 +142,10 @@ function createTableRow(tableName, data) {
     td.className = "option";
 
     button = document.createElement("button"); // Edit
-    button.innerText = "Editar";
+    img = document.createElement("img");
+    img.src = "/projetointegrador/images/edit.svg";
+    img.alt = "Editar";
+    button.append(img);
     button.className = "button edit-button";
     button.onclick = () => {
         getRegistry(tableName, id).then((data) => {
@@ -170,7 +174,10 @@ function createTableRow(tableName, data) {
     td.append(button);
 
     button = document.createElement("button"); // Delete
-    button.innerText = "Excluir";
+    img = document.createElement("img");
+    img.src = "/projetointegrador/images/delete.svg";
+    img.alt = "Excluir";
+    button.append(img);
     button.className = "button delete-button";
     button.onclick = () => {
         getRegistry(tableName, id).then(registry => {
