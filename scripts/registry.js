@@ -121,7 +121,7 @@ function createTableRow(tableName, data) {
             let img = document.createElement("img");
             img.loading = "lazy";
             if (data[column] == null || data[column] == "") {
-                img.src = "/projetointegrador/images/user.svg";
+                img.src = "/projetointegrador/images/person.svg";
             } else {
                 img.src = `data:image/png;base64, ${data[column]}`;
             }

@@ -187,7 +187,7 @@ function userForm(data) {
 
     const image = document.createElement("img");
     image.loading = "lazy";
-    image.src = "/projetointegrador/images/user.svg";
+    image.src = "/projetointegrador/images/person.svg";
     image.id = dataName + `-${windowNumber}`;
 
     const imageContainer = document.createElement("div");
@@ -222,7 +222,7 @@ function userForm(data) {
     removeImage.innerHTML = "Remover";
     removeImage.onclick = () => {
         imageInput.value = "";
-        image.src = "/projetointegrador/images/user.svg";
+        image.src = "/projetointegrador/images/person.svg";
     }
 
     editImageField.append(imageInputLabel);
