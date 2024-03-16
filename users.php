@@ -10,18 +10,20 @@ include "patterns/logged/header.php";
     </nav>
     
     <main>
-        <!-- Windows appears here, in #container -->
-        <div id="container"></div>
-    
-        <h1>Cadastro dos usuários</h1>
-    
-        <table class="registries-table"></table>
+        <div class="wrapper">
+            <!-- Windows appears here, in #container -->
+            <div id="container"></div>
         
-        <script src="/projetointegrador/scripts/window.js"></script>
-        <script src="/projetointegrador/scripts/registry.js"></script>
-        <script src="/projetointegrador/scripts/verifications.js"></script>
-        <script>listRegistries("users")</script>
+            <h1>Cadastro dos usuários</h1>
         
+            <table class="registries-table"></table>
+            
+            <script src="/projetointegrador/scripts/window.js"></script>
+            <script src="/projetointegrador/scripts/registry.js"></script>
+            <script src="/projetointegrador/scripts/verifications.js"></script>
+            <script>listRegistries("users")</script>
+            
+        </div>
     </main>
 
     <!-- ?php include "footer.php" ?> -->
