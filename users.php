@@ -23,9 +23,25 @@ include "patterns/logged/header.php";
             <script src="/projetointegrador/scripts/verifications.js"></script>
             <script>listRegistries("users")</script>
             
-            <!-- ?php include "footer.php" ?> -->
         </main>
+
+        <!-- ?php include "footer.php" ?> -->
     </div>
+
+    <script>
+        function showMenu() {
+            const menu = document.querySelector("div.body nav");
+            const img = document.querySelector("header nav ul li.menu img");
+
+            if (menu.style.display == "block") {
+                menu.style.display = "none";
+                img.src = "/projetointegrador/images/menu.svg";
+            } else {
+                menu.style.display = "block";
+                img.src = "/projetointegrador/images/close.svg";
+            }
+        }
+    </script>
 
 </body>
 </html>

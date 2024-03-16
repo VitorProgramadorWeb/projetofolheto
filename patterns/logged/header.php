@@ -5,7 +5,7 @@ function customHeader() {
     $isLogged = isset($_SESSION["username"]);
 
     if(!$isLogged) {
-        header("location: /projetointegrador/login.php");
+        header("location: /projetointegrador/signin.php");
         exit("Não está logado.");
     }
 
