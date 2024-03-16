@@ -3,35 +3,33 @@ $PAGE_TITLE = "Usuários";
 include "patterns/logged/header.php";
 ?>
 
-    <div class="body">
-        <nav>
-            <ul>
-                <?php if (function_exists("customMenu")) customMenu(); ?>
-            </ul>
-        </nav>
+    <nav>
+        <ul>
+            <?php if (function_exists("customMenu")) customMenu(); ?>
+        </ul>
+    </nav>
+    
+    <main>
+        <!-- Windows appears here, in #container -->
+        <div id="container"></div>
+    
+        <h1>Cadastro dos usuários</h1>
+    
+        <table class="registries-table"></table>
         
-        <main>
-            <!-- Windows appears here, in #container -->
-            <div id="container"></div>
+        <script src="/projetointegrador/scripts/window.js"></script>
+        <script src="/projetointegrador/scripts/registry.js"></script>
+        <script src="/projetointegrador/scripts/verifications.js"></script>
+        <script>listRegistries("users")</script>
         
-            <h1>Cadastro dos usuários</h1>
-        
-            <table class="registries-table"></table>
-            
-            <script src="/projetointegrador/scripts/window.js"></script>
-            <script src="/projetointegrador/scripts/registry.js"></script>
-            <script src="/projetointegrador/scripts/verifications.js"></script>
-            <script>listRegistries("users")</script>
-            
-        </main>
+    </main>
 
-        <!-- ?php include "footer.php" ?> -->
-    </div>
+    <!-- ?php include "footer.php" ?> -->
 
     <script>
         function showMenu() {
-            const menu = document.querySelector("div.body nav");
-            const img = document.querySelector("header nav ul li.menu img");
+            const menu = document.querySelector("body > nav");
+            const img = document.querySelector("header > nav ul li.menu img");
 
             if (menu.style.display == "block") {
                 menu.style.display = "none";
