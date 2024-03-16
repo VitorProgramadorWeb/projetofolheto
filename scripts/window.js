@@ -58,6 +58,8 @@ function addWindow(windowLabel = "", content = none()) {
     const windowContent = document.createElement("div");
     windowContent.className = "window-content";
     windowContent.style.marginTop = "30px";
+    windowContent.style.width = "340px";
+    windowContent.style.height = "275px";
     
     /* ----- appends ----- */
     bar.append(label);
@@ -151,8 +153,6 @@ function userForm(data) {
         });
     };
     form.onmousedown = () => windowFocus(form);
-    form.style.width = "250px";
-    form.style.height = "235px";
     
     let dataName; // Data name (reseted each data);
     const fieldClassName = "field"; // All field's class
