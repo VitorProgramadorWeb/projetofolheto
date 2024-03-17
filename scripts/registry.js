@@ -57,7 +57,7 @@ function listRegistries(tableName) {
             th = document.createElement("th");
             th.className = "option";
             th.innerText = "Opções";
-            tr.append(th);
+            //tr.append(th);
     
             thead.append(tr);
     
@@ -97,7 +97,7 @@ function listRegistries(tableName) {
         tfoot.append(tr);
         
         // APPEND
-        registriesTable.append(tfoot);
+        // registriesTable.append(tfoot);
     });
 }
 
@@ -111,6 +111,7 @@ function createTableRow(tableName, data) {
 
     let id;
     let tr = document.createElement("tr");
+    /** @type {HTMLTableCellElement} */
     let td;
     let button, img;
 
@@ -191,7 +192,16 @@ function createTableRow(tableName, data) {
     };
     td.append(button);
     tr.append(td);
-    
+
+    // Hover tr shows options
+    tr.onmouseover = () => {
+        td.style.position = "sticky";
+        td.style.right = "20px";
+    }
+    tr.onmouseout = () => {
+        td.style.removeProperty("position");
+        td.style.removeProperty("rigth");
+    }
     return tr;
 }
 

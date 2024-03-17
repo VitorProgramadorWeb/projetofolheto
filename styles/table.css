@@ -1,32 +1,72 @@
+.table-wrapper {
+    overflow-x: auto;
+    display: flex;
+}
+
+.left-fade {
+    background: linear-gradient(90deg, white, transparent);
+    min-width: 20px;
+    position: sticky;
+    left: 0;
+}
+
+.right-fade {
+    background: linear-gradient(270deg, white, transparent);
+    min-width: 20px;
+    position: sticky;
+    right: 0;
+}
+
 table {
-    border: 1px solid black;
-    border-spacing: 0;
+    border-spacing: 0px 5px;
     text-align: left;
 
     display: block;
     max-width: fit-content;
-    overflow-x: auto;
 }
 
-th, td {
-    background-color: white;
-    border: 1px solid black;
+th, td {    
+    background-color: lightgray;
     padding: 5px;
 
     white-space: nowrap;
+    text-align: center;
 
-    img {
+    > img {
         width: 50px;
     }
+}
+
+th {
+    background-color: gray;
+}
+
+td:first-child, td:nth-of-type(2),
+th:first-child, th:nth-of-type(2) {
+    border-radius: 10px 0px 0px 10px;
+}
+
+td:last-child, 	td:nth-last-of-type(2), 
+th:last-child {
+    border-radius: 0px 10px 10px 0px;
 }
 
 button + button {
     margin-left: 5px;
 }
 
-tbody td.option, thead th.option {
-    position: sticky;
-    right: 0;
+td.option {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+td.option button {
+    border: none;
+    border-radius: 50%;
+    padding: 5px;
+    background-color: gray;
+
+    animation: rotate 1s linear calc(var(--scroll) * -1s) infinite;
+    animation-play-state: paused;
 }
 
 tfoot th.option {
@@ -34,4 +74,10 @@ tfoot th.option {
     display: block;
     position: sticky;
     left: 0;
+}
+
+@keyframes rotate {
+    to {
+        transform: rotate(360deg);
+    }
 }

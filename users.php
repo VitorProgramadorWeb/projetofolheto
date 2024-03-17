@@ -16,7 +16,11 @@ include "patterns/logged/header.php";
         
             <h1>Cadastro dos usuários</h1>
         
-            <table class="registries-table"></table>
+            <div class="table-wrapper">
+                <div class="left-fade"></div>
+                <table class="registries-table"></table>
+                <div class="right-fade"></div>
+            </div>
             
             <script src="/projetointegrador/scripts/window.js"></script>
             <script src="/projetointegrador/scripts/registry.js"></script>
@@ -29,6 +33,13 @@ include "patterns/logged/header.php";
     <!-- ?php include "footer.php" ?> -->
 
     <script>
+        /** @type {HTMLDivElement} */
+        const tableWrapper = document.querySelector(".table-wrapper");
+        tableWrapper.onscroll = () => {
+            tableWrapper.style.setProperty("--scroll", tableWrapper.scrollLeft / (tableWrapper.scrollWidth - tableWrapper.offsetWidth));
+            console.log(tableWrapper.scrollLeft / (tableWrapper.scrollWidth - tableWrapper.offsetWidth));
+        };
+        
         let computerView = window.matchMedia("(min-width: 450px)");
         computerView.onchange = () => {
             const menu = document.querySelector("body > nav");
