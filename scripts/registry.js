@@ -189,14 +189,37 @@ function createTableRow(tableName, data) {
     tr.append(td);
 
     // Hover tr shows options
-    tr.onmouseover = () => {
+    tr.ontouchstart = () => {
+        tr.onmouseenter = null;
+    };
+    tr.onmouseenter = (e) => { //alert("enter");
         td.style.position = "sticky";
         td.style.right = "20px";
     }
-    tr.onmouseout = () => {
+    tr.onclick = (e) => { //alert("click");
+        if (td.style.position == "sticky") {
+            td.style.removeProperty("position");
+            td.style.removeProperty("rigth");
+        } else {
+            td.style.position = "sticky";
+            td.style.right = "20px";
+        }
+    };
+    tr.onmouseleave = (e) => { //alert("leave");
         td.style.removeProperty("position");
         td.style.removeProperty("rigth");
+
+        if (tr.onmouseenter == null) {
+            tr.onmouseenter = () => {
+                td.style.position = "sticky";
+                td.style.right = "20px";
+            };
+        }
     }
+    td.onclick = (e) => { //alert("td click");
+        e.stopPropagation();
+    };
+
     return tr;
 }
 

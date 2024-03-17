@@ -2,7 +2,7 @@
     position: fixed; /* remove to disable window mode */
     background-color: white;
     width: fit-content;
-    box-shadow: 2px 2px 6px 0px gray;
+    box-shadow: 2px 2px 7px 0px gray;
     overflow: hidden;
     border-radius: 10px;
 

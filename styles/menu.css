@@ -30,9 +30,19 @@ header > nav {
     ul {
         display: flex;
         justify-content: space-between;
+        align-items: center;
+
+        a {
+            display: flex;
+            align-items: center;
+        }
 
         img {
             margin-right: 5px;
+        }
+
+        img:only-child {
+            margin: 0;
         }
     }
 }
