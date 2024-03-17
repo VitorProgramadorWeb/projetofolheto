@@ -30,6 +30,10 @@ header > nav {
     ul {
         display: flex;
         justify-content: space-between;
+
+        img {
+            margin-right: 5px;
+        }
     }
 }
 
