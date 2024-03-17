@@ -3,6 +3,12 @@ $PAGE_TITLE = "Entrar";
 include "patterns/unlogged/header.php";
 ?>
 
+    <nav>
+        <ul>
+            <?php if (function_exists("customMenu")) customMenu(); ?>
+        </ul>
+    </nav>
+
     <div class="sign-in">
         <h1>Entrar</h1>
         

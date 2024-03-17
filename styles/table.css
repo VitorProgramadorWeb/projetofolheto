@@ -34,11 +34,13 @@ th, td {
 
     > img {
         width: 50px;
+        border-radius: 10px;
     }
 }
 
 th {
     background-color: gray;
+    padding: 10px;
 }
 
 td:first-child, td:nth-of-type(2),
@@ -65,15 +67,26 @@ td.option button {
     padding: 5px;
     background-color: gray;
 
-    animation: rotate 1s linear calc(var(--scroll) * -1s) infinite;
-    animation-play-state: paused;
+    img {
+        animation: rotate 1s linear calc(var(--scroll) * -1s) infinite;
+        animation-play-state: paused;
+    }
 }
 
-tfoot th.option {
+.create-button {
     border: none;
-    display: block;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: gray;
+
     position: sticky;
-    left: 0;
+    left: 20px;
+
+    img {
+        margin-right: 5px;
+        animation: rotate 1s linear calc(var(--scroll) * -1s) infinite;
+        animation-play-state: paused;
+    }
 }
 
 @keyframes rotate {

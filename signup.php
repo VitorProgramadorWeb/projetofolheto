@@ -3,6 +3,12 @@ $PAGE_TITLE = "Cadastrar";
 include "patterns/unlogged/header.php";
 ?>
 
+    <nav>
+        <ul>
+            <?php if (function_exists("customMenu")) customMenu(); ?>
+        </ul>
+    </nav>
+
     <div class="sign-up">
         <h1>Cadastrar</h1>
         

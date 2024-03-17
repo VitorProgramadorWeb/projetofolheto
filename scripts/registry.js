@@ -37,9 +37,9 @@ function listRegistries(tableName) {
 
     getRegistry(tableName, "*").then(response => {
         
-        let thead, tbody, tfoot;
+        let thead, tbody;
         let tr, th;
-        let button;
+        let button, img;
 
         if (response.length !== 0) {
             // ---------- THEAD ----------
@@ -72,15 +72,13 @@ function listRegistries(tableName) {
             registriesTable.append(tbody);
         }
         
-        // ---------- TFOOT ----------
-        tfoot = document.createElement("tfoot");
-        tr = document.createElement("tr");
-        th = document.createElement("th");
-        th.className = "option";
-        //th.colSpan = 100;
-        th.scope = "row";
+        // ---------- Create new (button) ----------
         button = document.createElement("button");
-        button.innerHTML = "&plus; Criar novo";
+        img = document.createElement("img");
+        img.src = "/projetointegrador/images/add_person.svg";
+        img.alt = "Criar novo";
+        button.append(img);
+        button.append("Criar novo");
         button.className = "button create-button";
         button.onclick = () => {
             switch (tableName) {
@@ -92,12 +90,9 @@ function listRegistries(tableName) {
                     break;
             }
         };
-        th.append(button);
-        tr.append(th);
-        tfoot.append(tr);
         
         // APPEND
-        // registriesTable.append(tfoot);
+        registriesTable.append(button);
     });
 }
 
