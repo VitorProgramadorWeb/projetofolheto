@@ -1,0 +1,49 @@
+.window {
+    position: fixed; /* remove to disable window mode */
+    background-color: white;
+    width: fit-content;
+    box-shadow: 2px 2px 7px 0px gray;
+    overflow: hidden;
+    border-radius: 10px;
+
+    .window-label {
+        padding: 5px;
+
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .close-button {
+        background-color: lightgray;
+        border: none;
+        padding: 0px;
+        min-width: 30px;
+        max-width: 30px;
+        min-height: 30px;
+        max-height: 30px;
+    }
+
+    .close-button:hover {
+        background: indianred;
+    }
+    
+    .window-bar {
+        background-color: lightgray;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: grab;
+        user-select: none;
+
+        position: absolute;
+        left: 0;
+        right: 0;
+    }
+    
+    .window-content {
+        resize: both;
+        overflow: auto;
+        padding: 20px;
+    }
+}

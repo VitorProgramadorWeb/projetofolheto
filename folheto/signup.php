@@ -1,6 +1,6 @@
 <?php 
 $PAGE_TITLE = "Cadastrar";
-include "adm.folheto/patterns/unlogged/header.php";
+include "folheto/patterns/unsigned/header.php";
 ?>
 
     <nav>

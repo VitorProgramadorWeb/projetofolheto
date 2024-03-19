@@ -1,6 +1,6 @@
 <?php 
-$PAGE_TITLE = "Cadastrar";
-include "adm.folheto/patterns/unlogged/header.php";
+$PAGE_TITLE = "Entrar";
+include "folheto/patterns/unsigned/header.php";
 ?>
 
     <nav>
@@ -9,10 +9,10 @@ include "adm.folheto/patterns/unlogged/header.php";
         </ul>
     </nav>
 
-    <div class="sign-up">
-        <h1>Cadastrar</h1>
+    <div class="sign-in">
+        <h1>Entrar</h1>
         
-        <form class="sign-up">
+        <form class="sign-in">
             <div class="field">
                 <label for="username">Usuário</label>
                 <input type="text" name="username" id="username" placeholder="Usuário">
@@ -24,13 +24,18 @@ include "adm.folheto/patterns/unlogged/header.php";
                     <button class="button" type="button" tabindex="-1" onclick="event.preventDefault(); togglePasswordVisibility(this);">Mostrar</button>
                 </div>
             </div>
-            <span id="message"></span>
-            <input class="button" type="submit" value="Cadastrar">
+            <div id="message"></div>
+            <input class="button" type="submit" value="Entrar">
         </form>
+
+        <hr>
+
+        <a href="/projetofolheto/adm.folheto/signup.php">Cadastrar-se</a>
+        -
+        <a href="#forgot-password">Esqueci minha senha</a>
     </div>
 
-    <script src="/projetofolheto/adm.folheto/scripts/signup.js"></script>
-    <script src="/projetofolheto/adm.folheto/scripts/registry.js"></script>
+    <script src="/projetofolheto/adm.folheto/scripts/signin.js"></script>
 
 </body>
 </html>

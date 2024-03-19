@@ -30,8 +30,6 @@ include "adm.folheto/patterns/logged/header.php";
         </div>
     </main>
 
-    <!-- ?php include "adm.folheto/footer.php" ?> -->
-
     <script>
         /** @type {HTMLDivElement} */
         const tableWrapper = document.querySelector(".table-wrapper");

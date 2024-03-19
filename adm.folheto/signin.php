@@ -35,8 +35,6 @@ include "adm.folheto/patterns/unlogged/header.php";
         <a href="#forgot-password">Esqueci minha senha</a>
     </div>
 
-    <!-- ?php include "adm.folheto/footer.php" ?> -->
-
     <script src="/projetofolheto/adm.folheto/scripts/signin.js"></script>
 
 </body>

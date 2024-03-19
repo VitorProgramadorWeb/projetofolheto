@@ -1,0 +1,31 @@
+[x] Alterar a forma de senhas atuais para HASH + Salt
+[x] Fazer formulário de cadastro de usuário (no login)
+[x] Mudar o getRegistry, do php, para prepared statement
+[] Inserir privilégios para os usuários
+[] Fazer o cadastro de produtos
+[] Colocar imagem como parte do registro (ver BLOB e SHA-1)
+[] Window content form focus
+    [] Users
+    [] Suppliers
+    [] Customers
+    [] Products/Stock
+[x] alterar o nome da propriedade 'user' para 'username' em Users
+[x] Alterar o nome da tabela 'stocks' para 'products'
+[] Refazer o layout dos formulários
+    [] Users
+    [] Suppliers
+    [] Customers
+    [] Products/Stock
+[] Gerador de registros aleatórios (usuários, fornecedores, clientes, produtos)
+[] Adicionar ícones esconder/mostrar senha no login
+[] ícones de editar e excluir nas tabelas
+[] Criar cadastro de usuário (com privilégio baixo, pode editar somente os próprios produtos)
+[] Aumentar a segurança contra erros de entradas de dados do usuário (FrontEnd JS & HTML)
+[] Aumentar a segurança contra erros de entradas de dados do usuário (PHP)
+[] Revisar as mensagens de resposta do servidor
+[] Revisar os códigos, limpar, deixar mais legível, comentar (fazer a documentação JS doc)
+[] Usar Try-catch e revisar o tratamento de erros e exceções
+[] Desabilitar a função request DELETE do servidor apache
+[] Mobile first
+[] Switch toggle theme (light/dark)
+[] Adicionar indicação de carregamento (ex.: tuberipper, quadrado mexendo ao buscar link)

@@ -13,8 +13,6 @@ include "adm.folheto/patterns/logged/header.php";
 
     <p>Para acessar outra conta, faça logout.</p>
 
-    <!-- ?php include "adm.folheto/footer.php" ?> -->
-
     <script>
         let computerView = window.matchMedia("(min-width: 450px)");
         computerView.onchange = () => {
