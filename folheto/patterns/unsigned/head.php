@@ -2,10 +2,10 @@
 function custom_head() {
 
     session_start();
-    $isLogged = isset($_SESSION["username"]);
+    $isSigned = isset($_SESSION["username"]);
 
-    if($isLogged) {
-        header("location: /projetofolheto/adm.folheto/home.php");
+    if($isSigned) {
+        header("location: /projetofolheto/folheto/home.php");
         exit("Já está logado.");
     }
 

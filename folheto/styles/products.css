@@ -1,0 +1,19 @@
+.main-wrapper {
+    display: grid;
+    grid-template-areas: "aside main";
+    grid-template-columns: min-content 1fr;
+}
+
+aside {
+    grid-area: aside;
+
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+main {
+    grid-area: main;
+    
+    border: 1px solid black;
+    border-radius: 10px;
+}

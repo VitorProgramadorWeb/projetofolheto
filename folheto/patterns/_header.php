@@ -4,16 +4,16 @@
 
     <nav>
         <ul class="menu">
-            <li><a href="#products">Produtos</a></li>
-            <li><a href="#list">Lista</a></li>
+            <li><a href="/projetofolheto/folheto/index.php">Produtos</a></li>
+            <li><a href="/projetofolheto/folheto/list.php">Lista</a></li>
         </ul>
     </nav>
 
     <a class="settings" href="#settings">Configurações</a>
 
     <ul class="auth">
-        <li>Entrar</li>
-        <li>Cadastrar-se</li>
+        <li><a href="/projetofolheto/folheto/signin.php">Entrar</a></li>
+        <li><a href="/projetofolheto/folheto/signup.php">Cadastrar-se</a></li>
     </ul>
     
 </header>

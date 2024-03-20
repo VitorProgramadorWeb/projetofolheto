@@ -1,0 +1,11 @@
+.main-wrapper {
+    display: grid;
+    grid-template-areas: "main";
+}
+
+main {
+    grid-area: main;
+    
+    border: 1px solid black;
+    border-radius: 10px;
+}
