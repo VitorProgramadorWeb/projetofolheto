@@ -52,7 +52,9 @@ header {
         }
 
         .text {
-            margin-left: 2px;
+            margin-left: 3px;
+            font-weight: bold;
+            color: darkblue;
         }
     }
     .logo:hover {
@@ -126,4 +128,8 @@ body > nav {
 img {
     width: 50px;
     vertical-align: middle;
+}
+
+.button {
+    cursor: pointer;
 }

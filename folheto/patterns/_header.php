@@ -1,7 +1,7 @@
 <header>
 
     <div>
-        <a class="logo" href="/projetofolheto/folheto/index.php"><img src="/projetofolheto/folheto/images/folheto.png" alt="folheto logo"><div class="text">Folheto</div></a>
+        <a class="logo" href="/projetofolheto/folheto/index.php"><img src="/projetofolheto/folheto/images/folheto.png" alt="Folheto logo"><div class="text">Folheto</div></a>
     </div>
 
     <div>

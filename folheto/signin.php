@@ -24,27 +24,43 @@ include "folheto/patterns/_head.php";
         <div>
             <!-- Sign-in -->
             <main>
-                <form class="sign-in">
+
+                <!-- Logo -->
+                <div class="logo">
+                    <img src="/projetofolheto/folheto/images/folheto.png" alt="Folheto logo">
+                    <div class="text">Folheto</div>
+                </div>
+
+                <h1>Entrar</h1>
+
+                <!-- Form -->
+                <form>
+
                     <div class="field">
                         <label for="username">Usuário</label>
-                        <input type="text" name="username" id="username" placeholder="Usuário">
+                        <input type="text" name="username" id="username">
                     </div>
+
                     <div class="field">
                         <label for="password">Senha</label>
                         <div class="password">
-                            <input type="password" name="password" id="password" placeholder="Senha">
-                            <button class="button" type="button" tabindex="-1" onclick="event.preventDefault(); togglePasswordVisibility(this);">Mostrar</button>
+                            <input type="password" name="password" id="password">
+                            <button class="button" type="button" tabindex="-1" onclick="event.preventDefault(); togglePasswordVisibility(this);"><img src="/projetofolheto/folheto/images/visibility.svg" alt="Eye visibility"></button>
                         </div>
                     </div>
-                    <div id="message"></div>
+                    
                     <input class="button" type="submit" value="Entrar">
+                    
+                    <a class="recover-password" href="#recover-password">Recuperar senha</a>
+
                 </form>
-    
-                <hr>
-    
-                <a href="/projetofolheto/adm.folheto/signup.php">Cadastrar-se</a>
-                -
-                <a href="#forgot-password">Esqueci minha senha</a>
+                
+                <!-- Form-footer -->
+                <div class="footer">
+                    <hr>
+                    <div class="message">Usuário ou senha incorretos</div>
+                </div>
+
             </main>
         </div>
 
