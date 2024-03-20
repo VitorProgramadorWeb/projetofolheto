@@ -97,6 +97,11 @@ header {
 
         .signup {
             border: 1px solid white;
+
+            &:hover {
+                color: var(--blue);
+                background-color: white;
+            }
         }
     }
     
