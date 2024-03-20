@@ -43,6 +43,8 @@ aside {
 main {
     padding: 20px;
 
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.5);
+
     .logo {
         display: flex;
         align-items: center;
@@ -55,7 +57,7 @@ main {
         .text {
             margin-left: 3px;
             font-weight: bold;
-            color: darkblue;
+            color: var(--dark-blue);
             font-size: 30px;
         }
     }
@@ -98,7 +100,7 @@ main {
                 position: absolute;
                 right: 5px;
 
-                background-color: rgba(0, 0, 0, 0);
+                background-color: transparent;
                 border: none;
 
                 img {
@@ -123,16 +125,17 @@ main {
 
         color: var(--blue);
     }
+    
     .recover-password:hover {
         text-decoration: underline;
     }
 
     .footer {
-        /* display: none; */
+        display: none;
         
         hr {
             border: none;
-            border-top: 1px solid var(--gray);
+            border-top: 1px solid gray;
 
             margin: 10px;
         }

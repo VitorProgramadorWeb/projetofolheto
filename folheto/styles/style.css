@@ -1,7 +1,8 @@
 :root {
     --blue: rgb(0, 155, 222);
+    --dark-blue: rgb(0, 0, 105);
     --blue-hover: rgb(0, 144, 206);
-    --gray: #e7e7e7;
+    --gray: rgb(245, 245, 245);
 }
 
 * {
@@ -39,6 +40,10 @@ header {
     background-color: var(--blue);
     
     padding: 5px 10px 5px 10px;
+
+    box-shadow: 0 -8px 20px;
+
+    z-index: 1;
     
     /* Items */
     .logo {
@@ -54,7 +59,6 @@ header {
         .text {
             margin-left: 3px;
             font-weight: bold;
-            color: darkblue;
         }
     }
     .logo:hover {
@@ -62,14 +66,25 @@ header {
     }
     
     nav {
+        margin: 0px 10px;
+
         .menu {
             display: flex;
             height: 100%;
         }
     }
     
-    .settings {
-        
+    .toggle-theme {
+        background-color: transparent;
+
+        border: none;
+
+        svg {
+            width: 30px;
+            height: 30px;
+
+            color: white;
+        }
     }
     
     .auth {
@@ -102,6 +117,7 @@ header {
 
         padding: 5px 10px 5px 10px;
     }
+
     a:hover {
         background-color: var(--blue-hover);
     }

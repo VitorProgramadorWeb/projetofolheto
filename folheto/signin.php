@@ -45,7 +45,7 @@ include "folheto/patterns/_head.php";
                         <label for="password">Senha</label>
                         <div class="password">
                             <input type="password" name="password" id="password">
-                            <button class="button" type="button" tabindex="-1" onclick="event.preventDefault(); togglePasswordVisibility(this);"><img src="/projetofolheto/folheto/images/visibility.svg" alt="Eye visibility"></button>
+                            <button class="button" type="button" tabindex="-1" onclick="toggleVisibility(this);"><img src="/projetofolheto/folheto/images/visibility.svg" alt="Mostrar"></button>
                         </div>
                     </div>
                     
@@ -65,6 +65,9 @@ include "folheto/patterns/_head.php";
         </div>
 
     </div>
+
+    <!-- Footer -->
+    <?php include "folheto/patterns/_footer.php"; ?>
 
 </body>
 </html>

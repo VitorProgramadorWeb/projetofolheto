@@ -18,26 +18,43 @@ include "folheto/patterns/_head.php";
     <!-- Main page content -->
     <div class="main-wrapper">
     
-        <!-- Sign-up -->
+        <!-- Sign-in -->
         <main>
-            <form class="sign-up">
+
+            <h1>Cadastrar-se</h1>
+
+            <!-- Form -->
+            <form>
+
                 <div class="field">
                     <label for="username">Usuário</label>
-                    <input type="text" name="username" id="username" placeholder="Usuário">
+                    <input type="text" name="username" id="username">
                 </div>
+
                 <div class="field">
                     <label for="password">Senha</label>
                     <div class="password">
-                        <input type="password" name="password" id="password" placeholder="Senha">
-                        <button class="button" type="button" tabindex="-1" onclick="event.preventDefault(); togglePasswordVisibility(this);">Mostrar</button>
+                        <input type="password" name="password" id="password">
+                        <button class="button" type="button" tabindex="-1" onclick="toggleVisibility(this);"><img src="/projetofolheto/folheto/images/visibility.svg" alt="Mostrar"></button>
                     </div>
                 </div>
-                <span id="message"></span>
+                
                 <input class="button" type="submit" value="Cadastrar">
+
             </form>
+
+            <!-- Form-footer -->
+            <div class="footer">
+                <hr>
+                <div class="message">Usuário ou senha incorretos</div>
+            </div>
+
         </main>
 
     </div>
+
+    <!-- Footer -->
+    <?php include "folheto/patterns/_footer.php"; ?>
 
 </body>
 </html>

@@ -30,5 +30,8 @@ include "folheto/patterns/_head.php";
 
     </div>
 
+    <!-- Footer -->
+    <?php include "folheto/patterns/_footer.php"; ?>
+
 </body>
 </html>

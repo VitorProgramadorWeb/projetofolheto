@@ -58,7 +58,7 @@ button + button {
 }
 
 td.option {
-    background-color: rgba(0, 0, 0, 0);
+    background-color: transparent;
 }
 
 td.option button {
