@@ -3,11 +3,19 @@
     grid-template-areas: "main";
 }
 
+header {
+    nav .menu {
+        display: none;
+    }
+    
+    .settings {
+        display: none;
+    }
+}
+
 main {
     grid-area: main;
     
     border: 1px solid black;
     border-radius: 10px;
-    
-    padding: 5px;
 }

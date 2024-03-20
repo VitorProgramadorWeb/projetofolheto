@@ -1,0 +1,39 @@
+.main-wrapper {
+    display: grid;
+    grid-template-areas: "aside div";
+    grid-template-columns: 1fr 1fr;
+    
+    padding: 0;
+}
+
+header {
+    nav .menu {
+        display: none;
+    }
+    
+    .settings {
+        display: none;
+    }
+}
+
+aside {
+    grid-area: aside;
+}
+
+.main-wrapper > div {
+    grid-area: div;
+
+    display: flex;
+    
+    background-color: var(--blue);
+    
+    main {
+        border-radius: 10px;
+
+        background-color: white;
+    
+        margin: auto;
+
+        width: fit-content;
+    }
+}
