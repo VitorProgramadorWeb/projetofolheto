@@ -53,3 +53,21 @@ function toggleTheme(button) {
 
     button.replaceChildren(svg);
 }
+
+/**
+ * Show menu
+ */
+function showMenu() {
+    const [menuWrapper] = document.getElementsByClassName("menu-wrapper");
+    
+    menuWrapper.style.display = "block";
+}
+
+/**
+ * Close menu
+ */
+function closeMenu() {
+    const [menuWrapper] = document.getElementsByClassName("menu-wrapper");
+    
+    menuWrapper.style.display = "none";
+}

@@ -121,6 +121,7 @@ header {
 
         .sign-up {
             outline: 1px solid white;
+            outline-offset: -1px;
 
             &:hover {
                 color: var(--blue);
@@ -138,7 +139,7 @@ header {
     }
 
     a {
-        display: block;
+        display: inline-block;
 
         color: white;
         border-radius: 5px;
@@ -152,14 +153,97 @@ header {
 
 }
 
-body > nav {
+.menu-wrapper {
     display: none;
+
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
     
-    border: 1px solid black;
-    border-radius: 10px;
+    z-index: 2;
+    
+    background-color: rgba(0, 0, 0, 0.4);
 
-    .menu {
+    .close-button {
+        align-self: flex-end;
 
+        background-color: transparent;
+
+        border: none;
+
+        img {
+            width: 30px;
+            height: 30px;
+
+            color: white;
+        }
+    }
+    
+    nav {
+        display: flex;
+        flex-direction: column;
+
+        background-color: var(--blue);
+
+        color: white;
+
+        width: 200px;
+        height: 100%;
+
+        padding: 5px;
+
+        box-shadow: -5px 0px 20px black;
+
+        .sign-up {
+            background-color: white;
+            color: var(--blue);
+
+            &:hover {
+                outline: 1px solid white;
+                outline-offset: -1px;
+
+                color: white;
+            }
+        }
+    }
+
+    .toggle-theme {
+        background-color: transparent;
+
+        border: none;
+
+        margin: 5px;
+
+        svg {
+            width: 30px;
+            height: 30px;
+
+            color: white;
+        }
+    }
+
+    /* Other */
+    a {
+        display: inline-block;
+
+        color: white;
+        border-radius: 5px;
+
+        padding: 5px 10px 5px 10px;
+        margin: 2px 0px;
+
+        width: 100%;
+
+        &:hover {
+            background-color: var(--blue-hover);
+        }
+    }
+
+    hr {
+        margin: 10px;
+        border: none;
+        border-top: 1px solid white;
     }
 }
 
