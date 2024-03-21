@@ -19,7 +19,16 @@ include "folheto/patterns/_head.php";
     <div class="main-wrapper">
 
         <!-- Image -->
-        <aside class="image"></aside>
+        <aside>
+            <div class="cube">
+                <div class="face front"></div>
+                <div class="face back"></div>
+                <div class="face top"></div>
+                <div class="face bottom"></div>
+                <div class="face left"></div>
+                <div class="face right"></div>
+            </div>
+        </aside>
     
         <div>
             <!-- Sign-in -->

@@ -46,6 +46,22 @@ header {
     z-index: 1;
     
     /* Items */
+    .show-menu {
+        background-color: transparent;
+
+        border: none;
+        border-radius: 5px;
+
+        img {
+            width: 30px;
+            height: 30px;
+        }
+
+        &:hover {
+            background-color: var(--blue-hover);
+        }
+    }
+    
     .logo {
         display: flex;
         align-items: center;
@@ -66,6 +82,8 @@ header {
     }
     
     nav {
+        display: none;
+
         margin: 0px 10px;
 
         .menu {
@@ -75,6 +93,8 @@ header {
     }
     
     .toggle-theme {
+        display: none;
+        
         background-color: transparent;
 
         border: none;
@@ -90,13 +110,17 @@ header {
     .auth {
         display: flex;
 
-        .signin:hover {
-            background-color: var(--blue);
-            text-decoration: underline;
+        .sign-in {
+            display: none;
+
+            &:hover {
+                background-color: var(--blue);
+                text-decoration: underline;
+            }
         }
 
-        .signup {
-            border: 1px solid white;
+        .sign-up {
+            outline: 1px solid white;
 
             &:hover {
                 color: var(--blue);
@@ -117,15 +141,15 @@ header {
         display: block;
 
         color: white;
-        border: 1px solid var(--blue);
         border-radius: 5px;
 
         padding: 5px 10px 5px 10px;
+
+        &:hover {
+            background-color: var(--blue-hover);
+        }
     }
 
-    a:hover {
-        background-color: var(--blue-hover);
-    }
 }
 
 body > nav {
@@ -142,15 +166,53 @@ body > nav {
 .main-wrapper {
     grid-area: main-wrapper;
 
+    overflow: auto;
+
     padding: 10px;
 }
 
 /* Other */
-img {
+img, svg {
     width: 50px;
+    
     vertical-align: middle;
 }
 
 .button {
     cursor: pointer;
+}
+
+/* Media queries */
+@media (max-width: 260px) {
+    header {
+        div.second {
+            display: none;
+        }
+
+        div.third {
+            display: none;
+        }
+    }
+}
+
+@media (min-width: 500px) {
+    header {
+        div.first {
+            display: none;
+        }
+
+        div.second nav {
+            display: block;
+        }
+
+        div.third {
+            .toggle-theme {
+                display: block;
+            }
+
+            .sign-in {
+                display: block;
+            }
+        }
+    }
 }

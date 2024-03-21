@@ -6,6 +6,16 @@ header {
     .settings {
         display: none;
     }
+
+    .auth {
+        .sign-in {
+            display: block;
+        }
+    
+        .sign-up {
+            display: none;
+        }
+    }
 }
 
 .main-wrapper {
@@ -18,7 +28,7 @@ main {
     
     border-radius: 10px;
 
-    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.25);
 
     h1 {
         text-align: center;
@@ -72,7 +82,7 @@ main {
         background-color: var(--blue);
         color: white;
         
-        border: 1px solid var(--blue);
+        border: none;
         border-radius: 3px;
 
         padding: 5px 15px 5px 15px;
@@ -104,5 +114,11 @@ main {
             font-size: small;
             text-align: center;
         }
+    }
+}
+
+@media (min-width: 500px) {
+    header .auth .sign-up {
+        display: block;
     }
 }
