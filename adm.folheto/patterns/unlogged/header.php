@@ -5,7 +5,7 @@ function customHeader() {
     $isLogged = isset($_SESSION["username"]);
 
     if($isLogged) {
-        header("location: /projetofolheto/adm.folheto/home.php");
+        header("location: /projetofolheto/adm.folheto/index.php");
         exit("Já está logado.");
     }
 

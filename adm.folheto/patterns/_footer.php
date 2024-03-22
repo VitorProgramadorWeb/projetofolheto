@@ -1,0 +1,1 @@
+<script src="/projetofolheto/folheto/scripts/script.js"></script>

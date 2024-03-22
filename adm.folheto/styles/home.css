@@ -1,0 +1,70 @@
+.main-wrapper {
+    display: grid;
+    grid-template-areas: "aside main";
+    grid-template-columns: min-content 1fr;
+
+    padding: 0px;
+}
+
+aside {
+    grid-area: aside;
+
+    width: fit-content;
+
+    background-color: var(--blue);
+
+    z-index: 1;
+
+    nav {
+        display: flex;
+        flex-direction: column;
+
+        color: white;
+
+        height: 100%;
+
+        padding: 5px;
+
+        box-shadow: -5px 0px 20px black;
+
+        .sign-up {
+            background-color: white;
+            color: var(--blue);
+
+            &:hover {
+                outline: 1px solid white;
+                outline-offset: -1px;
+
+                color: white;
+            }
+        }
+    }
+    
+        /* Other */
+        a {
+            display: inline-block;
+    
+            color: white;
+            border-radius: 5px;
+    
+            padding: 5px 10px 5px 10px;
+            margin: 2px 0px;
+    
+            width: 100%;
+    
+            &:hover {
+                background-color: var(--blue-hover);
+            }
+        }
+    
+        hr {
+            margin: 10px;
+            border: none;
+            border-top: 1px solid white;
+        }
+    
+}
+
+main {
+
+}

@@ -78,7 +78,7 @@ header {
         }
     }
     .logo:hover {
-        background-color: var(--blue);
+        background-color: transparent;
     }
     
     nav {
