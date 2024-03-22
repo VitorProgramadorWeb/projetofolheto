@@ -5,10 +5,10 @@ include "adm.folheto/actions/connection.php";
 $conn = database_connection();
 
 // Administrator data
-$id       = $_POST["id"];
-$username = $_POST["username"];
-$password = $_POST["password"];
-$image    = $_POST["image"];
+$id       = isset($_POST["id"])       ? $_POST["id"]       : null;
+$username = isset($_POST["username"]) ? $_POST["username"] : null;
+$password = isset($_POST["password"]) ? $_POST["password"] : null;
+$image    = isset($_POST["image"])    ? $_POST["image"]    : null;
 
 // Execute action
 $action = $_POST["action"];

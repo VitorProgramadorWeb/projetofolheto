@@ -3,12 +3,12 @@ $PAGE_TITLE = "Produtos";
 function custom_head() { ?>
     <link rel="stylesheet" href="/projetofolheto/adm.folheto/styles/products.css">
 <?php }
-include "adm.folheto/patterns/_head.php";
+include "adm.folheto/patterns/signed/head.php";
 ?>
 <body>
     
     <!-- Header -->
-    <?php include "adm.folheto/patterns/_header.php" ?>
+    <?php include "adm.folheto/patterns/header.php" ?>
     
     <!-- Menu (only for mobile) -->
     <?php //include "adm.folheto/patterns/_menu.php" ?>
@@ -20,27 +20,31 @@ include "adm.folheto/patterns/_head.php";
         
         <!-- Menu -->
         <aside>
-            <nav>
-                <ul class="menu">
-                    <li><a href="/projetofolheto/adm.folheto/products.php">Produtos</a></li>
-                    <li><a href="/projetofolheto/adm.folheto/administrators.php">Administradores</a></li>
-                    <li><a class="comming-soon" href="/projetofolheto/adm.folheto/charts.php" onclick="event.preventDefault();">Gráficos</a></li>
-                    <li><a class="comming-soon" href="/projetofolheto/adm.folheto/logs.php" onclick="event.preventDefault();">Histórico</a></li>
-                </ul>
-            </nav>
+            <?php include "adm.folheto/patterns/menu.php" ?>
         </aside>
         
         <!-- Content -->
         <main>
-            <h1>Bem vindo(a), <?= $_SESSION["username"] ?>!</h1>
             
-            <p>Para acessar outra conta, faça logout.</p>
+            <h1>Não tem nada aqui ainda...</h1>
+            
+            <p>Por enquanto, aprecie o cubo</p>
+
+            <div class="cube">
+                <div class="face front"></div>
+                <div class="face back"></div>
+                <div class="face top"></div>
+                <div class="face bottom"></div>
+                <div class="face left"></div>
+                <div class="face right"></div>
+            </div>
+
         </main>
 
     </div>
 
     <!-- Footer -->
-    <?php include "adm.folheto/patterns/_footer.php"; ?>
+    <?php include "adm.folheto/patterns/footer.php"; ?>
 
 </body>
 </html>

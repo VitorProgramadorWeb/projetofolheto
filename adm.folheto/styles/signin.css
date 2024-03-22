@@ -1,20 +1,6 @@
 header {
-    nav .menu {
+    .user-options {
         display: none;
-    }
-    
-    .settings {
-        display: none;
-    }
-
-    .auth {
-        .sign-in {
-            display: block;
-        }
-    
-        .sign-up {
-            display: none;
-        }
     }
 }
 

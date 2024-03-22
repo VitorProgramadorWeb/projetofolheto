@@ -86,6 +86,15 @@ header {
             color: white;
         }
     }
+
+    .user-options {
+        outline: 1px solid white;
+        outline-offset: -1px;
+
+        margin-left: 5px;
+
+
+    }
     
     /* Other */
     > div {
@@ -141,7 +150,7 @@ header {
         flex-direction: column;
 
         background-color: var(--blue);
-        box-shadow: -5px 0px 20px black;
+        box-shadow: -6px 0px 20px black;
 
         color: white;
 
@@ -280,7 +289,7 @@ header {
     main {
         overflow: auto;
 
-        padding: 10px;
+        padding: 30px;
 
         #container {
             .window {
@@ -345,6 +354,7 @@ header {
                     
                             img {
                                 width: 100px;
+                                background-color: lightgray;
                             }
                         }
                         
@@ -397,6 +407,12 @@ header {
             }
         }
 
+        .table-wrapper {
+            overflow: auto;
+
+            padding: 5px;
+        }
+
         table {
             
             border-spacing: 0px 5px;
@@ -404,9 +420,13 @@ header {
         
             display: block;
             max-width: fit-content;
+
+            tbody tr {
+                box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+                border-radius: 10px;
+            }
             
             th, td {
-                background-color: lightgray;
                 padding: 5px;
             
                 white-space: nowrap;
@@ -419,8 +439,7 @@ header {
             }
             
             th {
-                background-color: gray;
-                padding: 10px;
+                padding: 10px 10px 0px;
             }
             
             td:first-child, td:nth-of-type(2),
@@ -436,16 +455,21 @@ header {
             button + button {
                 margin-left: 5px;
             }
+
+            .image img {
+                background-color: lightgray;
+            }
             
             td.option {
                 background-color: transparent;
+
+                display: none;
             }
             
             td.option button {
                 border: none;
                 border-radius: 50%;
                 padding: 5px;
-                background-color: gray;
             
                 img {
                     animation: rotate 1s linear calc(var(--scroll) * -1s) infinite;
@@ -453,26 +477,24 @@ header {
                 }
             }
             
-            .create-button {
-                border: none;
-                border-radius: 10px;
-                padding: 5px;
-                background-color: gray;
-            
-                position: sticky;
-                left: 20px;
-            
-                img {
-                    margin-right: 5px;
-                    animation: rotate 1s linear calc(var(--scroll) * -1s) infinite;
-                    animation-play-state: paused;
-                }
-            }
-            
-            @keyframes rotate {
-                to {
-                    transform: rotate(360deg);
-                }
+        }
+
+        .create-button {
+            background-color: var(--blue);
+            border: none;
+            border-radius: 5px;
+            padding: 3px 10px;
+            color: white;
+
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+
+            position: sticky;
+            left: 0px;
+        
+            img {
+                margin-right: 5px;
+                animation: rotate 1s linear calc(var(--scroll) * -1s) infinite;
+                animation-play-state: paused;
             }
         }
     }
@@ -480,7 +502,7 @@ header {
 
 /* Other */
 img, svg {
-    width: 30px;
+    width: 20px;
     
     vertical-align: middle;
 }
@@ -497,5 +519,62 @@ img, svg {
 
     &:hover {
         background-color: transparent;
+    }
+}
+
+/* Cube */
+.cube {
+    --cube-size: 100px;
+
+    margin: 50px auto;
+
+    width: var(--cube-size);
+    height: var(--cube-size);
+
+    transform-style: preserve-3d;
+
+    /* Animation */
+    animation-name: cube;
+    animation-duration: 24s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+
+    /* Faces */
+    .face {
+        position: absolute;
+
+        width: var(--cube-size);
+        height: var(--cube-size);
+    }
+
+    .front {
+        background-color: rgba(255, 0, 0, 0.5);
+        transform: translateZ(calc(var(--cube-size)/2));
+    }
+    .back {
+        background-color: rgba(255, 166, 0, 0.5);
+        transform: translateZ(calc(-1*var(--cube-size)/2));
+    }
+    .top {
+        background-color: rgba(255, 255, 0, 0.5);
+        transform: translateY(calc(-1*var(--cube-size)/2)) rotateX(-90deg);
+    }
+    .bottom {
+        background-color: rgba(128, 128, 128, 0.5);
+        transform: translateY(calc(var(--cube-size)/2)) rotateX(90deg);
+    }
+    .left {
+        background-color: rgba(0, 0, 255, 0.5);
+        transform: translateX(calc(-1*var(--cube-size)/2)) rotateY(-90deg);
+    }
+    .right {
+        background-color: rgba(0, 128, 0, 0.5);
+        transform: translateX(calc(var(--cube-size)/2)) rotateY(90deg);
+    }
+}
+
+@keyframes cube {
+    100% {
+        transform: rotateY(360deg) rotateX(360deg);
     }
 }

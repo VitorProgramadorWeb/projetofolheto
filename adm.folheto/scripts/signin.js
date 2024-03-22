@@ -12,9 +12,12 @@ function signin() {
         if (data.status == "authenticated") {
             window.location.href = "/projetofolheto/adm.folheto/index.php";
         } else {
+            // Form footer
+            let formFooter = document.querySelector("main div.footer");
+            formFooter.style.display = "block";
+            
             // Message
-            let spanMessage = document.querySelector("#message");
-            spanMessage.innerHTML = data.message;
+            formFooter.querySelector(".message").innerHTML = data.message;
         }
     });
 }

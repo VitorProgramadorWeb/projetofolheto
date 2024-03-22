@@ -3,12 +3,12 @@ $PAGE_TITLE = "Entrar";
 function custom_head() { ?>
     <link rel="stylesheet" href="/projetofolheto/adm.folheto/styles/signin.css">
 <?php }
-include "adm.folheto/patterns/_head.php";
+include "adm.folheto/patterns/unsigned/head.php";
 ?>
 <body>
     
     <!-- Header -->
-    <?php include "adm.folheto/patterns/_header.php" ?>
+    <?php include "adm.folheto/patterns/header.php" ?>
 
     
 
@@ -53,7 +53,7 @@ include "adm.folheto/patterns/_head.php";
     </div>
 
     <!-- Footer -->
-    <?php include "adm.folheto/patterns/_footer.php"; ?>
+    <?php include "adm.folheto/patterns/footer.php"; ?>
     <script src="/projetofolheto/adm.folheto/scripts/signin.js"></script>
 
 </body>

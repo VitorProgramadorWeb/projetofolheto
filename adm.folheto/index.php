@@ -1,15 +1,14 @@
 <?php
-session_start();
 $PAGE_TITLE = "Início";
 function custom_head() { ?>
     <link rel="stylesheet" href="/projetofolheto/adm.folheto/styles/home.css">
 <?php }
-include "adm.folheto/patterns/_head.php";
+include "adm.folheto/patterns/signed/head.php";
 ?>
 <body>
     
     <!-- Header -->
-    <?php include "adm.folheto/patterns/_header.php" ?>
+    <?php include "adm.folheto/patterns/header.php" ?>
     
     <!-- Menu (only for mobile) -->
     <?php //include "adm.folheto/patterns/_menu.php" ?>
@@ -21,14 +20,7 @@ include "adm.folheto/patterns/_head.php";
         
         <!-- Menu -->
         <aside>
-            <nav>
-                <ul class="menu">
-                    <li><a href="/projetofolheto/adm.folheto/products.php">Produtos</a></li>
-                    <li><a href="/projetofolheto/adm.folheto/administrators.php">Administradores</a></li>
-                    <li><a class="comming-soon" href="/projetofolheto/adm.folheto/charts.php" onclick="event.preventDefault();">Gráficos</a></li>
-                    <li><a class="comming-soon" href="/projetofolheto/adm.folheto/logs.php" onclick="event.preventDefault();">Histórico</a></li>
-                </ul>
-            </nav>
+            <?php include "adm.folheto/patterns/menu.php" ?>
         </aside>
         
         <!-- Content -->
@@ -41,7 +33,7 @@ include "adm.folheto/patterns/_head.php";
     </div>
 
     <!-- Footer -->
-    <?php include "adm.folheto/patterns/_footer.php"; ?>
+    <?php include "adm.folheto/patterns/footer.php"; ?>
 
 </body>
 </html>

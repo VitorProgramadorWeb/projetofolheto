@@ -59,7 +59,7 @@ function addWindow(windowLabel = "", content = none()) {
     windowContent.className = "window-content";
     windowContent.style.marginTop = "30px";
     windowContent.style.width = "340px";
-    windowContent.style.height = "275px";
+    windowContent.style.height = "fit-content";
     
     /* ----- appends ----- */
     bar.append(label);
@@ -130,7 +130,7 @@ function administratorForm(data) {
     form.onsubmit = (e) => {
         e.preventDefault();
 
-        let tbody = document.querySelector("main > table").querySelector("tbody");
+        let tbody = document.querySelector("main table").querySelector("tbody");
 
         if (data?.action == "update") {
             updateAdministrator(new FormData(form)).then(response => {

@@ -160,28 +160,41 @@ function createTableRow(data) {
     // tr shows options
     tr.ontouchstart = () => {
         tr.onmouseenter = null;
+        
     };
     tr.onmouseenter = (e) => {
         td.style.position = "sticky";
-        td.style.right = "20px";
+        td.style.right = "0px";
+
+        td.style.display = "table-cell";
     }
     tr.onclick = (e) => {
         if (td.style.position == "sticky") {
             td.style.removeProperty("position");
             td.style.removeProperty("rigth");
+
         } else {
             td.style.position = "sticky";
-            td.style.right = "20px";
+            td.style.right = "0px";
+        }
+        
+        if (td.style.display == "table-cell") {
+            td.style.display = "none";
+            
+        } else {
+            td.style.display = "table-cell";
         }
     };
     tr.onmouseleave = (e) => {
         td.style.removeProperty("position");
         td.style.removeProperty("rigth");
+        
+        td.style.display = "none";
 
         if (tr.onmouseenter == null) {
             tr.onmouseenter = () => {
                 td.style.position = "sticky";
-                td.style.right = "20px";
+                td.style.right = "0px";
             };
         }
     }
