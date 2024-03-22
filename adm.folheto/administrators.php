@@ -29,17 +29,18 @@ include "adm.folheto/patterns/_head.php";
             <!-- Windows container -->
             <div id="container"></div>
 
-            <h1>Sua conta</h1>
+            <!-- <h1>Sua conta</h1>
             <div></div>
             
-            <h1>Criar uma conta de administrador</h1>
-            <div><button class="button" onclick="addWindow('Criar administrador', administratorForm());"><img src="/projetofolheto/adm.folheto/images/add_person.svg" alt="Criar conta">Criar conta</button></div>
-        
+            <h1>Criar uma conta de administrador</h1> -->
+            
             <h1>Cadastro dos administradores</h1>
             <table>
                 <thead></thead>
                 <tbody></tbody>
             </table>
+
+            <div><button class="button" onclick="addWindow('Criar administrador', administratorForm());"><img src="/projetofolheto/adm.folheto/images/add_person.svg" alt="Criar conta">Criar conta</button></div>
             
         </main>
         

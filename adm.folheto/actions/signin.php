@@ -1,11 +1,11 @@
 <?php
-include "adm.folheto/actions/conn.php";
+include "adm.folheto/actions/connection.php";
 $conn = database_connection();
 
 $username = $_POST["username"];
 $password = $_POST["password"];
 
-$stmt = $conn->prepare("SELECT id, username, password FROM users WHERE username = ?");
+$stmt = $conn->prepare("SELECT id, username, password FROM administrators WHERE username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 
