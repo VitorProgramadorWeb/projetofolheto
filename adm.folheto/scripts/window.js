@@ -121,36 +121,43 @@ function removeWindow(element) {
 //              Window contents              //
 ///////////////////////////////////////////////
 
-function userForm(data) {
+function administratorForm(data) {
     /* ----------------------------- USER ----------------------------- */
     // Form
     const form = document.createElement("form");
-    form.id = "user-form-" + (data != undefined ? data.id : "0");
-    form.className = "content-user";
+    form.id = "administrator-form-" + (data != undefined ? data.id : "0");
+    form.className = "content-administrator";
     form.onsubmit = (e) => {
         e.preventDefault();
-        setRegistry("users", new FormData(form)).then(response =>{
-            if (response.status != "failure") {
-                alert(response.message);
-                
-                const tbody = document.querySelector(".registries-table").querySelector("tbody");
-                if (response.status == "created") {
-                    tbody.append(createTableRow("users", response.registry));
 
-                } else if (response.status == "edited") {
+        let tbody = document.querySelector("main > table").querySelector("tbody");
+
+        if (data?.action == "update") {
+            updateAdministrator(new FormData(form)).then(response => {
+                alert(response.message);
+                if (response.status == "updated") {
                     let tableRow = [...tbody.querySelectorAll("tr")].find((tr) => {
-                        return (tr.querySelector(".id").innerText == response.registry.id);
+                        return (tr.querySelector(".id").innerText == response.data.id);
                     });
-                    tableRow.replaceWith(createTableRow("users", response.registry));
-
+                    tableRow.replaceWith(createTableRow(response.data));
+    
+                    removeWindow(form);
+    
                 }
+            });
 
-                removeWindow(form);
-
-            } else {
+        } else {
+            createAdministrator(new FormData(form)).then(response => {
                 alert(response.message);
-            }
-        });
+                if (response.status == "created") {
+                    tbody.append(createTableRow(response.data));
+    
+                    removeWindow(form);
+    
+                }
+            });
+
+        }
     };
     form.onmousedown = () => windowFocus(form);
     
@@ -158,6 +165,7 @@ function userForm(data) {
     const fieldClassName = "field"; // All field's class
     const inputClassName = "input"; // All inputs's class
     const labelClassName = "label"; // All labels's class
+
     // ---------- Fields ---------- //
     /* ID */ dataName = "id";
     const idField = document.createElement("div");
@@ -238,7 +246,6 @@ function userForm(data) {
     userField.className = fieldClassName;
 
     const userInput = document.createElement("input");
-    userInput.required = true;
     userInput.name = dataName;
     userInput.type = "text";
     userInput.className = inputClassName + ` ${dataName}-input`;
@@ -252,290 +259,64 @@ function userForm(data) {
     userField.append(userLabel);
     userField.append(userInput);
     
-    /* Password */ dataName = "password";
+    /* Password field */ dataName = "password";
     const passwordField = document.createElement("div");
     passwordField.className = fieldClassName;
 
-    const createPasswordField = document.createElement("div");
-    createPasswordField.className = fieldClassName;
+    /* Password */ dataName = "password";
+    const passwordAndToggleField = document.createElement("div");
+    passwordAndToggleField.className = "password";
 
-    const confirmPasswordField = document.createElement("div");
-    confirmPasswordField.className = fieldClassName;
+    const passwordInput = document.createElement("input");
+    passwordInput.name = dataName;
+    passwordInput.type = "password";
+    passwordInput.className = inputClassName + ` ${dataName}-input`;
+    passwordInput.id = `${dataName}-${windowNumber}`;
+    
+    const passwordToggle = document.createElement("button");
+    passwordToggle.className = "button";
+    passwordToggle.type = "button";
+    passwordToggle.innerHTML = "Mostrar";
+    passwordToggle.tabIndex = "-1";
+    passwordToggle.onclick = () => {
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            passwordToggle.innerHTML = "Ocultar";
+        } else {
+            passwordInput.type = "password";
+            passwordToggle.innerHTML = "Mostrar";
+        }
+    };
+
+    passwordAndToggleField.append(passwordInput);
+    passwordAndToggleField.append(passwordToggle);
+
+    const passwordLabel = document.createElement("label");
+    passwordLabel.className = labelClassName;
+    passwordLabel.textContent = "Senha";
+    passwordLabel.htmlFor = passwordInput.id;
+
+    passwordField.append(passwordLabel);
+    passwordField.append(passwordAndToggleField);
+
+    /* Change password link */
+    const passwordLink = document.createElement("a");
+    passwordLink.innerHTML = "Alterar senha";
+    passwordLink.href = "#change-password";
+    passwordLink.onclick = () => {
+        passwordAndToggleField.style.display = "flex";
+        passwordLink.style.display = "none";
+    };
+
+    passwordField.append(passwordLink);
 
     if (data == undefined) { // create password
-        /* Password */ dataName = "password";
-        const passwordAndToggleField = document.createElement("div");
-        passwordAndToggleField.className = "password";
-
-        const passwordInput = document.createElement("input");
-        passwordInput.required = true;
-        passwordInput.name = dataName;
-        passwordInput.type = "password";
-        passwordInput.className = inputClassName + ` ${dataName}-input`;
-        passwordInput.id = `${dataName}-${windowNumber}`;
+        passwordLink.style.display = "none";
         
-        const passwordToggle = document.createElement("button");
-        passwordToggle.className = "button";
-        passwordToggle.type = "button";
-        passwordToggle.innerHTML = "Mostrar";
-        passwordToggle.tabIndex = "-1";
-        passwordToggle.onclick = () => {
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                passwordToggle.innerHTML = "Ocultar";
-            } else {
-                passwordInput.type = "password";
-                passwordToggle.innerHTML = "Mostrar";
-            }
-        };
-
-        passwordAndToggleField.append(passwordInput);
-        passwordAndToggleField.append(passwordToggle);
-
-        const passwordLabel = document.createElement("label");
-        passwordLabel.className = labelClassName;
-        passwordLabel.textContent = "Senha";
-        passwordLabel.htmlFor = passwordInput.id;
-
-        createPasswordField.append(passwordLabel);
-        createPasswordField.append(passwordAndToggleField);
-
     } else { // change password
-        const passwordLink = document.createElement("a");
-        passwordLink.innerHTML = "Alterar senha";
-        passwordLink.href = "#change-password";
-        passwordLink.onclick = () => {
-            addWindow("Alterar senha", changePassword());
-        };
-        passwordLink.id = dataName + `-${windowNumber}`;
-        
-        const passwordLabel = document.createElement("label");
-        passwordLabel.className = labelClassName;
-        passwordLabel.textContent = "Senha";
-        passwordLabel.htmlFor = passwordLink.id;
-    
-        passwordField.append(passwordLabel);
-        passwordField.append(passwordLink);
+        passwordAndToggleField.style.display = "none";
+
     }
-    
-    /* Name */ dataName = "name";
-    const nameField = document.createElement("div");
-    nameField.className = fieldClassName;
-
-    const nameInput = document.createElement("input");
-    nameInput.name = dataName;
-    nameInput.type = "text";
-    nameInput.className = inputClassName + ` ${dataName}-input`;
-    nameInput.id = dataName + `-${windowNumber}`;
-
-    const nameLabel = document.createElement("label");
-    nameLabel.className = labelClassName;
-    nameLabel.textContent = "Nome";
-    nameLabel.htmlFor = nameInput.id;
-
-    nameField.append(nameLabel);
-    nameField.append(nameInput);
-    
-    /* Birthdate */ dataName = "birthdate";
-    const birthdateField = document.createElement("div");
-    birthdateField.className = fieldClassName;
-
-    const birthdateInput = document.createElement("input");
-    birthdateInput.name = dataName;
-    birthdateInput.type = "date";
-    birthdateInput.className = inputClassName + ` ${dataName}-input`;
-    birthdateInput.id = dataName + `-${windowNumber}`;
-
-    const birthdateLabel = document.createElement("label");
-    birthdateLabel.className = labelClassName;
-    birthdateLabel.textContent = "Nascimento";
-    birthdateLabel.htmlFor = birthdateInput.id;
-
-    birthdateField.append(birthdateLabel);
-    birthdateField.append(birthdateInput);
-    
-    /* Address */ dataName = "address";
-    const addressField = document.createElement("div");
-    addressField.className = fieldClassName;
-
-    const addressInput = document.createElement("input");
-    addressInput.name = dataName;
-    addressInput.type = "text";
-    addressInput.className = inputClassName + ` ${dataName}-input`;
-    addressInput.id = dataName + `-${windowNumber}`;
-
-    const addressLabel = document.createElement("label");
-    addressLabel.className = labelClassName;
-    addressLabel.textContent = "Endereço";
-    addressLabel.htmlFor = addressInput.id;
-
-    addressField.append(addressLabel);
-    addressField.append(addressInput);
-    
-    /* Email */ dataName = "email";
-    const emailField = document.createElement("div");
-    emailField.className = fieldClassName;
-
-    const emailInput = document.createElement("input");
-    emailInput.name = dataName;
-    emailInput.type = "email";
-    emailInput.className = inputClassName + ` ${dataName}-input`;
-    emailInput.id = dataName + `-${windowNumber}`;
-
-    const emailLabel = document.createElement("label");
-    emailLabel.className = labelClassName;
-    emailLabel.textContent = "E-mail";
-    emailLabel.htmlFor = emailInput.id;
-
-    emailField.append(emailLabel);
-    emailField.append(emailInput);
-    
-    /* Phone */ dataName = "phone";
-    const phoneField = document.createElement("div");
-    phoneField.className = fieldClassName;
-
-    const phoneInput = document.createElement("input");
-    phoneInput.name = dataName;
-    phoneInput.type = "tel";
-    phoneInput.className = inputClassName + ` ${dataName}-input`;
-    phoneInput.id = dataName + `-${windowNumber}`;
-    phoneInput.placeholder = "(__) _.____-____";
-    phoneInput.maxLength = 16;
-    phoneInput.oninput = (e) => {
-        /** @type {string} */
-        let phone = phoneInput.value.replace(/\D/g, "");
-
-        // get cursor position
-        let cursorPosition = phoneInput.selectionStart;
-
-        phoneInput.value = phone.replace(/(\d{1,2})(\d{1})?(\d{1,4})?(\d{1,4})?/, (match, p1, p2, p3, p4) => {
-            let formatedCpf = "(" + p1;
-            if (p2?.length > 0) formatedCpf += `) ${p2}`;
-            if (p3?.length > 0) formatedCpf += `.${p3}`;
-            if (p4?.length > 0) formatedCpf += `-${p4}`;
-
-            if (e.inputType == "insertText") {
-                if (p2?.length == 1 || p3?.length == 1 || p4?.length == 1) {
-                    cursorPosition++;
-                }
-            }
-
-            return formatedCpf;
-        });
-    };
-
-    const phoneLabel = document.createElement("label");
-    phoneLabel.className = labelClassName;
-    phoneLabel.textContent = "Telefone";
-    phoneLabel.htmlFor = phoneInput.id;
-
-    phoneField.append(phoneLabel);
-    phoneField.append(phoneInput);
-    
-    /* CPF */ dataName = "cpf";
-    const cpfField = document.createElement("div");
-    cpfField.className = fieldClassName;
-
-    const cpfInput = document.createElement("input");
-    cpfInput.name = dataName;
-    cpfInput.type = "text";
-    cpfInput.className = inputClassName + ` ${dataName}-input`;
-    cpfInput.id = dataName + `-${windowNumber}`;
-    cpfInput.placeholder = "___.___.___-__";
-    cpfInput.maxLength = 14;
-    cpfInput.oninput = (e) => {
-        /** @type {string} */
-        let cpf = cpfInput.value.replace(/\D/g, "");
-
-        // get cursor position
-        let cursorPosition = cpfInput.selectionStart;
-
-        cpfInput.value = cpf.replace(/(\d{1,3})(\d{1,3})?(\d{1,3})?(\d{1,2})?/, (match, p1, p2, p3, p4) => {
-            let formatedCpf = p1;
-            if (p2?.length > 0) formatedCpf += `.${p2}`;
-            if (p3?.length > 0) formatedCpf += `.${p3}`;
-            if (p4?.length > 0) formatedCpf += `-${p4}`;
-
-            if (e.inputType == "insertText") {
-                if (p2?.length == 1 || p3?.length == 1 || p4?.length == 1) {
-                    cursorPosition++;
-                }
-            }
-
-            return formatedCpf;
-        });
-
-        // Backspace and delete
-        if (e.data == null) {
-            let deletedChar = cpfInput.value.charAt(cursorPosition);
-
-            if (deletedChar == "." || deletedChar == "-") {
-                if (e.inputType == "deleteContentBackward") {
-                    cpf = cpfInput.value.substring(0, cursorPosition-1) + cpfInput.value.substring(cursorPosition);
-                    cursorPosition--;
-                } else if (e.inputType == "deleteContentForward") {
-                    cpf = cpfInput.value.substring(0, cursorPosition) + cpfInput.value.substring(cursorPosition+2);
-                }
-            }
-        }
-
-        cpf = cpf.replace(/\D/g, "");
-        cpfInput.value = cpf.replace(/(\d{1,3})(\d{1,3})?(\d{1,3})?(\d{1,2})?/, (match, p1, p2, p3, p4) => {
-            let formatedCpf = p1;
-            if (p2?.length > 0) formatedCpf += `.${p2}`;
-            if (p3?.length > 0) formatedCpf += `.${p3}`;
-            if (p4?.length > 0) formatedCpf += `-${p4}`;
-
-            if (e.inputType == "insertText") {
-                if (p2?.length == 1 || p3?.length == 1 || p4?.length == 1) {
-                    cursorPosition++;
-                }
-            }
-
-            return formatedCpf;
-        });
-
-        // set cursor position
-        cpfInput.setSelectionRange(cursorPosition, cursorPosition);
-
-        if (cpf.length == 11) {
-            if (!verifyCpf(cpf)) {
-                cpfInput.style.outlineColor = "red";
-                cpfInput.style.color = "red";
-            } else {
-                cpfInput.style.removeProperty("outline-color");
-                cpfInput.style.removeProperty("color");
-            }
-        } else if (cpf.length > 11) {
-            cpfInput.style.outlineColor = "red";
-            cpfInput.style.color = "red";
-        } else {
-            cpfInput.style.removeProperty("outline-color");
-            cpfInput.style.removeProperty("color");
-        }
-    };
-    cpfInput.onblur = (e) => {
-        /** @type {string} */
-        let cpf = cpfInput.value.replace(/\D/g, "");
-
-        if (cpf != "") {
-            if (verifyCpf(cpf)) {
-                cpfInput.style.removeProperty("outline-color");
-                cpfInput.style.removeProperty("color");
-            } else {
-                cpfInput.style.outlineColor = "red";
-                cpfInput.style.color = "red";
-            }
-        }
-    };
-
-    const cpfLabel = document.createElement("label");
-    cpfLabel.className = labelClassName;
-    cpfLabel.textContent = "CPF";
-    cpfLabel.htmlFor = cpfInput.id;
-
-    cpfField.append(cpfLabel);
-    cpfField.append(cpfInput);
     
     /* Submit */
     const submitField = document.createElement("div");
@@ -552,29 +333,13 @@ function userForm(data) {
     form.append(idField);
     form.append(imageField);
     form.append(userField);
-    if (data == undefined) {
-        form.append(createPasswordField);
-    } else {
-        form.append(passwordField);
-    }
-    form.append(nameField);
-    form.append(birthdateField);
-    form.append(addressField);
-    form.append(emailField);
-    form.append(phoneField);
-    form.append(cpfField);
+    form.append(passwordField);
     form.append(submitField);
     
     // Inserting data
     if (data != undefined) {
-        idInput.value =        data.id;
-        userInput.value =      data.username;
-        nameInput.value =      data.name;
-        birthdateInput.value = data.birthdate;
-        addressInput.value =   data.address;
-        emailInput.value =     data.email;
-        phoneInput.value =     data.phone;
-        cpfInput.value =       data.cpf;
+        idInput.value =   data.id;
+        userInput.value = data.username;
         // Inserting image
         if (!(data.image == null || data.image == "")) {
             image.src =  `data:image/png;base64, ${data.image}`;
@@ -582,200 +347,6 @@ function userForm(data) {
     }
 
     return form;
-}
-
-function supplierForm(data) {
-    /* ----------------------------- SUPPLIER ----------------------------- */
-    // Form
-    const form = document.createElement("form");
-    form.id = "supplier-form-" + (data != undefined ? data.id : "0");
-    form.className = "content-supplier";
-    form.onsubmit = (e) => {
-        e.preventDefault();
-        setRegistry("suppliers", new FormData(form)).then(response =>{
-            if (response.status != "failure") {
-                alert(response.message);
-                
-                const tbody = document.querySelector(".registries-table").querySelector("tbody");
-                if (response.status == "created") {
-                    tbody.append(createTableRow("suppliers", response.registry));
-
-                } else if (response.status == "edited") {
-                    let tableRow = [...tbody.querySelectorAll("tr")].find((tr) => {
-                        return (tr.querySelector(".id").innerText == response.registry.id);
-                    });
-                    tableRow.replaceWith(createTableRow("suppliers", response.registry));
-
-                }
-
-                removeWindow(form);
-
-            } else {
-                alert(response.message);
-            }
-        });
-    };
-    form.onmousedown = () => windowFocus(form);
-    form.style.minWidth = "275px";
-    form.style.minHeight = "170px";
-    
-    let dataName; // Data name (reseted each data);
-    const fieldClassName = "field"; // All field's class
-    const inputClassName = "input"; // All inputs's class
-    const labelClassName = "label"; // All labels's class
-    // ---------- Fields ---------- //
-    /* ID */ dataName = "id";
-    const idField = document.createElement("div");
-    idField.hidden = true;
-    //idField.className = fieldClassName;
-
-    const idInput = document.createElement("input");
-    idInput.hidden = true;
-    //idInput.disabled = true; // Does not send on submit
-    idInput.name = dataName;
-    idInput.type = "number";
-    idInput.className = inputClassName + ` ${dataName}-input`;
-    idInput.id = dataName + `-${windowNumber}`;
-
-    const idLabel = document.createElement("label");
-    idLabel.hidden = true;
-    idLabel.className = labelClassName;
-    idLabel.textContent = "ID";
-    idLabel.htmlFor = idInput.id;
-
-    idField.append(idLabel);
-    idField.append(idInput);
-    
-    /* Name */ dataName = "name";
-    const nameField = document.createElement("div");
-    nameField.className = fieldClassName;
-
-    const nameInput = document.createElement("input");
-    nameInput.required = true;
-    nameInput.name = dataName;
-    nameInput.type = "text";
-    nameInput.className = inputClassName + ` ${dataName}-input`;
-    nameInput.id = dataName + `-${windowNumber}`;
-
-    const nameLabel = document.createElement("label");
-    nameLabel.className = labelClassName;
-    nameLabel.textContent = "Nome";
-    nameLabel.htmlFor = nameInput.id;
-
-    nameField.append(nameLabel);
-    nameField.append(nameInput);
-    
-    /* Address */ dataName = "address";
-    const addressField = document.createElement("div");
-    addressField.className = fieldClassName;
-
-    const addressInput = document.createElement("input");
-    addressInput.name = dataName;
-    addressInput.type = "text";
-    addressInput.className = inputClassName + ` ${dataName}-input`;
-    addressInput.id = dataName + `-${windowNumber}`;
-
-    const addressLabel = document.createElement("label");
-    addressLabel.className = labelClassName;
-    addressLabel.textContent = "Endereço";
-    addressLabel.htmlFor = addressInput.id;
-
-    addressField.append(addressLabel);
-    addressField.append(addressInput);
-    
-    /* Email */ dataName = "email";
-    const emailField = document.createElement("div");
-    emailField.className = fieldClassName;
-
-    const emailInput = document.createElement("input");
-    emailInput.name = dataName;
-    emailInput.type = "email";
-    emailInput.className = inputClassName + ` ${dataName}-input`;
-    emailInput.id = dataName + `-${windowNumber}`;
-
-    const emailLabel = document.createElement("label");
-    emailLabel.className = labelClassName;
-    emailLabel.textContent = "E-mail";
-    emailLabel.htmlFor = emailInput.id;
-
-    emailField.append(emailLabel);
-    emailField.append(emailInput);
-    
-    /* Phone */ dataName = "phone";
-    const phoneField = document.createElement("div");
-    phoneField.className = fieldClassName;
-
-    const phoneInput = document.createElement("input");
-    phoneInput.name = dataName;
-    phoneInput.type = "tel";
-    phoneInput.className = inputClassName + ` ${dataName}-input`;
-    phoneInput.id = dataName + `-${windowNumber}`;
-    phoneInput.placeholder = "(__) _.____-____";
-    phoneInput.maxLength = 16;
-    phoneInput.oninput = (e) => {
-        /** @type {string} */
-        let phone = phoneInput.value.replace(/\D/g, "");
-
-        // get cursor position
-        let cursorPosition = phoneInput.selectionStart;
-
-        phoneInput.value = phone.replace(/(\d{1,2})(\d{1})?(\d{1,4})?(\d{1,4})?/, (match, p1, p2, p3, p4) => {
-            let formatedCpf = "(" + p1;
-            if (p2?.length > 0) formatedCpf += `) ${p2}`;
-            if (p3?.length > 0) formatedCpf += `.${p3}`;
-            if (p4?.length > 0) formatedCpf += `-${p4}`;
-
-            if (e.inputType == "insertText") {
-                if (p2?.length == 1 || p3?.length == 1 || p4?.length == 1) {
-                    cursorPosition++;
-                }
-            }
-
-            return formatedCpf;
-        });
-    };
-
-    const phoneLabel = document.createElement("label");
-    phoneLabel.className = labelClassName;
-    phoneLabel.textContent = "Telefone";
-    phoneLabel.htmlFor = phoneInput.id;
-
-    phoneField.append(phoneLabel);
-    phoneField.append(phoneInput);
-    
-    /* Submit */
-    const submitField = document.createElement("div");
-    submitField.className = fieldClassName;
-
-    const submitInput = document.createElement("input");
-    submitInput.className = "button";
-    submitInput.type = "submit";
-    submitInput.value = "Salvar";
-
-    submitField.append(submitInput);
-    
-    // Appends
-    form.append(idField);
-    form.append(nameField);
-    form.append(addressField);
-    form.append(emailField);
-    form.append(phoneField);
-    form.append(submitField);
-    
-    // Inserting data
-    if (data != undefined) {
-        idInput.value =        data.id,
-        nameInput.value =      data.name,
-        addressInput.value =   data.address,
-        emailInput.value =     data.email,
-        phoneInput.value =     data.phone
-    }
-
-    return form;
-}
-
-function customerForm() {
-
 }
 
 function productForm() {

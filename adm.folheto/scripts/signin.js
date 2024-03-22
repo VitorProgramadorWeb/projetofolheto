@@ -1,4 +1,4 @@
-const form = document.getElementsByTagName("form")[0];
+const [form] = document.getElementsByTagName("form");
 
 function signin() {
     let formData = new FormData(form);
@@ -10,7 +10,7 @@ function signin() {
     .then(data => {
 
         if (data.status == "authenticated") {
-            window.location.href = "/projetofolheto/adm.folheto/home.php";
+            window.location.href = "/projetofolheto/adm.folheto/index.php";
         } else {
             // Message
             let spanMessage = document.querySelector("#message");

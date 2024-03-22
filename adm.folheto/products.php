@@ -1,8 +1,7 @@
 <?php
-session_start();
-$PAGE_TITLE = "Início";
+$PAGE_TITLE = "Produtos";
 function custom_head() { ?>
-    <link rel="stylesheet" href="/projetofolheto/adm.folheto/styles/home.css">
+    <link rel="stylesheet" href="/projetofolheto/adm.folheto/styles/products.css">
 <?php }
 include "adm.folheto/patterns/_head.php";
 ?>
@@ -33,7 +32,7 @@ include "adm.folheto/patterns/_head.php";
         
         <!-- Content -->
         <main>
-            <h1>Bem vindo(a), <?php echo $_SESSION["username"]; ?>!</h1>
+            <h1>Bem vindo(a), <?= $_SESSION["username"] ?>!</h1>
             
             <p>Para acessar outra conta, faça logout.</p>
         </main>

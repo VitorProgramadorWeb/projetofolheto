@@ -1,9 +1,7 @@
 <?php
-include "adm.folheto/actions/conn.php";
+include "adm.folheto/actions/connection.php";
 
 session_start();
-// $username      = $_SESSION["username"];
-// $privilege = 777;
 
 $action = $_POST["action"];
 switch ($action) {

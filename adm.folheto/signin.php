@@ -54,6 +54,7 @@ include "adm.folheto/patterns/_head.php";
 
     <!-- Footer -->
     <?php include "adm.folheto/patterns/_footer.php"; ?>
+    <script src="/projetofolheto/adm.folheto/scripts/signin.js"></script>
 
 </body>
 </html>

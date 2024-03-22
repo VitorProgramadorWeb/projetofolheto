@@ -1,68 +1,53 @@
-<?php 
-$PAGE_TITLE = "Usuários";
-include "adm.folheto/patterns/logged/header.php";
+<?php
+$PAGE_TITLE = "Administradores";
+function custom_head() { ?>
+    <link rel="stylesheet" href="/projetofolheto/adm.folheto/styles/administrators.css">
+<?php }
+include "adm.folheto/patterns/_head.php";
 ?>
-
-    <nav>
-        <ul>
-            <?php if (function_exists("customMenu")) customMenu(); ?>
-        </ul>
-    </nav>
+<body>
     
-    <main>
-        <div class="wrapper">
-            <!-- Windows appears here, in #container -->
+    <!-- Header -->
+    <?php include "adm.folheto/patterns/_header.php" ?>
+    
+    <!-- Menu (only for mobile) -->
+    <?php //include "adm.folheto/patterns/_menu.php" ?>
+    
+
+    
+    <!-- Main page content -->
+    <div class="main-wrapper">
+        
+        <!-- Menu -->
+        <aside>
+            <?php include "adm.folheto/patterns/_menu.php" ?>
+        </aside>
+        
+        <!-- Content -->
+        <main>
+
+            <!-- Windows container -->
             <div id="container"></div>
-        
-            <h1>Cadastro dos usuários</h1>
-        
-            <div class="table-wrapper">
-                <div class="left-fade"></div>
-                <table class="registries-table"></table>
-                <div class="right-fade"></div>
-            </div>
-            
-            <script src="/projetofolheto/adm.folheto/scripts/window.js"></script>
-            <script src="/projetofolheto/adm.folheto/scripts/registry.js"></script>
-            <script src="/projetofolheto/adm.folheto/scripts/verifications.js"></script>
-            <script>listRegistries("users")</script>
-            
-        </div>
-    </main>
 
-    <script>
-        /** @type {HTMLDivElement} */
-        const tableWrapper = document.querySelector(".table-wrapper");
-        tableWrapper.onscroll = () => {
-            tableWrapper.style.setProperty("--scroll", tableWrapper.scrollLeft / (tableWrapper.scrollWidth - tableWrapper.offsetWidth));
-            console.log(tableWrapper.scrollLeft / (tableWrapper.scrollWidth - tableWrapper.offsetWidth));
-        };
+            <h1>Sua conta</h1>
+            <div></div>
+            
+            <h1>Criar uma conta de administrador</h1>
+            <div><button class="button" onclick="addWindow('Criar administrador', administratorForm());"><img src="/projetofolheto/adm.folheto/images/add_person.svg" alt="Criar conta">Criar conta</button></div>
         
-        let computerView = window.matchMedia("(min-width: 450px)");
-        computerView.onchange = () => {
-            const menu = document.querySelector("body > nav");
-            if (computerView.matches) {
-                if (menu.style.display == "none") {
-                    menu.style.display = "block";
-                }
-            } else {
-                showMenu();
-            }
-        };
+            <h1>Cadastro dos administradores</h1>
+            <table>
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+            
+        </main>
         
-        function showMenu() {
-            const menu = document.querySelector("body > nav");
-            const img = document.querySelector("header > nav ul li.menu img");
-
-            if (menu.style.display == "block") {
-                menu.style.display = "none";
-                img.src = "/projetofolheto/adm.folheto/images/menu.svg";
-            } else {
-                menu.style.display = "block";
-                img.src = "/projetofolheto/adm.folheto/images/close.svg";
-            }
-        }
-    </script>
+    </div>
+    
+    <!-- Footer -->
+    <?php include "adm.folheto/patterns/_footer.php"; ?>
+    <script src="/projetofolheto/adm.folheto/scripts/administrators.js"></script>
 
 </body>
 </html>

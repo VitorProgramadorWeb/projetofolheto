@@ -5,7 +5,7 @@ function database_connection() {
     $DATABASE_HOSTNAME = "localhost";
     $DATABASE_USERNAME = "root";
     $DATABASE_PASSWORD = "";
-    $DATABASE_NAME = "projetointegrador_v1";
+    $DATABASE_NAME     = "folheto";
     
     $conn = new mysqli($DATABASE_HOSTNAME, $DATABASE_USERNAME, $DATABASE_PASSWORD, $DATABASE_NAME);
     
