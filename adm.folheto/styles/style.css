@@ -470,6 +470,8 @@ header {
                 border: none;
                 border-radius: 50%;
                 padding: 5px;
+
+                box-shadow: 2px 2px 4px rgb(0 0 0 / 25%);
             
                 img {
                     animation: rotate 1s linear calc(var(--scroll) * -1s) infinite;

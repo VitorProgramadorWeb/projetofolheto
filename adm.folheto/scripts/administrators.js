@@ -56,12 +56,12 @@ function updateTable() {
                 // ---------- THEAD ----------
                 // column headers
                 for (const columnName in columnNames) {
-                    th = document.createElement("th");
+                    let th = document.createElement("th");
                     th.innerText = columnNames[columnName];
                     if (columnName == "id") th.hidden = true; // Hide ID
                     tr.append(th);
                 }
-        
+
                 // APPEND
                 thead.append(tr);
         
